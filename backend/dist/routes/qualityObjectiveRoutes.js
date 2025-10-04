@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const QualityObjectiveController_1 = require("../controllers/QualityObjectiveController");
+const multiTenantMiddleware_1 = require("../middleware/multiTenantMiddleware");
+const router = (0, express_1.Router)();
+router.use(multiTenantMiddleware_1.multiTenantSecurity);
+router.post('/', multiTenantMiddleware_1.managerOrAdmin, QualityObjectiveController_1.qualityObjectiveController.create);
+router.get('/', QualityObjectiveController_1.qualityObjectiveController.findAll);
+router.get('/:id', QualityObjectiveController_1.qualityObjectiveController.findById);
+router.put('/:id', multiTenantMiddleware_1.managerOrAdmin, QualityObjectiveController_1.qualityObjectiveController.update);
+router.delete('/:id', multiTenantMiddleware_1.managerOrAdmin, QualityObjectiveController_1.qualityObjectiveController.delete);
+router.patch('/:id/restore', multiTenantMiddleware_1.managerOrAdmin, QualityObjectiveController_1.qualityObjectiveController.restore);
+router.post('/bulk-delete', multiTenantMiddleware_1.managerOrAdmin, QualityObjectiveController_1.qualityObjectiveController.bulkDelete);
+router.get('/process/:processId', QualityObjectiveController_1.qualityObjectiveController.getByProcess);
+router.get('/alerts/upcoming', QualityObjectiveController_1.qualityObjectiveController.getUpcoming);
+router.get('/alerts/overdue', QualityObjectiveController_1.qualityObjectiveController.getOverdue);
+router.patch('/:id/complete', multiTenantMiddleware_1.managerOrAdmin, QualityObjectiveController_1.qualityObjectiveController.markCompleted);
+router.get('/statistics/summary', QualityObjectiveController_1.qualityObjectiveController.getStatistics);
+exports.default = router;
+//# sourceMappingURL=qualityObjectiveRoutes.js.map

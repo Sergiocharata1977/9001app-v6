@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 15, 23, 42;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 248, 250, 252;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-start-rgb));
+}
+
+/* Estilos para documentación */
+.prose {
+  @apply max-w-none;
+}
+
+.prose h1 {
+  @apply text-4xl font-bold text-slate-900 mb-6 mt-8;
+}
+
+.prose h2 {
+  @apply text-3xl font-bold text-slate-900 mb-4 mt-6;
+}
+
+.prose h3 {
+  @apply text-2xl font-semibold text-slate-800 mb-3 mt-4;
+}
+
+.prose code {
+  @apply bg-slate-100 text-emerald-600 px-2 py-1 rounded text-sm;
+}
+
+.prose pre {
+  @apply bg-slate-900 text-white p-4 rounded-lg overflow-x-auto;
+}
+
+.prose a {
+  @apply text-emerald-600 hover:text-emerald-700 underline;
+}
+
+.prose img {
+  @apply rounded-lg shadow-lg my-6;
+}
+
+.prose table {
+  @apply w-full border-collapse;
+}
+
+.prose th {
+  @apply bg-slate-100 p-3 text-left font-semibold;
+}
+
+.prose td {
+  @apply border-t border-slate-200 p-3;
+}
+
+
+

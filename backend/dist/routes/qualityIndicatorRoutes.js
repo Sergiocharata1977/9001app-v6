@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const QualityIndicatorController_1 = require("../controllers/QualityIndicatorController");
+const multiTenantMiddleware_1 = require("../middleware/multiTenantMiddleware");
+const router = (0, express_1.Router)();
+router.use(multiTenantMiddleware_1.multiTenantSecurity);
+router.post('/', multiTenantMiddleware_1.managerOrAdmin, QualityIndicatorController_1.qualityIndicatorController.create);
+router.get('/', QualityIndicatorController_1.qualityIndicatorController.findAll);
+router.get('/:id', QualityIndicatorController_1.qualityIndicatorController.findById);
+router.put('/:id', multiTenantMiddleware_1.managerOrAdmin, QualityIndicatorController_1.qualityIndicatorController.update);
+router.delete('/:id', multiTenantMiddleware_1.managerOrAdmin, QualityIndicatorController_1.qualityIndicatorController.delete);
+router.patch('/:id/restore', multiTenantMiddleware_1.managerOrAdmin, QualityIndicatorController_1.qualityIndicatorController.restore);
+router.post('/bulk-delete', multiTenantMiddleware_1.managerOrAdmin, QualityIndicatorController_1.qualityIndicatorController.bulkDelete);
+router.get('/process/:processId', QualityIndicatorController_1.qualityIndicatorController.getByProcess);
+router.patch('/:id/value', QualityIndicatorController_1.qualityIndicatorController.updateValue);
+router.get('/:id/history', QualityIndicatorController_1.qualityIndicatorController.getValueHistory);
+router.get('/alerts/indicators', QualityIndicatorController_1.qualityIndicatorController.getAlertsIndicators);
+router.get('/statistics/summary', QualityIndicatorController_1.qualityIndicatorController.getStatistics);
+exports.default = router;
+//# sourceMappingURL=qualityIndicatorRoutes.js.map

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Casos de Uso - ISO 9001 App v6</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 20px;
+        }
+        h4 {
+            color: #27ae60;
+        }
+        pre {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-left: 3px solid #3498db;
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 4px;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .toc {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .toc ul ul {
+            padding-left: 20px;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        @media print {
+            body {
+                max-width: 100%;
+                margin: 0;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>📖 CASOS DE USO - Sistema ISO 9001 App v6</h1>
+    
+    <blockquote>Documento de referencia con casos de uso reales de cada módulo del sistema</blockquote>
+    
+    <div class="toc">
+        <h2>📑 ÍNDICE</h2>
+        <ul>
+            <li><a href="#norma">1. Puntos de la Norma ISO 9001</a></li>
+            <li><a href="#documentos">2. Documentos</a></li>
+        </ul>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2 id="norma">1. PUNTOS DE LA NORMA ISO 9001</h2>
+    
+    <h3>🎯 OBJETIVO DEL MÓDULO</h3>
+    <p>Gestionar los 32 requisitos de ISO 9001:2015 (capítulos 4-10), vincularlos con procesos, documentos, objetivos e indicadores para garantizar trazabilidad completa.</p>
+    
+    <h3>📊 ESTRUCTURA DE DATOS</h3>
+    <h4>Punto de Norma (NormPoint)</h4>
+    <pre><code>{
+  // IDENTIFICACIÓN
+  code: "8.3",
+  title: "Diseño y desarrollo",
+  chapter: 8,
+  section: "8.3",
+  
+  // CONTENIDO ISO
+  requirements: "La organización debe...",
+  guidance: "Incluye planificación...",
+  examples: "Por ejemplo...",
+  
+  // CLASIFICACIÓN
+  category: "operacion",
+  keywords: ["diseño", "desarrollo"],
+  is_mandatory: true,
+  priority: "alta",
+  
+  // RELACIONES (multi-tenant)
+  related_processes: [ObjectId],
+  related_documents: [ObjectId],
+  related_objectives: [ObjectId],
+  related_indicators: [ObjectId]
+}</code></pre>
+
+    <p><strong>NOTA:</strong> NormPoint es <strong>GLOBAL</strong> (sin organization_id) porque ISO 9001:2015 es la misma norma para todos.</p>
+
+    <h3>📝 CASOS DE USO</h3>
+
+    <h4>CASO 1: Consultor implementando ISO - Ver requisitos</h4>
+    <p><strong>Actor:</strong> Consultor de Calidad</p>
+    <p><strong>Objetivo:</strong> Entender qué requisitos debe cumplir la organización</p>
+    
+    <p><strong>Flujo:</strong></p>
+    <ol>
+        <li>Usuario ingresa a <code>/norm-points</code></li>
+        <li>Ve tabla con 32 puntos organizados por capítulos (4-10)</li>
+        <li>Usa filtros para buscar por capítulo, categoría o prioridad</li>
+        <li>Resultado: Lista filtrada de puntos relevantes</li>
+    </ol>
+
+    <p><strong>Resultado:</strong> Usuario identifica qué requisitos aplicar.</p>
+
+    <div class="page-break"></div>
+
+    <h4>CASO 2: Ver detalle de un requisito ISO</h4>
+    <p><strong>Actor:</strong> Responsable de Calidad</p>
+    <p><strong>Objetivo:</strong> Entender en detalle qué exige la norma</p>
+    
+    <p><strong>Flujo:</strong></p>
+    <ol>
+        <li>Usuario hace click en "8.3 Diseño y desarrollo"</li>
+        <li>Ve modal con:
+            <ul>
+                <li>Texto oficial del requisito ISO</li>
+                <li>Guía práctica de implementación</li>
+                <li>Ejemplos de aplicación</li>
+                <li>Lista de procesos relacionados</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h4>CASO 3: Vincular proceso a punto de norma</h4>
+    <p><strong>Actor:</strong> Jefe de Calidad</p>
+    <p><strong>Objetivo:</strong> Relacionar un proceso con los requisitos ISO que debe cumplir</p>
+    
+    <p><strong>Flujo:</strong></p>
+    <ol>
+        <li>Usuario está en detalle de "8.4 Control de proveedores"</li>
+        <li>Click en "Vincular Proceso"</li>
+        <li>Selecciona procesos de su organización</li>
+        <li>Guarda relación</li>
+    </ol>
+
+    <p><strong>Resultado:</strong> Trazabilidad establecida entre requisito ISO y procesos.</p>
+
+    <div class="page-break"></div>
+
+    <h2 id="documentos">2. DOCUMENTOS</h2>
+    
+    <h3>🎯 OBJETIVO DEL MÓDULO</h3>
+    <p>Gestionar documentos del Sistema de Gestión de Calidad (PDFs, Word, etc.) con control de versiones, estados de aprobación y vinculación a procesos.</p>
+    
+    <h3>📊 ESTRUCTURA DE DATOS</h3>
+    <h4>Documento (ProcessDocument)</h4>
+    <pre><code>{
+  // IDENTIFICACIÓN
+  process_id: ObjectId,
+  titulo: "Manual de Calidad",
+  descripcion: "Manual del SGC v2",
+  
+  // CLASIFICACIÓN
+  tipo_documento: "manual", // procedimiento|instructivo|formato|manual|politica
+  
+  // VERSIONAMIENTO
+  version: "2.0",
+  estado: "aprobado", // borrador|revision|aprobado|obsoleto
+  
+  // ARCHIVO FÍSICO
+  archivo_url: "/uploads/manual_v2.pdf",
+  archivo_nombre: "manual_calidad_v2.pdf",
+  archivo_tamaño: 2048000,
+  
+  // CONTROL
+  fecha_creacion: Date,
+  fecha_revision: Date,
+  creado_por: ObjectId,
+  revisado_por: ObjectId,
+  
+  // MULTI-TENANT
+  organization_id: "org-001"
+}</code></pre>
+
+    <h3>📝 CASOS DE USO</h3>
+
+    <h4>CASO 1: Subir nuevo documento</h4>
+    <p><strong>Actor:</strong> Responsable de Proceso</p>
+    <p><strong>Objetivo:</strong> Subir un procedimiento documentado</p>
+    
+    <p><strong>Flujo:</strong></p>
+    <ol>
+        <li>Usuario ingresa a <code>/documentos</code></li>
+        <li>Click "+ Nuevo Documento"</li>
+        <li>Completa formulario y sube PDF</li>
+        <li>Sistema guarda con estado "borrador"</li>
+    </ol>
+
+    <h4>CASO 2: Aprobar documento</h4>
+    <p><strong>Actor:</strong> Responsable de Calidad</p>
+    <p><strong>Objetivo:</strong> Aprobar documento en revisión</p>
+    
+    <p><strong>Flujo:</strong></p>
+    <ol>
+        <li>Usuario ve documentos en "REVISIÓN"</li>
+        <li>Revisa contenido del PDF</li>
+        <li>Click "Aprobar"</li>
+        <li>Estado cambia a "APROBADO"</li>
+    </ol>
+
+    <h4>CASO 3: Crear nueva versión</h4>
+    <p><strong>Actor:</strong> Dueño del proceso</p>
+    <p><strong>Objetivo:</strong> Actualizar documento aprobado</p>
+    
+    <p><strong>Flujo:</strong></p>
+    <ol>
+        <li>Usuario ve documento v1.0 (APROBADO)</li>
+        <li>Click "Nueva Versión"</li>
+        <li>Sube nuevo PDF</li>
+        <li>Sistema crea v2.0 (BORRADOR)</li>
+        <li>Al aprobar v2.0, v1.0 pasa a OBSOLETO</li>
+    </ol>
+
+    <div class="page-break"></div>
+
+    <h2>📊 RESUMEN DE RELACIONES</h2>
+    <pre>
+Punto de Norma ─────┬──── Proceso ──────┬──── Documento
+                    │                    │
+                    ├──── Objetivo       │
+                    │                    │
+                    └──── Indicador ─────┘
+    </pre>
+
+    <p><strong>Flujo completo:</strong></p>
+    <ol>
+        <li><strong>Punto ISO 8.3</strong> (Diseño) → Se implementa en → <strong>Proceso "Diseño de Productos"</strong></li>
+        <li><strong>Proceso</strong> → Se documenta en → <strong>Documento "Procedimiento de Diseño v2.0"</strong></li>
+        <li><strong>Objetivo</strong> → "Reducir tiempo de diseño 20%" → Mide cumplimiento</li>
+        <li><strong>Indicador</strong> → "Tiempo promedio diseño" → Evidencia mejora continua</li>
+    </ol>
+
+    <hr>
+    <p style="text-align: center; color: #7f8c8d; margin-top: 40px;">
+        <strong>Sistema ISO 9001 App v6</strong><br>
+        Última actualización: 01/10/2025 | Versión: 1.0
+    </p>
+</body>
+</html>
+
+
+

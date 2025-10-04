@@ -1,0 +1,121 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env*.local
+.env.production
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+pnpm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Git
+.git/
+
+# Backup folders
+migration-backup/
+migration-backup-complete/
+migration-backup-phase2/
+
+# CRM development backup
+crm-agro-v0/
+crm-agro.zip
+
+# Reports (opcional - quita si quieres versionar)
+consistency-validation-report.json
+migration-report.json
+MIGRATION_FINAL_REPORT.json
+POST_MIGRATION_VALIDATION_REPORT.json
+
+# Scripts de migración temporales
+execute-migration.ts
+consistency-analysis.ts
+api-consistency-check.ts
+run-consistency-check.ts
+simple-consistency-test.ts
+migrate-complete.ps1
+migrate-simple.ps1
+migration-execution.log
+
+# TypeScript
+*.tsbuildinfo
+.tsbuildinfo
+
+# Next.js
+.next/
+out/
+
+# Turbo
+.turbo/
+
+# Vercel
+.vercel
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Documentos temporales de desarrollo (NO SUBIR)
+RESUMEN_*.md
+SOLUCION_*.md
+CORRECCIONES_*.md
+ANALISIS_*.md
+PROMPTS_*.md
+RECOMENDACIONES_*.md
+ROADMAP_*.md
+CASOS_DE_USO.html
+PROMPT_DON_CANDIDO_ESPECIFICO.md
+ENV_CONFIGURATION.md
+
+# Archivos con secretos/claves API
+*SECRET*
+*API_KEY*
+*CLAVE*
+
+# Imágenes duplicadas
+logo29001app.png.png
+logo9001app.png.png
