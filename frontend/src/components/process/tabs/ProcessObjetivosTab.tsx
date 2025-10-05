@@ -12,7 +12,8 @@ import {
   AlertTriangle,
   CheckCircle
 } from 'lucide-react';
-import { QualityObjective } from '@/shared-types/processes';
+import { QualityObjective } from '@/types/process';
+import api from '@/lib/api';
 
 interface ProcessObjetivosTabProps {
   processId: string;
@@ -29,10 +30,11 @@ export function ProcessObjetivosTab({ processId }: ProcessObjetivosTabProps) {
   const loadObjectives = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/processes/quality-objectives?processId=${processId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setObjectives(data.data || []);
+      const response = await api.get(`/quality-objectives?process_definition_id=${processId}&organization_id=1`);
+      if (response.data.success) {
+        setObjectives(response.data.data || []);
+      } else {
+        console.error('Error en la respuesta:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error cargando objetivos:', error);
@@ -185,7 +187,7 @@ export function ProcessObjetivosTab({ processId }: ProcessObjetivosTabProps) {
                         <div className="mt-4">
                           <p className="text-sm text-gray-600 mb-2">Indicadores Relacionados:</p>
                           <div className="flex flex-wrap gap-2">
-                            {objective.related_indicators.map((indicator, idx) => (
+                            {objective.related_indicators.map((indicator: string, idx: number) => (
                               <Badge key={idx} variant="outline" className="text-xs">
                                 {indicator}
                               </Badge>

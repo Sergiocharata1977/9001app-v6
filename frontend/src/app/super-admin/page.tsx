@@ -68,35 +68,35 @@ export default function SuperAdminPage() {
           </CardContent>
         </Card>
 
-        {/* Sección Documentación */}
+        {/* Sección Gestión de Proyecto */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-green-600" />
-              Documentación del Proyecto
+              Gestión de Proyecto
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-gray-600">
-              Objetivos, módulos del sistema, análisis de gaps y progreso general.
+              Dashboard, análisis técnico-funcional y seguimiento del proyecto ISO 9001.
             </p>
             <div className="grid gap-2">
-              <Link href="/super-admin/documentacion/objetivos">
+              <Link href="/super-admin/proyecto">
+                <Button variant="outline" className="w-full justify-start">
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  Dashboard Proyecto
+                </Button>
+              </Link>
+              <Link href="/super-admin/proyecto/analisis-tecnico">
                 <Button variant="outline" className="w-full justify-start">
                   <Target className="w-4 h-4 mr-2" />
-                  Objetivos del Proyecto
+                  Análisis Técnico-Funcional
                 </Button>
               </Link>
-              <Link href="/super-admin/documentacion/modulos">
+              <Link href="/super-admin/proyecto/analisis">
                 <Button variant="outline" className="w-full justify-start">
                   <FileText className="w-4 h-4 mr-2" />
-                  Módulos del Sistema
-                </Button>
-              </Link>
-              <Link href="/super-admin/documentacion/gaps">
-                <Button variant="outline" className="w-full justify-start">
-                  <AlertTriangle className="w-4 h-4 mr-2" />
-                  Análisis de Gaps
+                  Todos los Análisis
                 </Button>
               </Link>
             </div>

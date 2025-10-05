@@ -56,6 +56,30 @@ const iso9001NormPoints = [
         priority: 'alta'
     },
     {
+        code: '4.4.1',
+        title: 'Generalidades del sistema de gestión de la calidad',
+        chapter: 4,
+        section: '4.4.1',
+        category: 'contexto',
+        requirements: 'La organización debe establecer, implementar, mantener y mejorar continuamente un sistema de gestión de la calidad, incluidos los procesos necesarios y sus interacciones.',
+        guidance: 'Debe determinar los procesos necesarios para el sistema de gestión de la calidad y su aplicación a través de la organización.',
+        keywords: ['sistema de gestión', 'procesos', 'interacciones', 'aplicación'],
+        is_mandatory: true,
+        priority: 'alta'
+    },
+    {
+        code: '4.4.2',
+        title: 'Información documentada del sistema de gestión',
+        chapter: 4,
+        section: '4.4.2',
+        category: 'contexto',
+        requirements: 'La organización debe mantener información documentada para apoyar la operación de sus procesos y conservar información documentada para tener la confianza de que los procesos se realizan según lo planificado.',
+        guidance: 'La información documentada puede estar en cualquier formato y medio, y puede provenir de cualquier fuente.',
+        keywords: ['información documentada', 'procesos', 'operación', 'planificación'],
+        is_mandatory: true,
+        priority: 'alta'
+    },
+    {
         code: '5.1',
         title: 'Liderazgo y compromiso',
         chapter: 5,
@@ -64,6 +88,30 @@ const iso9001NormPoints = [
         requirements: 'La alta dirección debe demostrar liderazgo y compromiso con el sistema de gestión de la calidad mediante: a) responsabilidad y autoridad; b) establecimiento de la política y objetivos; c) promoción de la mejora; d) apoyo a otros roles de dirección.',
         guidance: 'El liderazgo debe ser visible y promover una cultura de calidad en toda la organización.',
         keywords: ['liderazgo', 'compromiso', 'alta dirección', 'cultura de calidad'],
+        is_mandatory: true,
+        priority: 'alta'
+    },
+    {
+        code: '5.1.1',
+        title: 'Generalidades del liderazgo y compromiso',
+        chapter: 5,
+        section: '5.1.1',
+        category: 'liderazgo',
+        requirements: 'La alta dirección debe demostrar liderazgo y compromiso con respecto al sistema de gestión de la calidad asumiendo la responsabilidad y obligación de rendir cuentas con relación a la eficacia del sistema de gestión de la calidad.',
+        guidance: 'La alta dirección debe asegurar que se establezcan la política de la calidad y los objetivos de la calidad para el sistema de gestión de la calidad.',
+        keywords: ['liderazgo', 'compromiso', 'responsabilidad', 'eficacia'],
+        is_mandatory: true,
+        priority: 'alta'
+    },
+    {
+        code: '5.1.2',
+        title: 'Enfoque al cliente',
+        chapter: 5,
+        section: '5.1.2',
+        category: 'liderazgo',
+        requirements: 'La alta dirección debe demostrar liderazgo y compromiso con respecto al enfoque al cliente asegurándose de que: a) se determinen, se comprendan y se cumplan regularmente los requisitos del cliente y los legales y reglamentarios aplicables; b) se determinen y se consideren los riesgos y oportunidades que pueden afectar a la conformidad de los productos y servicios y a la capacidad de aumentar la satisfacción del cliente; c) se mantenga el enfoque en el aumento de la satisfacción del cliente.',
+        guidance: 'El enfoque al cliente debe ser una prioridad estratégica de la organización.',
+        keywords: ['enfoque al cliente', 'requisitos del cliente', 'satisfacción', 'conformidad'],
         is_mandatory: true,
         priority: 'alta'
     },
@@ -104,6 +152,30 @@ const iso9001NormPoints = [
         priority: 'alta'
     },
     {
+        code: '6.1.1',
+        title: 'Generalidades de riesgos y oportunidades',
+        chapter: 6,
+        section: '6.1.1',
+        category: 'planificacion',
+        requirements: 'Al planificar el sistema de gestión de la calidad, la organización debe considerar las cuestiones referidas en 4.1 y los requisitos referidos en 4.2 y determinar los riesgos y oportunidades que es necesario abordar.',
+        guidance: 'Los riesgos y oportunidades deben estar relacionados con el contexto de la organización y las partes interesadas.',
+        keywords: ['riesgos', 'oportunidades', 'contexto', 'partes interesadas'],
+        is_mandatory: true,
+        priority: 'alta'
+    },
+    {
+        code: '6.1.2',
+        title: 'Planificación de acciones para abordar riesgos y oportunidades',
+        chapter: 6,
+        section: '6.1.2',
+        category: 'planificacion',
+        requirements: 'La organización debe planificar: a) las acciones para abordar estos riesgos y oportunidades; b) la manera de integrar e implementar las acciones en sus procesos del sistema de gestión de la calidad; c) la manera de evaluar la eficacia de estas acciones.',
+        guidance: 'Las acciones tomadas para abordar los riesgos y oportunidades deben ser proporcionales al impacto potencial en la conformidad de los productos y servicios.',
+        keywords: ['planificación de acciones', 'integración', 'implementación', 'eficacia'],
+        is_mandatory: true,
+        priority: 'alta'
+    },
+    {
         code: '6.2',
         title: 'Objetivos de la calidad y planificación para lograrlos',
         chapter: 6,
@@ -112,6 +184,30 @@ const iso9001NormPoints = [
         requirements: 'La organización debe establecer objetivos de calidad en niveles pertinentes y planificar cómo lograrlos.',
         guidance: 'Los objetivos deben ser medibles, consistentes con la política de calidad y comunicados.',
         keywords: ['objetivos de calidad', 'planificación', 'metas', 'medibles'],
+        is_mandatory: true,
+        priority: 'alta'
+    },
+    {
+        code: '6.2.1',
+        title: 'Objetivos de la calidad',
+        chapter: 6,
+        section: '6.2.1',
+        category: 'planificacion',
+        requirements: 'La organización debe establecer objetivos de la calidad para las funciones y niveles pertinentes y los procesos necesarios para el sistema de gestión de la calidad.',
+        guidance: 'Los objetivos de la calidad deben: a) ser coherentes con la política de la calidad; b) ser medibles; c) tener en cuenta los requisitos aplicables; d) ser pertinentes para la conformidad de los productos y servicios y para el aumento de la satisfacción del cliente; e) ser objeto de seguimiento; f) comunicarse; g) actualizarse, según corresponda.',
+        keywords: ['objetivos de calidad', 'medibles', 'coherentes', 'seguimiento'],
+        is_mandatory: true,
+        priority: 'alta'
+    },
+    {
+        code: '6.2.2',
+        title: 'Planificación de las acciones para lograr los objetivos de la calidad',
+        chapter: 6,
+        section: '6.2.2',
+        category: 'planificacion',
+        requirements: 'Al planificar cómo lograr sus objetivos de la calidad, la organización debe determinar: a) qué se va a hacer; b) qué recursos se requerirán; c) quién será responsable; d) cuándo se finalizará; e) cómo se evaluarán los resultados.',
+        guidance: 'La planificación debe incluir métodos de seguimiento y evaluación del progreso hacia los objetivos.',
+        keywords: ['planificación', 'recursos', 'responsabilidades', 'evaluación'],
         is_mandatory: true,
         priority: 'alta'
     },

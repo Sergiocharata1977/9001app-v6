@@ -202,13 +202,46 @@ export interface IOrganization {
   description?: string;
 }
 
-// Tipos para definiciones de procesos (simplificado)
+// Tipos para definiciones de procesos (completo)
 export interface IProcessDefinition {
   _id: string;
+  organization_id: string;
   nombre: string;
   codigo: string;
+  version: string;
   descripcion?: string;
-  tipo_proceso: 'estrategico' | 'operativo' | 'apoyo';
+  objetivo?: string;
+  alcance?: string;
+  entradas?: string;
+  salidas?: string;
+  tipo: 'estrategico' | 'operativo' | 'apoyo';
+  categoria?: string;
+  nivel_critico: 'bajo' | 'medio' | 'alto';
+  estado: 'activo' | 'inactivo' | 'revision' | 'obsoleto';
+  owner?: string;
+  
+  // Configuración de registros opcionales
+  hasExternalSystem?: boolean;
+  hasSpecificRegistries?: boolean;
+  enableRegistries?: boolean;
+  
+  // Campos alternativos (para compatibilidad)
+  name?: string;
+  code?: string;
+  description?: string;
+  objective?: string;
+  scope?: string;
+  inputs?: string[];
+  outputs?: string[];
+  related_documents?: string[];
+  
+  // Auditoría estándar
+  is_active: boolean;
+  is_archived: boolean;
+  created_by: string;
+  updated_by?: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 // Tipos para plantillas de procesos (simplificado)

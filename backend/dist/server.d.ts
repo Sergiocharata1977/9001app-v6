@@ -10,6 +10,10 @@ import './models/Audit';
 import './models/hallazgos';
 import './models/acciones';
 import './models/EmployeeDeclaration';
-import './models/CustomerSurvey';
+import './models/crm_clientes_agro';
+import './models/crm_contactos';
+import './models/crm_oportunidades_agro';
+import './models/crm_actividades_agro';
+import './models/crm_productos_agro';
 export default app;
 //# sourceMappingURL=server.d.ts.map

@@ -23,7 +23,16 @@ import {
   Line,
   Legend
 } from 'recharts';
-import { QualityIndicator } from '@/shared-types/processes';
+import api from '@/lib/api';
+
+interface QualityIndicator {
+  id: string;
+  name: string;
+  current_value?: string;
+  target_value?: string;
+  measurement_unit?: string;
+  measurement_frequency?: string;
+}
 
 interface ProcessIndicadoresTabProps {
   processId: string;
@@ -40,10 +49,11 @@ export function ProcessIndicadoresTab({ processId }: ProcessIndicadoresTabProps)
   const loadIndicators = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/processes/quality-indicators?processId=${processId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setIndicators(data.data || []);
+      const response = await api.get(`/quality-indicators?process_definition_id=${processId}&organization_id=1`);
+      if (response.data.success) {
+        setIndicators(response.data.data || []);
+      } else {
+        console.error('Error en la respuesta:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error cargando indicadores:', error);

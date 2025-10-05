@@ -1,240 +1,234 @@
+import { Request, Response } from 'express';
 import { z } from 'zod';
 import { ProcessRecord } from '../models/ProcessRecord';
+import { ProcessDefinition } from '../models/ProcessDefinition';
 import { BaseController, BaseValidationSchema } from './BaseController';
+import { canCreateRecord } from '../utils/processValidation';
+import mongoose from 'mongoose';
 
-// Esquema de validación específico para ProcessRecord
-const ProcessRecordValidationSchema = BaseValidationSchema.extend({
-  id: z.string()
-    .min(1, "El ID es obligatorio")
-    .max(50, "El ID no puede exceder 50 caracteres"),
-  
-  processId: z.string()
-    .min(1, "El proceso es obligatorio")
-    .regex(/^[0-9a-fA-F]{24}$/, "ID de proceso inválido"),
-  
-  responsible: z.string()
-    .min(1, "El responsable es obligatorio")
-    .max(100, "El responsable no puede exceder 100 caracteres"),
-  
-  date: z.coerce.date()
-    .refine(date => date <= new Date(), "La fecha no puede ser futura"),
-  
-  evidence: z.string()
-    .max(500, "La evidencia no puede exceder 500 caracteres")
-    .optional(),
-  
-  // Campos de compatibilidad
-  titulo: z.string()
-    .max(200, "El título no puede exceder 200 caracteres")
-    .optional(),
-  
-  descripcion: z.string()
-    .max(1000, "La descripción no puede exceder 1000 caracteres")
-    .optional(),
-  
-  estado: z.enum(['pendiente', 'en_progreso', 'completado', 'cancelado'])
-    .default('pendiente'),
-  
-  current_state: z.enum(['iniciado', 'en_progreso', 'revision', 'aprobado', 'completado', 'cancelado'])
-    .default('iniciado'),
-  
-  prioridad: z.enum(['baja', 'media', 'alta', 'crítica'])
-    .default('media'),
-  
-  fecha_inicio: z.coerce.date().optional(),
-  fecha_fin: z.coerce.date().optional(),
-  completed_date: z.coerce.date().optional(),
-  
-  observaciones: z.string()
-    .max(1000, "Las observaciones no pueden exceder 1000 caracteres")
-    .optional(),
-  
-  progress_percentage: z.number()
-    .min(0, "El progreso no puede ser negativo")
-    .max(100, "El progreso no puede exceder 100%")
-    .default(0)
-});
+// Obtener todos los registros de procesos
+export const getProcessRecords = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { organization_id } = req.query;
 
-class ProcessRecordController extends BaseController {
-  constructor() {
-    super(ProcessRecord, ProcessRecordValidationSchema, 'Registro de Proceso');
-  }
-
-  /**
-   * Campos específicos para búsqueda de texto
-   */
-  protected getSearchFields(): string[] {
-    return ['responsible', 'evidence', 'titulo', 'descripcion', 'observaciones'];
-  }
-
-  /**
-   * Campos para populate
-   */
-  protected getPopulateFields(): string[] {
-    return ['processId', 'created_by', 'updated_by'];
-  }
-
-  /**
-   * Obtener registros por proceso
-   */
-  getByProcess = async (req: any, res: any): Promise<void> => {
-    try {
-      const { processId } = req.params;
-      const { page = 1, limit = 10, estado, prioridad } = req.query;
-
-      const filters: any = {
-        processId,
-        organization_id: req.user?.organization_id,
-        is_active: true,
-        is_archived: false
-      };
-
-      if (estado) filters.estado = estado;
-      if (prioridad) filters.prioridad = prioridad;
-
-      const records = await ProcessRecord
-        .find(filters)
-        .limit(Number(limit))
-        .skip((Number(page) - 1) * Number(limit))
-        .sort({ date: -1 })
-        .populate(this.getPopulateFields());
-
-      const total = await ProcessRecord.countDocuments(filters);
-
-      res.json({
-        success: true,
-        data: records,
-        pagination: {
-          page: Number(page),
-          limit: Number(limit),
-          total,
-          pages: Math.ceil(total / Number(limit))
-        }
+    if (!organization_id) {
+      res.status(400).json({
+        error: 'organization_id es requerido'
       });
-    } catch (error) {
-      this.handleError(res, error, 'obtener registros por proceso');
+      return;
     }
-  };
 
-  /**
-   * Actualizar estado del registro
-   */
-  updateState = async (req: any, res: any): Promise<void> => {
-    try {
-      const { id } = req.params;
-      const { new_state, comment } = req.body;
+    const query: any = {
+      organization_id: organization_id,
+      is_active: true,
+      is_archived: false
+    };
 
-      if (!new_state) {
-        res.status(400).json({
-          success: false,
-          message: 'El nuevo estado es requerido'
-        });
-        return;
-      }
-
-      const record = await ProcessRecord.findOne({
-        id,
-        organization_id: req.user?.organization_id,
-        is_active: true
-      });
-
-      if (!record) {
-        res.status(404).json({
-          success: false,
-          message: 'Registro no encontrado'
-        });
-        return;
-      }
-
-      // Agregar al historial de estados
-      record.state_history.push({
-        state: new_state,
-        changed_at: new Date(),
-        changed_by: req.user?._id || 'unknown',
-        comment: comment || ''
-      });
-
-      record.current_state = new_state;
-      record.updated_by = req.user?._id;
-
-      // Actualizar progreso según el estado
-      switch (new_state) {
-        case 'iniciado':
-          record.progress_percentage = 0;
-          break;
-        case 'en_progreso':
-          record.progress_percentage = Math.max(record.progress_percentage, 25);
-          break;
-        case 'revision':
-          record.progress_percentage = Math.max(record.progress_percentage, 75);
-          break;
-        case 'completado':
-          record.progress_percentage = 100;
-          record.completed_date = new Date();
-          break;
-      }
-
-      await record.save();
-
-      res.json({
-        success: true,
-        data: record,
-        message: 'Estado actualizado exitosamente'
-      });
-    } catch (error) {
-      this.handleError(res, error, 'actualizar estado');
+    // Filtros opcionales
+    if (req.query.status) {
+      query.status = req.query.status;
     }
-  };
 
-  /**
-   * Obtener estadísticas de registros
-   */
-  getStatistics = async (req: any, res: any): Promise<void> => {
-    try {
-      const { processId } = req.query;
-
-      const matchFilter: any = {
-        organization_id: req.user?.organization_id,
-        is_active: true,
-        is_archived: false
-      };
-
-      if (processId) {
-        matchFilter.processId = processId;
-      }
-
-      const stats = await ProcessRecord.aggregate([
-        { $match: matchFilter },
-        {
-          $group: {
-            _id: null,
-            total: { $sum: 1 },
-            porEstado: {
-              $push: {
-                estado: '$estado',
-                count: 1
-              }
-            },
-            porPrioridad: {
-              $push: {
-                prioridad: '$prioridad',
-                count: 1
-              }
-            },
-            progresoPromedio: { $avg: '$progress_percentage' }
-          }
-        }
-      ]);
-
-      res.json({
-        success: true,
-        data: stats[0] || { total: 0, progresoPromedio: 0 },
-        message: 'Estadísticas obtenidas exitosamente'
-      });
-    } catch (error) {
-      this.handleError(res, error, 'obtener estadísticas');
+    if (req.query.process_definition_id) {
+      query.process_definition_id = req.query.process_definition_id;
     }
-  };
-}
 
-export const processRecordController = new ProcessRecordController();
+    if (req.query.current_state) {
+      query.current_state = req.query.current_state;
+    }
+
+    const records = await ProcessRecord.find(query)
+      .sort({ created_at: -1 });
+
+    res.json({
+      success: true,
+      data: records,
+      count: records.length
+    });
+  } catch (error) {
+    console.error('Error obteniendo registros de procesos:', error);
+    res.status(500).json({
+      error: 'Error interno del servidor',
+      message: error instanceof Error ? error.message : 'Error desconocido'
+    });
+  }
+};
+
+// Obtener un registro de proceso por ID
+export const getProcessRecordById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(400).json({
+        error: 'ID de registro inválido'
+      });
+      return;
+    }
+
+    const record = await ProcessRecord.findById(id);
+
+    if (!record) {
+      res.status(404).json({
+        error: 'Registro de proceso no encontrado'
+      });
+      return;
+    }
+
+    res.json({
+      success: true,
+      data: record
+    });
+  } catch (error) {
+    console.error('Error obteniendo registro de proceso:', error);
+    res.status(500).json({
+      error: 'Error interno del servidor',
+      message: error instanceof Error ? error.message : 'Error desconocido'
+    });
+  }
+};
+
+// Crear un nuevo registro de proceso
+export const createProcessRecord = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {
+      title,
+      description,
+      process_definition_id,
+      current_state,
+      priority,
+      organization_id,
+      created_by
+    } = req.body;
+
+    // Validaciones básicas
+    if (!title || !process_definition_id || !organization_id || !created_by) {
+      res.status(400).json({
+        error: 'Campos requeridos: title, process_definition_id, organization_id, created_by'
+      });
+      return;
+    }
+
+    // Verificar que el proceso permita registros
+    const process = await ProcessDefinition.findById(process_definition_id);
+    if (!process || !canCreateRecord(process)) {
+      res.status(400).json({
+        error: 'Este proceso no permite registros. Verifique la configuración del proceso.'
+      });
+      return;
+    }
+
+    // Crear el registro de proceso
+    const newRecord = new ProcessRecord({
+      title,
+      description,
+      process_definition_id,
+      current_state: current_state || 'iniciado',
+      priority: priority || 'medio',
+      organization_id,
+      created_by
+    });
+
+    const savedRecord = await newRecord.save();
+
+    res.status(201).json({
+      success: true,
+      data: savedRecord,
+      message: 'Registro de proceso creado exitosamente'
+    });
+  } catch (error) {
+    console.error('Error creando registro de proceso:', error);
+    res.status(500).json({
+      error: 'Error interno del servidor',
+      message: error instanceof Error ? error.message : 'Error desconocido'
+    });
+  }
+};
+
+// Actualizar un registro de proceso
+export const updateProcessRecord = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { updated_by, ...updateData } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(400).json({
+        error: 'ID de registro inválido'
+      });
+      return;
+    }
+
+    if (!updated_by) {
+      res.status(400).json({
+        error: 'updated_by es requerido'
+      });
+      return;
+    }
+
+    const record = await ProcessRecord.findById(id);
+
+    if (!record) {
+      res.status(404).json({
+        error: 'Registro de proceso no encontrado'
+      });
+      return;
+    }
+
+    // Actualizar campos
+    Object.assign(record, updateData);
+    record.updated_by = updated_by;
+
+    const updatedRecord = await record.save();
+
+    res.json({
+      success: true,
+      data: updatedRecord,
+      message: 'Registro de proceso actualizado exitosamente'
+    });
+  } catch (error) {
+    console.error('Error actualizando registro de proceso:', error);
+    res.status(500).json({
+      error: 'Error interno del servidor',
+      message: error instanceof Error ? error.message : 'Error desconocido'
+    });
+  }
+};
+
+// Eliminar un registro de proceso
+export const deleteProcessRecord = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(400).json({
+        error: 'ID de registro inválido'
+      });
+      return;
+    }
+
+    const record = await ProcessRecord.findById(id);
+
+    if (!record) {
+      res.status(404).json({
+        error: 'Registro de proceso no encontrado'
+      });
+      return;
+    }
+
+    // Soft delete
+    record.is_active = false;
+    record.is_archived = true;
+    await record.save();
+
+    res.json({
+      success: true,
+      message: 'Registro de proceso eliminado exitosamente'
+    });
+  } catch (error) {
+    console.error('Error eliminando registro de proceso:', error);
+    res.status(500).json({
+      error: 'Error interno del servidor',
+      message: error instanceof Error ? error.message : 'Error desconocido'
+    });
+  }
+};

@@ -10,7 +10,8 @@ import {
   List,
   Plus
 } from 'lucide-react';
-import { ProcessRecord } from '@/shared-types/processes';
+import { ProcessRecord } from '@/types/process-record';
+import ProcessRecordModal from '../ProcessRecordModal';
 
 interface ProcessRegistrosTabProps {
   processId: string;
@@ -22,6 +23,7 @@ export function ProcessRegistrosTab({ processId }: ProcessRegistrosTabProps) {
   const [records, setRecords] = useState<ProcessRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>('kanban');
+const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     loadRecords();
@@ -30,10 +32,12 @@ export function ProcessRegistrosTab({ processId }: ProcessRegistrosTabProps) {
   const loadRecords = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/processes/records?processId=${processId}`);
+      const response = await fetch(`http://localhost:5000/api/process-records?process_definition_id=${processId}&organization_id=org-001`);
       if (response.ok) {
         const data = await response.json();
         setRecords(data.data || []);
+      } else {
+        console.error('Error en la respuesta:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error cargando registros:', error);
@@ -57,9 +61,9 @@ export function ProcessRegistrosTab({ processId }: ProcessRegistrosTabProps) {
       <Card className="p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Registros del Proceso</h2>
+            <h2 className="text-xl font-semibold text-gray-900">Tareas del Proceso</h2>
             <p className="text-sm text-gray-600 mt-1">
-              {records.length} registros totales
+              {records.length} tareas totales
             </p>
           </div>
 
@@ -93,9 +97,9 @@ export function ProcessRegistrosTab({ processId }: ProcessRegistrosTabProps) {
             </div>
 
             {/* Botón crear */}
-            <Button>
+            <Button onClick={() => setIsModalOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
-              Nuevo Registro
+              Nueva Tarea
             </Button>
           </div>
         </div>
@@ -105,6 +109,14 @@ export function ProcessRegistrosTab({ processId }: ProcessRegistrosTabProps) {
       {viewMode === 'kanban' && <KanbanView records={records} />}
       {viewMode === 'cards' && <CardsView records={records} />}
       {viewMode === 'list' && <ListView records={records} />}
+
+      <ProcessRecordModal 
+        processId={processId}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={loadRecords}
+      />
+
     </div>
   );
 }

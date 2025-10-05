@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { ProcessSingleView } from '@/components/process/ProcessSingleView';
 import { ProcessDefinition } from '@/shared-types/processes';
+import api from '@/lib/api';
 
 export default function ProcesoPage() {
   const params = useParams();
@@ -17,10 +18,11 @@ export default function ProcesoPage() {
 
   const loadProcess = async () => {
     try {
-      const response = await fetch(`/api/processes/definitions/${processId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setProcess(data.data);
+      const response = await api.get(`/process-definitions/${processId}`);
+      if (response.data.success) {
+        setProcess(response.data.data);
+      } else {
+        console.error('Error en la respuesta:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error cargando proceso:', error);

@@ -91,17 +91,7 @@ export const getProcessById = async (req: Request, res: Response): Promise<void>
       organization_id,
       is_active: true,
       is_archived: false
-    })
-    .populate('responsible_user_id', 'name email')
-    .populate('department_id', 'name')
-    .populate('team_members', 'name email')
-    .populate('related_norm_points', 'code title')
-    .populate('related_objectives', 'name code')
-    .populate('related_indicators', 'name code')
-    .populate('registros.responsible_user_id', 'name email')
-    .populate('registros.assigned_users', 'name email')
-    .populate('registros.created_by', 'name email')
-    .populate('registros.updated_by', 'name email');
+    });
 
     if (!process) {
       res.status(404).json({
@@ -151,10 +141,7 @@ export const createProcess = async (req: Request, res: Response): Promise<void> 
 
     const savedProcess = await newProcess.save();
 
-    const populatedProcess = await ProcessUnified.findById(savedProcess._id)
-      .populate('responsible_user_id', 'name email')
-      .populate('department_id', 'name')
-      .populate('team_members', 'name email');
+    const populatedProcess = await ProcessUnified.findById(savedProcess._id);
 
     res.status(201).json({
       success: true,
@@ -206,10 +193,7 @@ export const updateProcess = async (req: Request, res: Response): Promise<void> 
     Object.assign(process, updateData, { updated_by: user_id });
     await process.save();
 
-    const updatedProcess = await ProcessUnified.findById(id)
-      .populate('responsible_user_id', 'name email')
-      .populate('department_id', 'name')
-      .populate('team_members', 'name email');
+    const updatedProcess = await ProcessUnified.findById(id);
 
     res.json({
       success: true,
@@ -286,13 +270,7 @@ export const getProcesoUnificado = async (req: Request, res: Response): Promise<
       organization_id,
       is_active: true,
       is_archived: false
-    })
-    .populate('responsible_user_id', 'name email')
-    .populate('department_id', 'name')
-    .populate('team_members', 'name email')
-    .populate('related_norm_points', 'code title')
-    .populate('registros.responsible_user_id', 'name email')
-    .populate('registros.assigned_users', 'name email');
+    });
 
     if (!process) {
       res.status(404).json({

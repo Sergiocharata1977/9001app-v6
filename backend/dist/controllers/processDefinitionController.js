@@ -9,6 +9,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const getProcessDefinitions = async (req, res) => {
     try {
         const { organization_id } = req.query;
+        console.log('🔍 Buscando procesos para organization_id:', organization_id);
         if (!organization_id) {
             res.status(400).json({
                 error: 'organization_id es requerido'
@@ -29,13 +30,11 @@ const getProcessDefinitions = async (req, res) => {
         if (req.query.category) {
             query.category = req.query.category;
         }
-        if (req.query.responsible_user_id) {
-            query.responsible_user_id = req.query.responsible_user_id;
-        }
+        console.log('📊 Query de búsqueda:', query);
         const processes = await ProcessDefinition_1.ProcessDefinition.find(query)
-            .populate('responsible_user_id', 'name email')
-            .populate('related_norm_points', 'code title')
             .sort({ created_at: -1 });
+        console.log('📊 Procesos encontrados:', processes.length);
+        console.log('📋 Datos de procesos:', processes);
         res.json({
             success: true,
             data: processes,
@@ -43,7 +42,7 @@ const getProcessDefinitions = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('Error obteniendo definiciones de procesos:', error);
+        console.error('❌ Error obteniendo definiciones de procesos:', error);
         res.status(500).json({
             error: 'Error interno del servidor',
             message: error instanceof Error ? error.message : 'Error desconocido'
@@ -60,17 +59,7 @@ const getProcessDefinitionById = async (req, res) => {
             });
             return;
         }
-        const process = await ProcessDefinition_1.ProcessDefinition.findById(id)
-            .populate('responsible_user_id', 'name email')
-            .populate('department_id', 'name')
-            .populate('team_members', 'name email')
-            .populate('related_documents', 'title code type status')
-            .populate('related_norm_points', 'code title norm_standard norm_section')
-            .populate('related_records', 'title unique_code current_state')
-            .populate('related_objectives', 'title code status')
-            .populate('related_indicators', 'name code status')
-            .populate('parent_process_id', 'name code')
-            .populate('sub_processes', 'name code status');
+        const process = await ProcessDefinition_1.ProcessDefinition.findById(id);
         if (!process) {
             res.status(404).json({
                 error: 'Definición de proceso no encontrada'
@@ -93,10 +82,10 @@ const getProcessDefinitionById = async (req, res) => {
 exports.getProcessDefinitionById = getProcessDefinitionById;
 const createProcessDefinition = async (req, res) => {
     try {
-        const { name, description, content, diagram, category, type, responsible_user_id, department_id, team_members, related_documents, related_norm_points, related_objectives, related_indicators, parent_process_id, keywords, estimated_duration, frequency, organization_id, created_by } = req.body;
-        if (!name || !description || !content || !category || !responsible_user_id || !organization_id || !created_by) {
+        const { name, description, content, diagram, category, type, related_documents, related_norm_points, related_objectives, related_indicators, parent_process_id, keywords, estimated_duration, frequency, organization_id, created_by } = req.body;
+        if (!name || !description || !content || !category || !organization_id || !created_by) {
             res.status(400).json({
-                error: 'Campos requeridos: name, description, content, category, responsible_user_id, organization_id, created_by'
+                error: 'Campos requeridos: name, description, content, category, organization_id, created_by'
             });
             return;
         }
@@ -107,9 +96,6 @@ const createProcessDefinition = async (req, res) => {
             diagram,
             category,
             type: type || 'operativo',
-            responsible_user_id,
-            department_id,
-            team_members: team_members || [],
             related_documents: related_documents || [],
             related_norm_points: related_norm_points || [],
             related_objectives: related_objectives || [],
@@ -122,10 +108,7 @@ const createProcessDefinition = async (req, res) => {
             created_by
         });
         const savedProcess = await newProcess.save();
-        const populatedProcess = await ProcessDefinition_1.ProcessDefinition.findById(savedProcess._id)
-            .populate('responsible_user_id', 'name email')
-            .populate('department_id', 'name')
-            .populate('team_members', 'name email');
+        const populatedProcess = await ProcessDefinition_1.ProcessDefinition.findById(savedProcess._id);
         res.status(201).json({
             success: true,
             data: populatedProcess,
@@ -174,10 +157,7 @@ const updateProcessDefinition = async (req, res) => {
         Object.assign(process, updateData);
         process.updated_by = updated_by;
         const updatedProcess = await process.save();
-        const populatedProcess = await ProcessDefinition_1.ProcessDefinition.findById(updatedProcess._id)
-            .populate('responsible_user_id', 'name email')
-            .populate('department_id', 'name')
-            .populate('team_members', 'name email');
+        const populatedProcess = await ProcessDefinition_1.ProcessDefinition.findById(updatedProcess._id);
         res.json({
             success: true,
             data: populatedProcess,

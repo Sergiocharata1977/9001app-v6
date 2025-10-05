@@ -12,6 +12,7 @@ import {
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import api from '@/lib/api';
 import { 
   BarChart3 as ChartBarIcon,
   Clock as ClockIcon,
@@ -47,43 +48,37 @@ export default function ProcessesDashboardPage() {
         overdueObjectivesRes,
         activeProcessesRes
       ] = await Promise.all([
-        fetch('/api/processes/definitions/statistics/summary'),
-        fetch('/api/processes/quality-objectives/statistics/summary'),
-        fetch('/api/processes/quality-indicators/statistics/summary'),
-        fetch('/api/processes/records?limit=5&sortBy=created_at&sortOrder=desc'),
-        fetch('/api/processes/quality-objectives/alerts/overdue'),
-        fetch('/api/processes/definitions?limit=5&estado=activo&sortBy=created_at&sortOrder=desc')
+        api.get('/process-definitions/statistics/summary'),
+        api.get('/quality-objectives/statistics/summary'),
+        api.get('/quality-indicators/statistics/summary'),
+        api.get('/process-records?limit=5&sortBy=created_at&sortOrder=desc'),
+        api.get('/quality-objectives/alerts/overdue'),
+        api.get('/process-definitions?limit=5&estado=activo&sortBy=created_at&sortOrder=desc')
       ]);
 
       // Procesar respuestas
-      if (processStatsRes.ok) {
-        const data = await processStatsRes.json();
-        setProcessStats(data.data);
+      if (processStatsRes.data?.success) {
+        setProcessStats(processStatsRes.data.data);
       }
 
-      if (objectiveStatsRes.ok) {
-        const data = await objectiveStatsRes.json();
-        setObjectiveStats(data.data);
+      if (objectiveStatsRes.data?.success) {
+        setObjectiveStats(objectiveStatsRes.data.data);
       }
 
-      if (indicatorStatsRes.ok) {
-        const data = await indicatorStatsRes.json();
-        setIndicatorStats(data.data);
+      if (indicatorStatsRes.data?.success) {
+        setIndicatorStats(indicatorStatsRes.data.data);
       }
 
-      if (recentRecordsRes.ok) {
-        const data = await recentRecordsRes.json();
-        setRecentRecords(data.data);
+      if (recentRecordsRes.data?.success) {
+        setRecentRecords(recentRecordsRes.data.data);
       }
 
-      if (overdueObjectivesRes.ok) {
-        const data = await overdueObjectivesRes.json();
-        setOverdueObjectives(data.data);
+      if (overdueObjectivesRes.data?.success) {
+        setOverdueObjectives(overdueObjectivesRes.data.data);
       }
 
-      if (activeProcessesRes.ok) {
-        const data = await activeProcessesRes.json();
-        setActiveProcesses(data.data);
+      if (activeProcessesRes.data?.success) {
+        setActiveProcesses(activeProcessesRes.data.data);
       }
 
     } catch (error) {

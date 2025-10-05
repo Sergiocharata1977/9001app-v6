@@ -39,12 +39,13 @@ const superAdminNavigation: MenuItem[] = [
     ]
   },
   {
-    name: 'Administración de Proyecto',
+    name: 'Gestión de Proyecto',
     icon: BookOpen,
     children: [
-      { name: 'Objetivos', href: '/super-admin/documentacion/objetivos', icon: Target },
-      { name: 'Módulos', href: '/super-admin/documentacion/modulos', icon: FileText },
-      { name: 'Gaps', href: '/super-admin/documentacion/gaps', icon: AlertTriangle },
+      { name: 'Dashboard Proyecto', href: '/super-admin/proyecto', icon: BarChart3 },
+      { name: 'Análisis Técnico-Funcional', href: '/super-admin/proyecto/analisis-tecnico', icon: Target },
+      { name: 'Análisis ABM por Subsistema', href: '/super-admin/proyecto/abm-analysis', icon: Shield },
+      { name: 'Análisis Disponibles', href: '/super-admin/proyecto/analisis', icon: FileText },
     ]
   },
 ];

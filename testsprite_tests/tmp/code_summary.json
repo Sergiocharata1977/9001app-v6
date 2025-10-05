@@ -1,0 +1,302 @@
+{
+  "tech_stack": [
+    "TypeScript",
+    "Next.js 14",
+    "Node.js",
+    "Express",
+    "MongoDB",
+    "Mongoose",
+    "React",
+    "Tailwind CSS"
+  ],
+  "features": [
+    {
+      "name": "Process Management API",
+      "description": "API for managing ISO 9001 process definitions with CRUD operations, search, and hierarchy management",
+      "files": [
+        "backend/src/routes/processDefinitionRoutes.ts",
+        "backend/src/controllers/processDefinitionController.ts",
+        "backend/src/models/ProcessDefinition.ts"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Process Management API",
+          "version": "1.0.0",
+          "description": "API for managing process definitions in ISO 9001 system"
+        },
+        "servers": [
+          {
+            "url": "http://localhost:5000/api",
+            "description": "Development server"
+          }
+        ],
+        "paths": {
+          "/process-definitions": {
+            "get": {
+              "summary": "Get all process definitions",
+              "parameters": [
+                {
+                  "name": "organization_id",
+                  "in": "query",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "List of process definitions",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "success": {
+                            "type": "boolean"
+                          },
+                          "data": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/ProcessDefinition"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "/process-definitions/{id}": {
+            "get": {
+              "summary": "Get process definition by ID",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Process definition details",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "success": {
+                            "type": "boolean"
+                          },
+                          "data": {
+                            "$ref": "#/components/schemas/ProcessDefinition"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Process not found"
+                },
+                "500": {
+                  "description": "Internal server error - StrictPopulateError"
+                }
+              }
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "ProcessDefinition": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "related_documents": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "related_norm_points": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "related_records": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "related_objectives": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "related_indicators": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Audit Management API",
+      "description": "API for managing ISO 9001 audits with CRUD operations and statistics",
+      "files": [
+        "backend/src/routes/auditRoutes.ts",
+        "backend/src/controllers/auditController.ts"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Audit Management API",
+          "version": "1.0.0"
+        },
+        "paths": {
+          "/audits": {
+            "get": {
+              "summary": "Get all audits",
+              "parameters": [
+                {
+                  "name": "organization_id",
+                  "in": "query",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "List of audits"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Finding Management API",
+      "description": "API for managing findings and non-conformities with root cause analysis",
+      "files": [
+        "backend/src/routes/findingRoutes.ts",
+        "backend/src/controllers/findingController.ts"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Finding Management API",
+          "version": "1.0.0"
+        },
+        "paths": {
+          "/findings": {
+            "get": {
+              "summary": "Get all findings",
+              "parameters": [
+                {
+                  "name": "organization_id",
+                  "in": "query",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "List of findings"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "CRM Management API",
+      "description": "API for managing CRM operations including clients, contacts, products, and opportunities",
+      "files": [
+        "backend/src/routes/crmClienteRoutes.ts",
+        "backend/src/routes/crmContactoRoutes.ts",
+        "backend/src/routes/crmProductoRoutes.ts",
+        "backend/src/routes/crmOportunidadRoutes.ts"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "CRM Management API",
+          "version": "1.0.0"
+        },
+        "paths": {
+          "/crm/clientes": {
+            "get": {
+              "summary": "Get all clients",
+              "responses": {
+                "200": {
+                  "description": "List of clients"
+                }
+              }
+            }
+          },
+          "/crm/contactos": {
+            "get": {
+              "summary": "Get all contacts",
+              "responses": {
+                "200": {
+                  "description": "List of contacts"
+                }
+              }
+            }
+          },
+          "/crm/productos": {
+            "get": {
+              "summary": "Get all products",
+              "responses": {
+                "200": {
+                  "description": "List of products"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+
+
+
+

@@ -5,12 +5,13 @@ import { useRouter } from 'next/navigation';
 import ProcessUnifiedCard from './ProcessUnifiedCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { processUnifiedService, ProcessUnified } from '@/services/processUnifiedService';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { ErrorMessage } from '@/components/ui/ErrorMessage';
 import { NotFoundMessage } from '@/components/ui/NotFoundMessage';
+import { ProcessModal } from '@/components/ProcessModal';
 import { Plus, Search, RefreshCw } from 'lucide-react';
 
 interface ProcessListingProps {
@@ -30,6 +31,7 @@ const ProcessListing: React.FC<ProcessListingProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const loadProcesses = async () => {
     try {
@@ -105,8 +107,12 @@ const ProcessListing: React.FC<ProcessListingProps> = ({
     if (onNewProcess) {
       onNewProcess();
     } else {
-      router.push('/procesos/nuevo');
+      setIsModalOpen(true);
     }
+  };
+
+  const handleModalSuccess = () => {
+    loadProcesses(); // Recargar la lista después de crear un proceso
   };
 
   const handleRefresh = () => {
@@ -166,34 +172,32 @@ const ProcessListing: React.FC<ProcessListingProps> = ({
           </div>
         </div>
 
-        <Select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          options={[
-            { value: "all", label: "Todos los estados" },
-            { value: "activo", label: "Activo" },
-            { value: "inactivo", label: "Inactivo" },
-            { value: "revision", label: "En revisión" },
-            { value: "obsoleto", label: "Obsoleto" }
-          ]}
-          placeholder="Filtrar por estado"
-          className="w-full sm:w-48"
-        />
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-full sm:w-48">
+            <SelectValue placeholder="Filtrar por estado" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos los estados</SelectItem>
+            <SelectItem value="activo">Activo</SelectItem>
+            <SelectItem value="inactivo">Inactivo</SelectItem>
+            <SelectItem value="revision">En revisión</SelectItem>
+            <SelectItem value="obsoleto">Obsoleto</SelectItem>
+          </SelectContent>
+        </Select>
 
-        <Select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          options={[
-            { value: "all", label: "Todas las categorías" },
-            { value: "Recursos Humanos", label: "Recursos Humanos" },
-            { value: "Calidad", label: "Calidad" },
-            { value: "Producción", label: "Producción" },
-            { value: "Ventas", label: "Ventas" },
-            { value: "Compras", label: "Compras" }
-          ]}
-          placeholder="Filtrar por categoría"
-          className="w-full sm:w-48"
-        />
+        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <SelectTrigger className="w-full sm:w-48">
+            <SelectValue placeholder="Filtrar por categoría" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todas las categorías</SelectItem>
+            <SelectItem value="Recursos Humanos">Recursos Humanos</SelectItem>
+            <SelectItem value="Calidad">Calidad</SelectItem>
+            <SelectItem value="Producción">Producción</SelectItem>
+            <SelectItem value="Ventas">Ventas</SelectItem>
+            <SelectItem value="Compras">Compras</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Results count */}
@@ -212,17 +216,25 @@ const ProcessListing: React.FC<ProcessListingProps> = ({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProcesses.map((process) => (
-            <ProcessUnifiedCard
+            <div
               key={process._id}
-              process={process}
-              onView={handleView}
-              onEdit={handleEdit}
-              onCreateRecord={handleCreateRecord}
-              onKanban={handleKanban}
-            />
+              className="cursor-pointer"
+              onClick={() => router.push(`/procesos/${process._id}`)}
+            >
+              <ProcessUnifiedCard
+                process={process}
+              />
+            </div>
           ))}
         </div>
       )}
+
+      {/* Modal para crear proceso */}
+      <ProcessModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleModalSuccess}
+      />
     </div>
   );
 };

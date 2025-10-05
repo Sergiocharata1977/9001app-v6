@@ -2,12 +2,16 @@ import { Request, Response } from 'express';
 import { z } from 'zod';
 import { ProcessDefinition } from '../models/ProcessDefinition';
 import { BaseController, BaseValidationSchema } from './BaseController';
+import { canEnableRegistries, shouldShowRegistriesTab } from '../utils/processValidation';
 import mongoose from 'mongoose';
 
 // Obtener todas las definiciones de procesos
 export const getProcessDefinitions = async (req: Request, res: Response): Promise<void> => {
   try {
     const { organization_id } = req.query;
+
+    // AGREGAR LOGS PARA DEBUG
+    console.log('🔍 Buscando procesos para organization_id:', organization_id);
 
     if (!organization_id) {
       res.status(400).json({
@@ -35,14 +39,15 @@ export const getProcessDefinitions = async (req: Request, res: Response): Promis
       query.category = req.query.category;
     }
 
-    if (req.query.responsible_user_id) {
-      query.responsible_user_id = req.query.responsible_user_id;
-    }
+    // Campo responsible_user_id no existe en el schema, se removió
+
+    console.log('📊 Query de búsqueda:', query);
 
     const processes = await ProcessDefinition.find(query)
-      .populate('responsible_user_id', 'name email')
-      .populate('related_norm_points', 'code title')
       .sort({ created_at: -1 });
+
+    console.log('📊 Procesos encontrados:', processes.length);
+    console.log('📋 Datos de procesos:', processes);
 
     res.json({
       success: true,
@@ -50,7 +55,7 @@ export const getProcessDefinitions = async (req: Request, res: Response): Promis
       count: processes.length
     });
   } catch (error) {
-    console.error('Error obteniendo definiciones de procesos:', error);
+    console.error('❌ Error obteniendo definiciones de procesos:', error);
     res.status(500).json({
       error: 'Error interno del servidor',
       message: error instanceof Error ? error.message : 'Error desconocido'
@@ -70,17 +75,7 @@ export const getProcessDefinitionById = async (req: Request, res: Response): Pro
       return;
     }
 
-    const process = await ProcessDefinition.findById(id)
-      .populate('responsible_user_id', 'name email')
-      .populate('department_id', 'name')
-      .populate('team_members', 'name email')
-      .populate('related_documents', 'title code type status')
-      .populate('related_norm_points', 'code title norm_standard norm_section')
-      .populate('related_records', 'title unique_code current_state')
-      .populate('related_objectives', 'title code status')
-      .populate('related_indicators', 'name code status')
-      .populate('parent_process_id', 'name code')
-      .populate('sub_processes', 'name code status');
+    const process = await ProcessDefinition.findById(id);
 
     if (!process) {
       res.status(404).json({
@@ -112,9 +107,6 @@ export const createProcessDefinition = async (req: Request, res: Response): Prom
       diagram,
       category,
       type,
-      responsible_user_id,
-      department_id,
-      team_members,
       related_documents,
       related_norm_points,
       related_objectives,
@@ -128,9 +120,9 @@ export const createProcessDefinition = async (req: Request, res: Response): Prom
     } = req.body;
 
     // Validaciones básicas
-    if (!name || !description || !content || !category || !responsible_user_id || !organization_id || !created_by) {
+    if (!name || !description || !content || !category || !organization_id || !created_by) {
       res.status(400).json({
-        error: 'Campos requeridos: name, description, content, category, responsible_user_id, organization_id, created_by'
+        error: 'Campos requeridos: name, description, content, category, organization_id, created_by'
       });
       return;
     }
@@ -143,9 +135,6 @@ export const createProcessDefinition = async (req: Request, res: Response): Prom
       diagram,
       category,
       type: type || 'operativo',
-      responsible_user_id,
-      department_id,
-      team_members: team_members || [],
       related_documents: related_documents || [],
       related_norm_points: related_norm_points || [],
       related_objectives: related_objectives || [],
@@ -160,11 +149,8 @@ export const createProcessDefinition = async (req: Request, res: Response): Prom
 
     const savedProcess = await newProcess.save();
 
-    // Poblar los datos para la respuesta
-    const populatedProcess = await ProcessDefinition.findById(savedProcess._id)
-      .populate('responsible_user_id', 'name email')
-      .populate('department_id', 'name')
-      .populate('team_members', 'name email');
+    // Retornar el proceso creado
+    const populatedProcess = await ProcessDefinition.findById(savedProcess._id);
 
     res.status(201).json({
       success: true,
@@ -218,17 +204,19 @@ export const updateProcessDefinition = async (req: Request, res: Response): Prom
       return;
     }
 
+    // Validar lógica de registros opcionales
+    if (updateData.hasExternalSystem || updateData.hasSpecificRegistries) {
+      updateData.enableRegistries = false;
+    }
+
     // Actualizar campos
     Object.assign(process, updateData);
     process.updated_by = updated_by;
 
     const updatedProcess = await process.save();
 
-    // Poblar los datos para la respuesta
-    const populatedProcess = await ProcessDefinition.findById(updatedProcess._id)
-      .populate('responsible_user_id', 'name email')
-      .populate('department_id', 'name')
-      .populate('team_members', 'name email');
+    // Retornar el proceso actualizado
+    const populatedProcess = await ProcessDefinition.findById(updatedProcess._id);
 
     res.json({
       success: true,

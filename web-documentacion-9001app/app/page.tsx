@@ -33,6 +33,32 @@ export default function DocumentacionPage() {
 
   const documentos = [
     {
+      id: 10,
+      titulo: 'Lógica de Registros Opcionales',
+      descripcion: 'Sistema inteligente de habilitación de registros por tipo de proceso. Documentación completa de la lógica de negocio.',
+      categoria: 'casos-uso',
+      modulos: ['Procesos', 'Registros', 'Lógica de Negocio', 'UI/UX'],
+      fecha: '2025-01-16',
+      autor: 'Equipo Desarrollo',
+      tiempo_lectura: '20 min',
+      nivel: 'Intermedio',
+      destacado: true,
+      url: '/docs/logica-registros-opcionales'
+    },
+    {
+      id: 11,
+      titulo: 'Implementación Técnica - Registros Opcionales',
+      descripcion: 'Guía de implementación paso a paso para desarrolladores. Código, modelos de datos y casos de prueba.',
+      categoria: 'api',
+      modulos: ['Backend', 'Frontend', 'Base de Datos', 'Validaciones'],
+      fecha: '2025-01-16',
+      autor: 'Equipo Desarrollo',
+      tiempo_lectura: '35 min',
+      nivel: 'Avanzado',
+      destacado: false,
+      url: '/docs/implementacion-registros-opcionales'
+    },
+    {
       id: 9,
       titulo: 'ROADMAP - ABM Críticos de Desarrollo',
       descripcion: 'Plan detallado de desarrollo para los 3 módulos críticos: Procesos, Documentación y Puntos de la Norma',

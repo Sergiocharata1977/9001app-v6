@@ -3,24 +3,15 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
   FileText,
   Users,
   Calendar,
-  TrendingUp,
-  Eye,
-  Edit,
-  Play,
-  Kanban
+  TrendingUp
 } from 'lucide-react';
 
 interface ProcessUnifiedCardProps {
   process: any;
-  onView: (process: any) => void;
-  onEdit: (process: any) => void;
-  onCreateRecord: (process: any) => void;
-  onKanban: (process: any) => void;
 }
 
 const getStatusColor = (status: string) => {
@@ -54,11 +45,7 @@ const getTypeColor = (type: string) => {
 };
 
 const ProcessUnifiedCard: React.FC<ProcessUnifiedCardProps> = ({
-  process,
-  onView,
-  onEdit,
-  onCreateRecord,
-  onKanban
+  process
 }) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('es-ES', {
@@ -69,7 +56,7 @@ const ProcessUnifiedCard: React.FC<ProcessUnifiedCardProps> = ({
   };
 
   return (
-    <Card className="hover:shadow-lg transition-shadow duration-200">
+    <Card className="hover:shadow-lg transition-shadow duration-200 cursor-pointer">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -130,47 +117,7 @@ const ProcessUnifiedCard: React.FC<ProcessUnifiedCardProps> = ({
           </div>
         </div>
 
-        <div className="flex gap-2 pt-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onView(process)}
-            className="flex-1"
-          >
-            <Eye className="h-4 w-4 mr-1" />
-            Ver
-          </Button>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onEdit(process)}
-            className="flex-1"
-          >
-            <Edit className="h-4 w-4 mr-1" />
-            Editar
-          </Button>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onCreateRecord(process)}
-            className="flex-1"
-          >
-            <Play className="h-4 w-4 mr-1" />
-            Registro
-          </Button>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onKanban(process)}
-            className="flex-1"
-          >
-            <Kanban className="h-4 w-4 mr-1" />
-            Kanban
-          </Button>
-        </div>
+        {/* Botones removidos - solo aparecen en el single de proceso */}
       </CardContent>
     </Card>
   );

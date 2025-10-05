@@ -81,17 +81,7 @@ const getProcessById = async (req, res) => {
             organization_id,
             is_active: true,
             is_archived: false
-        })
-            .populate('responsible_user_id', 'name email')
-            .populate('department_id', 'name')
-            .populate('team_members', 'name email')
-            .populate('related_norm_points', 'code title')
-            .populate('related_objectives', 'name code')
-            .populate('related_indicators', 'name code')
-            .populate('registros.responsible_user_id', 'name email')
-            .populate('registros.assigned_users', 'name email')
-            .populate('registros.created_by', 'name email')
-            .populate('registros.updated_by', 'name email');
+        });
         if (!process) {
             res.status(404).json({
                 error: 'Proceso no encontrado'
@@ -133,10 +123,7 @@ const createProcess = async (req, res) => {
             created_by: user_id
         });
         const savedProcess = await newProcess.save();
-        const populatedProcess = await ProcessUnified_1.ProcessUnified.findById(savedProcess._id)
-            .populate('responsible_user_id', 'name email')
-            .populate('department_id', 'name')
-            .populate('team_members', 'name email');
+        const populatedProcess = await ProcessUnified_1.ProcessUnified.findById(savedProcess._id);
         res.status(201).json({
             success: true,
             data: populatedProcess,
@@ -180,10 +167,7 @@ const updateProcess = async (req, res) => {
         }
         Object.assign(process, updateData, { updated_by: user_id });
         await process.save();
-        const updatedProcess = await ProcessUnified_1.ProcessUnified.findById(id)
-            .populate('responsible_user_id', 'name email')
-            .populate('department_id', 'name')
-            .populate('team_members', 'name email');
+        const updatedProcess = await ProcessUnified_1.ProcessUnified.findById(id);
         res.json({
             success: true,
             data: updatedProcess,
@@ -252,13 +236,7 @@ const getProcesoUnificado = async (req, res) => {
             organization_id,
             is_active: true,
             is_archived: false
-        })
-            .populate('responsible_user_id', 'name email')
-            .populate('department_id', 'name')
-            .populate('team_members', 'name email')
-            .populate('related_norm_points', 'code title')
-            .populate('registros.responsible_user_id', 'name email')
-            .populate('registros.assigned_users', 'name email');
+        });
         if (!process) {
             res.status(404).json({
                 error: 'Proceso no encontrado'

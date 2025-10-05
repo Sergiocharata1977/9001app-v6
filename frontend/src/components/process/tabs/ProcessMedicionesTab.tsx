@@ -11,6 +11,7 @@ import {
   User,
   FileText
 } from 'lucide-react';
+import api from '@/lib/api';
 
 interface Medicion {
   id: string;
@@ -39,15 +40,39 @@ export function ProcessMedicionesTab({ processId }: ProcessMedicionesTabProps) {
   const loadMediciones = async () => {
     try {
       setLoading(true);
-      // TODO: Implementar endpoint en backend
-      const response = await fetch(`/api/processes/measurements?processId=${processId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setMediciones(data.data || []);
+      // First get indicators for this process
+      const indicatorsResponse = await api.get(`/quality-indicators?process_definition_id=${processId}&organization_id=1`);
+      if (!indicatorsResponse.data.success) {
+        console.error('Error cargando indicadores');
+        setMediciones([]);
+        return;
       }
+
+      const indicators = indicatorsResponse.data.data || [];
+
+      // Then get measurements for each indicator
+      const allMediciones: Medicion[] = [];
+      for (const indicator of indicators) {
+        try {
+          const measurementsResponse = await api.get(`/measurements/indicator/${indicator._id}`);
+          if (measurementsResponse.data.success) {
+            const measurements = measurementsResponse.data.data || [];
+            // Add indicator name to each measurement
+            const medicionesWithIndicator = measurements.map((med: any) => ({
+              ...med,
+              indicadorNombre: indicator.name,
+              indicadorId: indicator._id
+            }));
+            allMediciones.push(...medicionesWithIndicator);
+          }
+        } catch (error) {
+          console.error(`Error cargando mediciones para indicador ${indicator._id}:`, error);
+        }
+      }
+
+      setMediciones(allMediciones);
     } catch (error) {
       console.error('Error cargando mediciones:', error);
-      // Datos de ejemplo mientras se implementa el backend
       setMediciones([]);
     } finally {
       setLoading(false);

@@ -20,6 +20,11 @@ export interface IProcessDefinition extends Document {
   nivel_critico: 'bajo' | 'medio' | 'alto';
   estado: 'activo' | 'inactivo' | 'revision' | 'obsoleto';
   
+  // Configuración de registros opcionales
+  hasExternalSystem: boolean;
+  hasSpecificRegistries: boolean;
+  enableRegistries: boolean;
+
   // Auditoría estándar
   is_active: boolean;
   is_archived: boolean;
@@ -108,6 +113,21 @@ const ProcessDefinitionSchema = new Schema<IProcessDefinition>({
     enum: ['activo', 'inactivo', 'revision', 'obsoleto'],
     default: 'activo'
   },
+  
+  // Configuración de registros opcionales
+  hasExternalSystem: {
+    type: Boolean,
+    default: false
+  },
+  hasSpecificRegistries: {
+    type: Boolean,
+    default: false
+  },
+  enableRegistries: {
+    type: Boolean,
+    default: true
+  },
+  
   organization_id: {
     type: String,
     required: [true, 'La organización es obligatoria'],

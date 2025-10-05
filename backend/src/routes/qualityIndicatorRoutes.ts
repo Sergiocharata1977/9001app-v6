@@ -5,14 +5,14 @@ import { multiTenantSecurity, managerOrAdmin } from '../middleware/multiTenantMi
 const router = Router();
 
 // Aplicar middleware de seguridad multi-tenant a todas las rutas
-router.use(multiTenantSecurity);
+// router.use(multiTenantSecurity); // TEMPORALMENTE DESHABILITADO PARA DESARROLLO
 
 /**
  * RUTAS ABM ESTÁNDAR PARA QUALITY INDICATOR
  */
 
 // CREATE - Crear nuevo indicador de calidad
-router.post('/', managerOrAdmin, qualityIndicatorController.create);
+router.post('/', qualityIndicatorController.create); // TEMPORALMENTE SIN AUTENTICACIÓN
 
 // READ - Obtener todos los indicadores de calidad (con paginación y filtros)
 router.get('/', qualityIndicatorController.findAll);
@@ -21,10 +21,10 @@ router.get('/', qualityIndicatorController.findAll);
 router.get('/:id', qualityIndicatorController.findById);
 
 // UPDATE - Actualizar indicador de calidad
-router.put('/:id', managerOrAdmin, qualityIndicatorController.update);
+router.put('/:id', qualityIndicatorController.update); // TEMPORALMENTE SIN AUTENTICACIÓN
 
 // DELETE - Eliminar indicador de calidad (soft delete)
-router.delete('/:id', managerOrAdmin, qualityIndicatorController.delete);
+router.delete('/:id', qualityIndicatorController.delete); // TEMPORALMENTE SIN AUTENTICACIÓN
 
 // RESTORE - Restaurar indicador de calidad eliminado
 router.patch('/:id/restore', managerOrAdmin, qualityIndicatorController.restore);

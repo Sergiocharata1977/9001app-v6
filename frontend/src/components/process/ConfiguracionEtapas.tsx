@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Modal } from '@/components/ui/modal';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/Badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
