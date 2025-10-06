@@ -32,7 +32,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
   const loadRecords = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/process-records?process_definition_id=${processId}&organization_id=org-001`);
+      const response = await fetch(`http://localhost:5000/api/process-records?process_definition_id=${processId}&organization_id=1`);
       if (response.ok) {
         const data = await response.json();
         setRecords(data.data || []);
@@ -125,8 +125,8 @@ const [isModalOpen, setIsModalOpen] = useState(false);
 function KanbanView({ records }: { records: ProcessRecord[] }) {
   const columns = [
     { id: 'iniciado', title: 'Iniciado', color: 'bg-blue-100' },
-    { id: 'en-progreso', title: 'En Progreso', color: 'bg-yellow-100' },
-    { id: 'en-revision', title: 'En Revisión', color: 'bg-purple-100' },
+    { id: 'en_progreso', title: 'En Progreso', color: 'bg-yellow-100' },
+    { id: 'revision', title: 'En Revisión', color: 'bg-purple-100' },
     { id: 'aprobado', title: 'Aprobado', color: 'bg-green-100' },
     { id: 'completado', title: 'Completado', color: 'bg-gray-100' }
   ];
@@ -134,7 +134,7 @@ function KanbanView({ records }: { records: ProcessRecord[] }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
       {columns.map(column => {
-        const columnRecords = records.filter(r => r.estado === column.id);
+        const columnRecords = records.filter(r => r.current_state === column.id);
         
         return (
           <div key={column.id} className="bg-white rounded-lg border border-gray-200 p-4">
@@ -146,8 +146,8 @@ function KanbanView({ records }: { records: ProcessRecord[] }) {
             <div className="space-y-3">
               {columnRecords.map(record => (
                 <Card key={record.id} className={`p-3 cursor-pointer hover:shadow-md transition-shadow ${column.color}`}>
-                  <p className="font-medium text-gray-900 text-sm">{record.title || `Registro ${record.id}`}</p>
-                  <p className="text-xs text-gray-600 mt-1">{record.responsible}</p>
+                  <p className="font-medium text-gray-900 text-sm">{record.titulo || record.title || `Registro ${record.id}`}</p>
+                  <p className="text-xs text-gray-600 mt-1">{record.responsable || record.responsible}</p>
                   <div className="mt-2 flex items-center justify-between">
                     <span className="text-xs text-gray-500">
                       {new Date(record.date).toLocaleDateString('es-ES')}
@@ -173,13 +173,13 @@ function CardsView({ records }: { records: ProcessRecord[] }) {
       {records.map(record => (
         <Card key={record.id} className="p-4 hover:shadow-lg transition-shadow cursor-pointer">
           <div className="flex items-start justify-between mb-3">
-            <h3 className="font-semibold text-gray-900">{record.title || `Registro ${record.id}`}</h3>
-            <Badge className={getStatusColor(record.estado)}>
-              {record.estado}
+            <h3 className="font-semibold text-gray-900">{record.titulo || record.title || `Registro ${record.id}`}</h3>
+            <Badge className={getStatusColor(record.current_state)}>
+              {record.current_state}
             </Badge>
           </div>
           
-          <p className="text-sm text-gray-600 mb-3">{record.responsible}</p>
+          <p className="text-sm text-gray-600 mb-3">{record.responsable || record.responsible}</p>
           
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-500">
@@ -235,11 +235,11 @@ function ListView({ records }: { records: ProcessRecord[] }) {
             <tr key={record.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm font-medium text-gray-900">
-                  {record.title || `Registro ${record.id}`}
+                  {record.titulo || record.title || `Registro ${record.id}`}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900">{record.responsible}</div>
+                <div className="text-sm text-gray-900">{record.responsable || record.responsible}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-500">
@@ -247,8 +247,8 @@ function ListView({ records }: { records: ProcessRecord[] }) {
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <Badge className={getStatusColor(record.estado)}>
-                  {record.estado}
+                <Badge className={getStatusColor(record.current_state)}>
+                  {record.current_state}
                 </Badge>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">

@@ -70,7 +70,7 @@ export default function ProcessRecordModal({ processId, isOpen, onClose, onSucce
         processId: processId,
         process_definition_id: processId,
         current_state: 'iniciado',
-        organization_id: 'org-001',
+        organization_id: '1',
         created_by: '68e1091fd2e5b6a2c385b778'
       };
       

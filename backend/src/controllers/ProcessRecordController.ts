@@ -91,45 +91,99 @@ export const getProcessRecordById = async (req: Request, res: Response): Promise
 // Crear un nuevo registro de proceso
 export const createProcessRecord = async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log('📥 Datos recibidos en createProcessRecord:', JSON.stringify(req.body, null, 2));
+    
     const {
-      title,
-      description,
+      titulo,
+      descripcion,
+      processId,
       process_definition_id,
       current_state,
+      prioridad,
       priority,
       organization_id,
-      created_by
+      created_by,
+      responsable,
+      fecha_inicio,
+      fecha_fin,
+      observaciones,
+      evidence,
+      progress_percentage
     } = req.body;
 
+    console.log('🔍 Validando campos requeridos...');
+    console.log('titulo:', titulo);
+    console.log('processId:', processId);
+    console.log('process_definition_id:', process_definition_id);
+    console.log('organization_id:', organization_id);
+    console.log('created_by:', created_by);
+
     // Validaciones básicas
-    if (!title || !process_definition_id || !organization_id || !created_by) {
+    if (!titulo || (!processId && !process_definition_id) || !organization_id || !created_by) {
+      console.log('❌ Validación falló - campos requeridos faltantes');
       res.status(400).json({
-        error: 'Campos requeridos: title, process_definition_id, organization_id, created_by'
+        error: 'Campos requeridos: titulo, processId/process_definition_id, organization_id, created_by'
       });
       return;
     }
 
+    // Usar processId o process_definition_id
+    const processIdToUse = processId || process_definition_id;
+    
+    console.log('🔍 Buscando proceso con ID:', processIdToUse);
+    
     // Verificar que el proceso permita registros
-    const process = await ProcessDefinition.findById(process_definition_id);
-    if (!process || !canCreateRecord(process)) {
+    const process = await ProcessDefinition.findById(processIdToUse);
+    console.log('📋 Proceso encontrado:', process ? 'Sí' : 'No');
+    
+    if (!process) {
+      res.status(400).json({
+        error: 'Proceso no encontrado'
+      });
+      return;
+    }
+    
+    console.log('🔧 Configuración del proceso:', {
+      enableRegistries: process.enableRegistries,
+      hasExternalSystem: process.hasExternalSystem,
+      hasSpecificRegistries: process.hasSpecificRegistries
+    });
+    
+    if (!canCreateRecord(process)) {
+      console.log('❌ El proceso no permite registros');
       res.status(400).json({
         error: 'Este proceso no permite registros. Verifique la configuración del proceso.'
       });
       return;
     }
 
+    console.log('✅ Proceso validado correctamente, creando registro...');
+
     // Crear el registro de proceso
     const newRecord = new ProcessRecord({
-      title,
-      description,
-      process_definition_id,
+      id: `PR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, // Generar ID único
+      titulo,
+      descripcion,
+      processId: processIdToUse,
+      process_definition_id: processIdToUse,
+      responsible: responsable || 'Usuario',
+      responsable: responsable,
+      date: new Date(),
       current_state: current_state || 'iniciado',
-      priority: priority || 'medio',
+      estado: 'pendiente',
+      prioridad: prioridad || priority || 'media',
+      fecha_inicio: fecha_inicio ? new Date(fecha_inicio) : undefined,
+      fecha_fin: fecha_fin ? new Date(fecha_fin) : undefined,
+      observaciones,
+      evidence,
+      progress_percentage: progress_percentage || 0,
       organization_id,
       created_by
     });
 
+    console.log('💾 Guardando registro en base de datos...');
     const savedRecord = await newRecord.save();
+    console.log('✅ Registro guardado exitosamente:', savedRecord._id);
 
     res.status(201).json({
       success: true,

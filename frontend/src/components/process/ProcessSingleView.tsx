@@ -7,13 +7,15 @@ import {
   ClipboardList,
   Target,
   BarChart3,
-  Activity
+  Activity,
+  Link
 } from 'lucide-react';
 import { ProcessDefinitionTab } from './tabs/ProcessDefinitionTab';
 import { ProcessRegistrosTab } from './tabs/ProcessRegistrosTab';
 import { ProcessObjetivosTab } from './tabs/ProcessObjetivosTab';
 import { ProcessIndicadoresTab } from './tabs/ProcessIndicadoresTab';
 import { ProcessMedicionesTab } from './tabs/ProcessMedicionesTab';
+import { ProcessRelationsTab } from './tabs/ProcessRelationsTab';
 import { IProcessDefinition } from '@/types';
 import api from '@/lib/api';
 
@@ -66,28 +68,50 @@ export function ProcessSingleView({
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6">
           <Tabs defaultValue="definicion" className="w-full">
-            <TabsList className={`grid w-full ${shouldShowRegistrosTab(process) ? 'grid-cols-5' : 'grid-cols-4'}`}>
-              <TabsTrigger value="definicion" className="flex items-center gap-2">
+            <TabsList className={`grid w-full ${shouldShowRegistrosTab(process) ? 'grid-cols-6' : 'grid-cols-5'} bg-gray-50`}>
+              <TabsTrigger 
+                value="definicion" 
+                className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+              >
                 <FileText className="h-4 w-4" />
                 <span className="hidden sm:inline">Definición</span>
               </TabsTrigger>
               {shouldShowRegistrosTab(process) && (
-                <TabsTrigger value="registros" className="flex items-center gap-2">
+                <TabsTrigger 
+                  value="registros" 
+                  className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+                >
                   <ClipboardList className="h-4 w-4" />
                   <span className="hidden sm:inline">Registro</span>
                 </TabsTrigger>
               )}
-              <TabsTrigger value="objetivos" className="flex items-center gap-2">
+              <TabsTrigger 
+                value="objetivos" 
+                className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+              >
                 <Target className="h-4 w-4" />
                 <span className="hidden sm:inline">Objetivos</span>
               </TabsTrigger>
-              <TabsTrigger value="indicadores" className="flex items-center gap-2">
+              <TabsTrigger 
+                value="indicadores" 
+                className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+              >
                 <BarChart3 className="h-4 w-4" />
                 <span className="hidden sm:inline">Indicadores</span>
               </TabsTrigger>
-              <TabsTrigger value="mediciones" className="flex items-center gap-2">
+              <TabsTrigger
+                value="mediciones"
+                className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+              >
                 <Activity className="h-4 w-4" />
                 <span className="hidden sm:inline">Mediciones</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="relaciones"
+                className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+              >
+                <Link className="h-4 w-4" />
+                <span className="hidden sm:inline">Norma</span>
               </TabsTrigger>
             </TabsList>
 
@@ -112,6 +136,10 @@ export function ProcessSingleView({
 
               <TabsContent value="mediciones" className="space-y-6">
                 <ProcessMedicionesTab processId={processId} />
+              </TabsContent>
+
+              <TabsContent value="relaciones" className="space-y-6">
+                <ProcessRelationsTab processId={processId} />
               </TabsContent>
             </div>
           </Tabs>

@@ -31,7 +31,8 @@ import {
   Building2,
   Calendar,
   DollarSign,
-  Award
+  Award,
+  Link as LinkIcon
 } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 
@@ -56,19 +57,7 @@ const navigation: MenuItem[] = [
       { name: 'Acciones', href: '/acciones', icon: CheckCircle }
     ]
   },
-  {
-    name: 'Módulo de Calidad',
-    href: '/calidad',
-    icon: Award,
-    children: [
-      { name: 'Dashboard', href: '/calidad', icon: BarChart3 },
-      { name: 'Política de Calidad', href: '/calidad/politica', icon: FileText },
-      { name: 'Análisis AMFE', href: '/calidad/amfe', icon: AlertTriangle },
-      { name: 'Análisis FODA', href: '/calidad/foda', icon: TrendingUp },
-      { name: 'Reuniones', href: '/calidad/reuniones', icon: Calendar },
-      { name: 'Organigrama', href: '/calidad/organigrama', icon: Building2 }
-    ]
-  },
+  { name: 'Módulo de Calidad', href: '/calidad', icon: Award },
   { name: 'Diseño y desarrollo de Producto', href: '/diseno-producto', icon: Package },
   { name: 'Recursos Humanos', href: '/rrhh', icon: Users },
   { name: 'Comercial / CRM', href: '/crm/dashboard', icon: Briefcase },
@@ -88,6 +77,8 @@ const navigation: MenuItem[] = [
     icon: BookOpen,
     children: [
       { name: 'Cláusulas ISO', href: '/normas', icon: BookOpen },
+      { name: 'Relaciones Norma-Proceso', href: '/relaciones-norma', icon: LinkIcon },
+      { name: 'Dashboard de Cumplimiento', href: '/dashboard-cumplimiento', icon: BarChart3 },
       { name: 'Evaluaciones', href: '/normas/evaluaciones', icon: CheckCircle },
       { name: 'Hallazgos', href: '/normas/hallazgos', icon: AlertTriangle },
       { name: 'Plan de Cumplimiento', href: '/normas/plan', icon: Target }
