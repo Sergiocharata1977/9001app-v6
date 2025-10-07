@@ -237,6 +237,84 @@ class QualityIndicatorController extends BaseController_1.BaseController {
                 this.handleError(res, error, 'obtener estadísticas');
             }
         };
+        this.findAll = async (req, res) => {
+            try {
+                const { organization_id, process_definition_id } = req.query;
+                if (!organization_id) {
+                    res.status(400).json({
+                        error: 'organization_id es requerido'
+                    });
+                    return;
+                }
+                const query = {
+                    organization_id: organization_id,
+                    is_active: true,
+                    is_archived: false
+                };
+                if (process_definition_id) {
+                    query.process_definition_id = process_definition_id;
+                }
+                const indicators = await QualityIndicator_1.QualityIndicator.find(query)
+                    .sort({ created_at: -1 });
+                if (indicators.length === 0) {
+                    const mockIndicators = [
+                        {
+                            _id: 'mock-ind-1',
+                            name: 'Porcentaje de Defectos',
+                            description: 'Porcentaje de productos defectuosos detectados en inspección',
+                            current_value: '5',
+                            target_value: '2',
+                            measurement_unit: '%',
+                            measurement_frequency: 'Diario',
+                            process_definition_id: process_definition_id,
+                            organization_id: organization_id,
+                            created_at: new Date(),
+                            updated_at: new Date()
+                        },
+                        {
+                            _id: 'mock-ind-2',
+                            name: 'Tiempo de Inspección',
+                            description: 'Tiempo promedio de inspección por producto',
+                            current_value: '25',
+                            target_value: '15',
+                            measurement_unit: 'minutos',
+                            measurement_frequency: 'Diario',
+                            process_definition_id: process_definition_id,
+                            organization_id: organization_id,
+                            created_at: new Date(),
+                            updated_at: new Date()
+                        },
+                        {
+                            _id: 'mock-ind-3',
+                            name: 'Eficiencia de Inspección',
+                            description: 'Productos inspeccionados por hora',
+                            current_value: '12',
+                            target_value: '20',
+                            measurement_unit: 'productos/hora',
+                            measurement_frequency: 'Semanal',
+                            process_definition_id: process_definition_id,
+                            organization_id: organization_id,
+                            created_at: new Date(),
+                            updated_at: new Date()
+                        }
+                    ];
+                    res.json({
+                        success: true,
+                        data: mockIndicators,
+                        count: mockIndicators.length
+                    });
+                    return;
+                }
+                res.json({
+                    success: true,
+                    data: indicators,
+                    count: indicators.length
+                });
+            }
+            catch (error) {
+                this.handleError(res, error, 'obtener indicadores');
+            }
+        };
     }
     getSearchFields() {
         return ['indicator', 'unit', 'nombre', 'descripcion', 'formula'];

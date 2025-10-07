@@ -1,0 +1,238 @@
+{
+  "timestamp": "2025-10-06T23:28:13.281Z",
+  "results": [
+    {
+      "name": "Landing Page",
+      "url": "http://localhost:3000/",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:27:34.191Z"
+    },
+    {
+      "name": "Dashboard",
+      "url": "http://localhost:3000/dashboard",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/dashboard\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/dashboard\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:27:37.082Z"
+    },
+    {
+      "name": "RRHH",
+      "url": "http://localhost:3000/rrhh",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/rrhh\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/rrhh\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:27:39.977Z"
+    },
+    {
+      "name": "RRHH - Personal",
+      "url": "http://localhost:3000/rrhh/personal",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/rrhh/personal\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/rrhh/personal\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:27:42.890Z"
+    },
+    {
+      "name": "RRHH - Puestos",
+      "url": "http://localhost:3000/rrhh/puestos",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/rrhh/puestos\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/rrhh/puestos\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:27:45.850Z"
+    },
+    {
+      "name": "RRHH - Departamentos",
+      "url": "http://localhost:3000/rrhh/departamentos",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/rrhh/departamentos\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/rrhh/departamentos\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:27:48.772Z"
+    },
+    {
+      "name": "Documentos",
+      "url": "http://localhost:3000/documentos",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/documentos\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/documentos\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:27:52.048Z"
+    },
+    {
+      "name": "Normas",
+      "url": "http://localhost:3000/normas",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/normas\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/normas\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:27:54.984Z"
+    },
+    {
+      "name": "Procesos",
+      "url": "http://localhost:3000/procesos",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/procesos\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/procesos\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:27:57.866Z"
+    },
+    {
+      "name": "Super Admin",
+      "url": "http://localhost:3000/super-admin",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/super-admin\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/super-admin\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:28:00.734Z"
+    },
+    {
+      "name": "Auditorías",
+      "url": "http://localhost:3000/auditorias",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/auditorias\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/auditorias\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:28:03.625Z"
+    },
+    {
+      "name": "Hallazgos",
+      "url": "http://localhost:3000/hallazgos",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/hallazgos\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/hallazgos\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:28:06.538Z"
+    },
+    {
+      "name": "Acciones",
+      "url": "http://localhost:3000/acciones",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_ABORTED at http://localhost:3000/acciones\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/acciones\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:28:09.101Z"
+    },
+    {
+      "name": "CRM - Empresas",
+      "url": "http://localhost:3000/crm/empresas",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/crm/empresas\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/crm/empresas\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:28:09.789Z"
+    },
+    {
+      "name": "CRM - Oportunidades",
+      "url": "http://localhost:3000/crm/oportunidades",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: Page crashed\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/crm/oportunidades\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:28:11.677Z"
+    },
+    {
+      "name": "CRM - Actividades",
+      "url": "http://localhost:3000/crm/actividades",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: Page crashed\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/crm/actividades\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "timestamp": "2025-10-06T23:28:12.191Z"
+    }
+  ],
+  "recommendations": [
+    {
+      "severity": "critical",
+      "page": "Landing Page",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "Dashboard",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "RRHH",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "RRHH - Personal",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "RRHH - Puestos",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "RRHH - Departamentos",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "Documentos",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "Normas",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "Procesos",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "Super Admin",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "Auditorías",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "Hallazgos",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "Acciones",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "CRM - Empresas",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "CRM - Oportunidades",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    },
+    {
+      "severity": "critical",
+      "page": "CRM - Actividades",
+      "issue": "Página no accesible o error 404",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente"
+    }
+  ],
+  "summary": {
+    "totalPages": 16,
+    "errorPages": 16,
+    "criticalPages": 0,
+    "slowPages": 0,
+    "averageLoadTime": null
+  }
+}

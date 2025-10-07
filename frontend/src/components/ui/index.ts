@@ -33,22 +33,22 @@ export {
 } from './dropdown-menu'
 
 // Componentes personalizados existentes
-export { default as Modal } from './Modal';
-export { default as LoadingSpinner } from './LoadingSpinner';
-export { default as ErrorMessage } from './ErrorMessage';
-export { default as EmptyState } from './empty-state';
-export { default as NotFoundMessage } from './NotFoundMessage';
-export { default as DataTable } from './DataTable';
-export { default as Dropdown } from './Dropdown';
-export { default as ViewToggle } from './ViewToggle';
-export { default as Logo } from './Logo';
+export { Modal } from './Modal';
+export { LoadingSpinner } from './LoadingSpinner';
+export { ErrorMessage } from './ErrorMessage';
+export { EmptyState, EmptyProcesses, EmptyRecords } from './empty-state';
+export { NotFoundMessage } from './NotFoundMessage';
+export { DataTable } from './DataTable';
+export { Dropdown } from './Dropdown';
+export { ViewToggle } from './ViewToggle';
+export { Logo } from './Logo';
 
 // Componentes Kanban
-export { default as KanbanCard } from './KanbanCard';
-export { default as KanbanColumn } from './KanbanColumn';
-export { default as ProcessBoardCard } from './ProcessBoardCard';
-export { default as TrelloCard } from './TrelloCard';
-export { default as UnifiedKanbanBoard } from './UnifiedKanbanBoard';
+export { KanbanCard } from './KanbanCard';
+export { KanbanColumn } from './KanbanColumn';
+export { ProcessBoardCard } from './ProcessBoardCard';
+export { TrelloCard } from './TrelloCard';
+export { UnifiedKanbanBoard } from './UnifiedKanbanBoard';
 export { default as UnifiedKanban } from './UnifiedKanban';
 
 // Componentes Don Candido

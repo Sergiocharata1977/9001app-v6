@@ -1,0 +1,29 @@
+{
+  "module": "Departamentos RRHH",
+  "status": "Passed",
+  "testsRun": 10,
+  "testsPassed": 10,
+  "testsFailed": 0,
+  "timestamp": "2025-10-06T20:39:09.738Z",
+  "screenshotsPath": "C:\\Users\\Usuario\\Documents\\Proyectos\\ISO -conjunto\\9001app-v6\\frontend\\test-results\\departamentos",
+  "functionalitiesTested": [
+    "Carga de página principal",
+    "Estadísticas departamentales",
+    "Componente DepartmentListing",
+    "Estructura de la página",
+    "Funcionalidades CRUD",
+    "Gestión de responsables",
+    "Estado activo/inactivo",
+    "Responsive design (móvil)",
+    "Navegación interna",
+    "Formularios y campos"
+  ],
+  "summary": {
+    "Estadísticas": 0,
+    "Elementos CRUD": 0,
+    "Responsables": 0,
+    "Estados": 0,
+    "Formularios": 0,
+    "Campos de entrada": 0
+  }
+}

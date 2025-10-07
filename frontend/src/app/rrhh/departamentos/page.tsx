@@ -1,12 +1,25 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building2, Users, UserCheck, TrendingUp, Clock, Award } from 'lucide-react';
-import { DepartmentListing } from '@/components/modules/hr/listings/DepartmentListing';
 import { departmentService } from '@/services/departmentService';
 import { personnelService } from '@/services/personnelService';
 import { useToast } from '@/components/ui/use-toast';
+
+// Lazy load del componente pesado
+const DepartmentListing = dynamic(
+  () => import('@/components/modules/hr/listings/DepartmentListing').then(mod => ({ default: mod.DepartmentListing })),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    ),
+    ssr: false
+  }
+);
 
 export default function DepartamentosRRHHPage() {
   const [departments, setDepartments] = useState<any[]>([]);

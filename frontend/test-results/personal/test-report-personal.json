@@ -1,0 +1,37 @@
+{
+  "module": "Personal RRHH",
+  "status": "Passed",
+  "testsRun": 12,
+  "testsPassed": 12,
+  "testsFailed": 0,
+  "timestamp": "2025-10-06T20:38:51.707Z",
+  "screenshotsPath": "C:\\Users\\Usuario\\Documents\\Proyectos\\ISO -conjunto\\9001app-v6\\frontend\\test-results\\personal",
+  "functionalitiesTested": [
+    "Carga de página principal",
+    "Componente PersonnelListing",
+    "Sistema de búsqueda y filtros",
+    "Botón Nuevo Personal",
+    "Vista grid (tarjetas)",
+    "Vista lista (tabla)",
+    "Estructura de datos del personal",
+    "Botones de acción (Ver, Editar, Eliminar)",
+    "Badges y estados",
+    "Funcionalidades CRUD",
+    "Responsive design (móvil)",
+    "Integración con servicios"
+  ],
+  "summary": {
+    "Tarjetas de personal": 0,
+    "Filas en tabla": 3,
+    "Campos de personal": 0,
+    "Botones Ver": 3,
+    "Botones Editar": 3,
+    "Botones Eliminar": 3,
+    "Badges": 0,
+    "Estados": 0,
+    "Tipos": 0,
+    "Formularios": 0,
+    "Campos de entrada": 1,
+    "Diálogos": 0
+  }
+}

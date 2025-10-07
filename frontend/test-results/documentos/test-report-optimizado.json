@@ -1,0 +1,36 @@
+{
+  "modulo": "Sistema de Documentos (Optimizado)",
+  "fecha": "2025-10-06T19:26:38.436Z",
+  "optimizaciones": [
+    "Modo headless para mejor rendimiento",
+    "Navegación directa sin pasar por landing page",
+    "Tiempos de espera reducidos",
+    "Resolución optimizada para computadoras viejas"
+  ],
+  "tests": {
+    "total": 11,
+    "pasados": 11,
+    "fallidos": 0,
+    "advertencias": 0
+  },
+  "funcionalidades": [
+    "Dashboard de documentos",
+    "Gestión de documentos",
+    "Categorías de documentos",
+    "Control de versiones",
+    "Plantillas de documentos",
+    "Configuración del sistema"
+  ],
+  "screenshots": [
+    "documentos-page-loaded.png",
+    "documentos-tab-dashboard.png",
+    "documentos-tab-management.png",
+    "documentos-tab-categories.png",
+    "documentos-tab-versions.png",
+    "documentos-tab-templates.png",
+    "documentos-tab-settings.png",
+    "documentos-url-categories.png",
+    "documentos-url-versions.png",
+    "documentos-mobile.png"
+  ]
+}

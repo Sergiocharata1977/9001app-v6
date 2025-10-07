@@ -1,16 +1,6 @@
 {
   "status": "commited",
-  "type": "backend",
+  "type": "frontend",
   "scope": "codebase",
-  "localEndpoint": "http://localhost:5000",
-  "backendAuthType": "public",
-  "executionArgs": {
-    "projectName": "9001app-v6",
-    "projectPath": "C:\\Users\\Usuario\\Documents\\Proyectos\\ISO -conjunto\\paso nexts\\9001app-v6",
-    "testIds": [],
-    "additionalInstruction": "Focus on the process system, specifically the endpoint GET /api/process-definitions/:id that returns 500 error due to incorrect populate fields in the backend controller. The main issue is StrictPopulateError with fields responsible_user_id, department_id, team_members that don't exist in the schema.",
-    "envs": {
-      "API_KEY": ""
-    }
-  }
+  "localEndpoint": "http://localhost:3000"
 }

@@ -68,6 +68,9 @@ import './models/Audit';
 import './models/hallazgos';
 import './models/acciones';
 import './models/EmployeeDeclaration';
+import './models/DocumentCategory';
+import './models/DocumentVersion';
+import './models/DocumentTemplate';
 // import './models/CustomerSurvey'; // TEMPORALMENTE DESACTIVADO - tiene errores
 // Modelos CRM
 import './models/crm_clientes_agro';
@@ -94,6 +97,9 @@ import auditRoutes from './routes/auditRoutes';
 import findingRoutes from './routes/findingRoutes';
 import actionRoutes from './routes/actionRoutes';
 import employeeDeclarationRoutes from './routes/employeeDeclarationRoutes';
+import documentCategoryRoutes from './routes/documentCategoryRoutes';
+import documentVersionRoutes from './routes/documentVersionRoutes';
+import documentTemplateRoutes from './routes/documentTemplateRoutes';
 // import customerSurveyRoutes from './routes/customerSurveyRoutes'; // TEMPORALMENTE DESACTIVADO
 // Rutas CRM
 import crmClienteRoutes from './routes/crmClienteRoutes';
@@ -120,6 +126,9 @@ app.use('/api/audits', auditRoutes);
 app.use('/api/findings', findingRoutes);
 app.use('/api/actions', actionRoutes);
 app.use('/api/employee-declarations', employeeDeclarationRoutes);
+app.use('/api/document-categories', documentCategoryRoutes);
+app.use('/api/document-versions', documentVersionRoutes);
+app.use('/api/document-templates', documentTemplateRoutes);
 // app.use('/api/customer-surveys', customerSurveyRoutes); // TEMPORALMENTE DESACTIVADO
 // Rutas CRM
 app.use('/api/crm/clientes', crmClienteRoutes);

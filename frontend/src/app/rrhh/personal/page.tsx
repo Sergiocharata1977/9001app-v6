@@ -1,8 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { PersonnelListing } from '@/components/rrhh/personnel/PersonnelListing';
+import dynamic from 'next/dynamic';
 import { Personnel } from '@/services/personnelService';
+
+// Lazy loading del componente pesado (490KB)
+const PersonnelListing = dynamic(
+  () => import('@/components/rrhh/personnel/PersonnelListing').then(mod => ({ default: mod.PersonnelListing })),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    ),
+    ssr: false
+  }
+);
 
 export default function PersonalPage() {
   const [selectedPersonnel, setSelectedPersonnel] = useState<Personnel | null>(null);

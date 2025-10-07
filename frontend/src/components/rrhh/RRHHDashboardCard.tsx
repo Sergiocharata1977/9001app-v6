@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { LucideIcon } from 'lucide-react';
 import { Lock } from 'lucide-react';
 
@@ -41,22 +41,13 @@ export function RRHHDashboardCard({
   habilitado,
   estadisticas
 }: RRHHDashboardCardProps) {
-  const router = useRouter();
-
-  const handleClick = () => {
-    if (habilitado) {
-      router.push(ruta);
-    }
-  };
-
-  return (
+  const cardContent = (
     <div
-      onClick={handleClick}
       className={`
-        relative overflow-hidden rounded-xl border-2
+        relative overflow-hidden rounded-xl border-2 h-full
         ${habilitado
-          ? 'border-slate-200 hover:border-emerald-300 hover:shadow-xl cursor-pointer'
-          : 'border-gray-300 opacity-60 cursor-not-allowed'
+          ? 'border-slate-200 hover:border-emerald-300 hover:shadow-xl'
+          : 'border-gray-300 opacity-60'
         }
         bg-white p-6 transition-all duration-300
         ${habilitado ? 'transform hover:scale-105' : ''}
@@ -97,7 +88,7 @@ export function RRHHDashboardCard({
                   {key.replace(/_/g, ' ')}:
                 </span>
                 <span className="ml-1 font-semibold text-gray-900">
-                  {value}
+                  {String(value)}
                 </span>
               </div>
             ))}
@@ -113,6 +104,20 @@ export function RRHHDashboardCard({
           </div>
         </div>
       )}
+    </div>
+  );
+
+  if (habilitado) {
+    return (
+      <Link href={ruta} className="group block h-full">
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return (
+    <div className="cursor-not-allowed h-full">
+      {cardContent}
     </div>
   );
 }

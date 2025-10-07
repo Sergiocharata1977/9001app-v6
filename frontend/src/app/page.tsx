@@ -4,16 +4,24 @@ import Link from 'next/link';
 import { Shield, Users, FileText, Award, Sparkles, LogIn, CheckCircle, TrendingUp, Clock, Zap, ArrowRight, Star, MessageSquare } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { DonCandidoAnimation } from '@/components/ui/DonCandidoAnimation';
+// import { DonCandidoAnimation } from '@/components/ui/DonCandidoAnimation'; // Comentado para mejor rendimiento
 
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
 
+  // useEffect optimizado para mejor rendimiento
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 50);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -152,14 +160,14 @@ export default function LandingPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                <Link href="/dashboard">
+                <Link href="/normas">
                   <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-xl font-bold inline-flex items-center justify-center gap-2 shadow-xl transition-all transform hover:scale-105">
                     <LogIn className="w-5 h-5" />
                     Comenzar Ahora
                     <ArrowRight className="w-5 h-5" />
                   </button>
                 </Link>
-                <Link href="/documentacion">
+                <Link href="/procesos">
                   <button className="border-2 border-emerald-400 text-emerald-300 hover:bg-emerald-500 hover:border-emerald-500 hover:text-white px-8 py-4 rounded-xl font-bold transition-all transform hover:scale-105">
                     Ver Demo
                   </button>
@@ -184,14 +192,10 @@ export default function LandingPage() {
                 <div className="aspect-square flex items-center justify-center">
                   <div className="text-center">
                     <div className="w-64 h-64 mx-auto mb-6 relative">
-                      <DonCandidoAnimation 
-                        animationType="saludo"
-                        size="xl"
-                        autoShow={true}
-                        loop={true}
-                        speed={1}
-                        className="mx-auto"
-                      />
+                      {/* Animación optimizada para mejor rendimiento */}
+                      <div className="w-32 h-32 mx-auto bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
+                        <Sparkles className="w-16 h-16 text-white" />
+                      </div>
                       {/* Círculo de fondo con gradiente */}
                       <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-teal-500/20 rounded-full blur-3xl -z-10"></div>
                     </div>

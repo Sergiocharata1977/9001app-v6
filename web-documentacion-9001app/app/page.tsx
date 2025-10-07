@@ -33,6 +33,19 @@ export default function DocumentacionPage() {
 
   const documentos = [
     {
+      id: 12,
+      titulo: 'Sistema de Monitoreo de Rendimiento',
+      descripcion: 'Monitoreo automático de velocidad y rendimiento con propuestas de mejora inteligentes. Testing continuo con reportes HTML visuales.',
+      categoria: 'api',
+      modulos: ['Testing', 'Rendimiento', 'Monitoreo', 'Playwright', 'DevOps'],
+      fecha: '2025-01-17',
+      autor: 'Equipo Desarrollo',
+      tiempo_lectura: '25 min',
+      nivel: 'Avanzado',
+      destacado: true,
+      url: '/docs/monitoreo-rendimiento'
+    },
+    {
       id: 10,
       titulo: 'Lógica de Registros Opcionales',
       descripcion: 'Sistema inteligente de habilitación de registros por tipo de proceso. Documentación completa de la lógica de negocio.',

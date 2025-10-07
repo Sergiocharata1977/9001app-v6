@@ -109,6 +109,18 @@ const ProcessDefinitionSchema = new mongoose_1.Schema({
         enum: ['activo', 'inactivo', 'revision', 'obsoleto'],
         default: 'activo'
     },
+    hasExternalSystem: {
+        type: Boolean,
+        default: false
+    },
+    hasSpecificRegistries: {
+        type: Boolean,
+        default: false
+    },
+    enableRegistries: {
+        type: Boolean,
+        default: true
+    },
     organization_id: {
         type: String,
         required: [true, 'La organización es obligatoria'],

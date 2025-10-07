@@ -2,303 +2,156 @@
   "tech_stack": [
     "TypeScript",
     "Next.js 14",
+    "React 18",
+    "Tailwind CSS",
+    "MongoDB",
     "Node.js",
     "Express",
-    "MongoDB",
-    "Mongoose",
-    "React",
-    "Tailwind CSS"
+    "Jest",
+    "Lucide React Icons"
   ],
   "features": [
     {
-      "name": "Process Management API",
-      "description": "API for managing ISO 9001 process definitions with CRUD operations, search, and hierarchy management",
+      "name": "Sistema de Navegación Principal",
+      "description": "Sidebar de navegación con menús colapsables y sistema de routing",
       "files": [
-        "backend/src/routes/processDefinitionRoutes.ts",
-        "backend/src/controllers/processDefinitionController.ts",
-        "backend/src/models/ProcessDefinition.ts"
-      ],
-      "api_doc": {
-        "openapi": "3.0.0",
-        "info": {
-          "title": "Process Management API",
-          "version": "1.0.0",
-          "description": "API for managing process definitions in ISO 9001 system"
-        },
-        "servers": [
-          {
-            "url": "http://localhost:5000/api",
-            "description": "Development server"
-          }
-        ],
-        "paths": {
-          "/process-definitions": {
-            "get": {
-              "summary": "Get all process definitions",
-              "parameters": [
-                {
-                  "name": "organization_id",
-                  "in": "query",
-                  "required": true,
-                  "schema": {
-                    "type": "string"
-                  }
-                }
-              ],
-              "responses": {
-                "200": {
-                  "description": "List of process definitions",
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "type": "object",
-                        "properties": {
-                          "success": {
-                            "type": "boolean"
-                          },
-                          "data": {
-                            "type": "array",
-                            "items": {
-                              "$ref": "#/components/schemas/ProcessDefinition"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "/process-definitions/{id}": {
-            "get": {
-              "summary": "Get process definition by ID",
-              "parameters": [
-                {
-                  "name": "id",
-                  "in": "path",
-                  "required": true,
-                  "schema": {
-                    "type": "string"
-                  }
-                }
-              ],
-              "responses": {
-                "200": {
-                  "description": "Process definition details",
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "type": "object",
-                        "properties": {
-                          "success": {
-                            "type": "boolean"
-                          },
-                          "data": {
-                            "$ref": "#/components/schemas/ProcessDefinition"
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "404": {
-                  "description": "Process not found"
-                },
-                "500": {
-                  "description": "Internal server error - StrictPopulateError"
-                }
-              }
-            }
-          }
-        },
-        "components": {
-          "schemas": {
-            "ProcessDefinition": {
-              "type": "object",
-              "properties": {
-                "_id": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "code": {
-                  "type": "string"
-                },
-                "type": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "created_by": {
-                  "type": "string"
-                },
-                "related_documents": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "related_norm_points": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "related_records": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "related_objectives": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "related_indicators": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+        "frontend/src/components/layout/Sidebar.tsx",
+        "frontend/src/components/layout/Header.tsx",
+        "frontend/src/app/layout.tsx"
+      ]
     },
     {
-      "name": "Audit Management API",
-      "description": "API for managing ISO 9001 audits with CRUD operations and statistics",
+      "name": "Sistema de Documentos con Tabs",
+      "description": "Página de gestión de documentos con sistema de tabs funcional",
       "files": [
-        "backend/src/routes/auditRoutes.ts",
-        "backend/src/controllers/auditController.ts"
-      ],
-      "api_doc": {
-        "openapi": "3.0.0",
-        "info": {
-          "title": "Audit Management API",
-          "version": "1.0.0"
-        },
-        "paths": {
-          "/audits": {
-            "get": {
-              "summary": "Get all audits",
-              "parameters": [
-                {
-                  "name": "organization_id",
-                  "in": "query",
-                  "required": true,
-                  "schema": {
-                    "type": "string"
-                  }
-                }
-              ],
-              "responses": {
-                "200": {
-                  "description": "List of audits"
-                }
-              }
-            }
-          }
-        }
-      }
+        "frontend/src/app/documentos/page.tsx",
+        "frontend/src/components/documents/DocumentDashboard.tsx",
+        "frontend/src/components/documents/DocumentManagement.tsx",
+        "frontend/src/components/documents/DocumentCategories.tsx",
+        "frontend/src/components/documents/DocumentVersions.tsx",
+        "frontend/src/components/documents/DocumentTemplates.tsx",
+        "frontend/src/components/documents/DocumentSettings.tsx"
+      ]
     },
     {
-      "name": "Finding Management API",
-      "description": "API for managing findings and non-conformities with root cause analysis",
+      "name": "Sistema de Puntos de Norma ISO 9001",
+      "description": "Sistema de gestión de cumplimiento ISO 9001 con tabs para cláusulas, relaciones, evaluaciones y hallazgos",
       "files": [
-        "backend/src/routes/findingRoutes.ts",
-        "backend/src/controllers/findingController.ts"
-      ],
-      "api_doc": {
-        "openapi": "3.0.0",
-        "info": {
-          "title": "Finding Management API",
-          "version": "1.0.0"
-        },
-        "paths": {
-          "/findings": {
-            "get": {
-              "summary": "Get all findings",
-              "parameters": [
-                {
-                  "name": "organization_id",
-                  "in": "query",
-                  "required": true,
-                  "schema": {
-                    "type": "string"
-                  }
-                }
-              ],
-              "responses": {
-                "200": {
-                  "description": "List of findings"
-                }
-              }
-            }
-          }
-        }
-      }
+        "frontend/src/app/normas/page.tsx",
+        "frontend/src/components/normas/NormaList.tsx",
+        "frontend/src/components/normas/NormaSingle.tsx",
+        "frontend/src/components/modules/iso/tables/IsoClauseTable.tsx"
+      ]
     },
     {
-      "name": "CRM Management API",
-      "description": "API for managing CRM operations including clients, contacts, products, and opportunities",
+      "name": "Dashboard Principal",
+      "description": "Dashboard con estadísticas y acceso rápido a módulos",
       "files": [
-        "backend/src/routes/crmClienteRoutes.ts",
-        "backend/src/routes/crmContactoRoutes.ts",
-        "backend/src/routes/crmProductoRoutes.ts",
-        "backend/src/routes/crmOportunidadRoutes.ts"
-      ],
-      "api_doc": {
-        "openapi": "3.0.0",
-        "info": {
-          "title": "CRM Management API",
-          "version": "1.0.0"
-        },
-        "paths": {
-          "/crm/clientes": {
-            "get": {
-              "summary": "Get all clients",
-              "responses": {
-                "200": {
-                  "description": "List of clients"
-                }
-              }
-            }
-          },
-          "/crm/contactos": {
-            "get": {
-              "summary": "Get all contacts",
-              "responses": {
-                "200": {
-                  "description": "List of contacts"
-                }
-              }
-            }
-          },
-          "/crm/productos": {
-            "get": {
-              "summary": "Get all products",
-              "responses": {
-                "200": {
-                  "description": "List of products"
-                }
-              }
-            }
-          }
-        }
-      }
+        "frontend/src/app/dashboard/page.tsx",
+        "frontend/src/app/page.tsx"
+      ]
+    },
+    {
+      "name": "Sistema CRM",
+      "description": "Módulo de gestión comercial y CRM con layout específico",
+      "files": [
+        "frontend/src/app/crm/layout.tsx",
+        "frontend/src/app/crm/dashboard/page.tsx",
+        "frontend/src/components/layout/CRMSidebar.tsx"
+      ]
+    },
+    {
+      "name": "Sistema RRHH",
+      "description": "Módulo de recursos humanos con navegación específica",
+      "files": [
+        "frontend/src/app/rrhh/page.tsx",
+        "frontend/src/components/rrhh/RRHHSidebar.tsx"
+      ]
+    },
+    {
+      "name": "Sistema de Procesos",
+      "description": "Gestión de procesos de calidad y documentación",
+      "files": [
+        "frontend/src/app/procesos/page.tsx",
+        "frontend/src/components/process/ProcessListing.tsx",
+        "frontend/src/components/process/ProcesoRelacionesTab.tsx",
+        "frontend/src/components/process/tabs/ProcessDefinitionTab.tsx"
+      ]
+    },
+    {
+      "name": "Sistema de Auditorías",
+      "description": "Gestión de auditorías internas y externas",
+      "files": [
+        "frontend/src/app/auditorias/page.tsx",
+        "frontend/src/app/auditorias/[id]/kanban/page.tsx"
+      ]
+    },
+    {
+      "name": "Sistema de Mejoras",
+      "description": "Gestión de hallazgos y acciones de mejora",
+      "files": [
+        "frontend/src/app/hallazgos/page.tsx",
+        "frontend/src/app/acciones/page.tsx",
+        "frontend/src/components/modules/findings/tables/FindingTable.tsx"
+      ]
+    },
+    {
+      "name": "Asistente IA Don Cándido",
+      "description": "Sistema de asistencia inteligente especializado en ISO 9001",
+      "files": [
+        "frontend/src/components/ia/ChatDonCandidos.tsx",
+        "frontend/src/contexts/DonCandidoContext.tsx",
+        "frontend/src/app/api/ia/don-candidos/route.ts",
+        "frontend/src/lib/ia/baseConocimientoISO.ts"
+      ]
+    },
+    {
+      "name": "Sistema de Super Administración",
+      "description": "Panel de administración avanzado con análisis técnico-funcional",
+      "files": [
+        "frontend/src/components/super-admin/SuperAdminSidebar.tsx",
+        "frontend/src/components/super-admin/SuperAdminHeader.tsx",
+        "frontend/src/app/super-admin/documentacion/page.tsx",
+        "frontend/src/app/super-admin/documentacion/modulos/page.tsx"
+      ]
+    },
+    {
+      "name": "Servicios Backend",
+      "description": "API REST para gestión de datos y procesos",
+      "files": [
+        "backend/src/controllers/",
+        "backend/src/services/",
+        "backend/src/models/",
+        "backend/src/routes/"
+      ]
+    },
+    {
+      "name": "Sistema de Base de Datos",
+      "description": "Modelos y configuración de MongoDB",
+      "files": [
+        "backend/src/config/database.ts",
+        "backend/src/models/"
+      ]
+    },
+    {
+      "name": "Sistema de Seeders",
+      "description": "Población inicial de datos para desarrollo y testing",
+      "files": [
+        "backend/src/seeders/isoDataSeeder.ts",
+        "backend/src/seeders/masterSeeder.ts",
+        "backend/src/seeders/mongoDataSeeder.ts",
+        "backend/src/seeders/processDefinitionSeeder.ts",
+        "backend/src/seeders/userSeeder.ts"
+      ]
+    },
+    {
+      "name": "Sistema de Testing",
+      "description": "Configuración y pruebas unitarias",
+      "files": [
+        "backend/jest.config.js",
+        "backend/src/tests/",
+        "frontend/src/tests/"
+      ]
     }
   ]
 }
-
-
-
-
-
-

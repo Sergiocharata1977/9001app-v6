@@ -1,0 +1,126 @@
+{
+  "timestamp": "2025-10-06T23:02:17.262Z",
+  "module": "Auditorías",
+  "results": [
+    {
+      "name": "Auditorías - Dashboard",
+      "url": "http://localhost:3000/auditorias",
+      "description": "Panel principal de gestión de auditorías",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/auditorias\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "results": {
+        "navigation": null,
+        "components": [],
+        "forms": [],
+        "tables": [],
+        "buttons": [],
+        "interactions": [],
+        "errors": [
+          "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/auditorias\", waiting until \"domcontentloaded\"\u001b[22m\n"
+        ],
+        "screenshot": "C:\\Users\\Usuario\\Documents\\Proyectos\\ISO -conjunto\\9001app-v6\\frontend\\test-results\\auditorias\\error-auditor-as---dashboard.png"
+      },
+      "timestamp": "2025-10-06T23:00:53.300Z"
+    },
+    {
+      "name": "Hallazgos",
+      "url": "http://localhost:3000/hallazgos",
+      "description": "Gestión de hallazgos de auditoría",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/hallazgos\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "results": {
+        "navigation": null,
+        "components": [],
+        "forms": [],
+        "tables": [],
+        "buttons": [],
+        "interactions": [],
+        "errors": [
+          "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/hallazgos\", waiting until \"domcontentloaded\"\u001b[22m\n"
+        ],
+        "screenshot": "C:\\Users\\Usuario\\Documents\\Proyectos\\ISO -conjunto\\9001app-v6\\frontend\\test-results\\auditorias\\error-hallazgos.png"
+      },
+      "timestamp": "2025-10-06T23:01:17.437Z"
+    },
+    {
+      "name": "Acciones Correctivas",
+      "url": "http://localhost:3000/acciones",
+      "description": "Seguimiento de acciones correctivas y preventivas",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/acciones\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/acciones\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "results": {
+        "navigation": null,
+        "components": [],
+        "forms": [],
+        "tables": [],
+        "buttons": [],
+        "interactions": [],
+        "errors": [
+          "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/acciones\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/acciones\", waiting until \"domcontentloaded\"\u001b[22m\n"
+        ],
+        "screenshot": "C:\\Users\\Usuario\\Documents\\Proyectos\\ISO -conjunto\\9001app-v6\\frontend\\test-results\\auditorias\\error-acciones-correctivas.png"
+      },
+      "timestamp": "2025-10-06T23:01:23.698Z"
+    },
+    {
+      "name": "Acciones Auditor",
+      "url": "http://localhost:3000/acciones-auditor",
+      "description": "Gestión de acciones desde perspectiva del auditor",
+      "loadTime": -1,
+      "status": "error",
+      "error": "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/acciones-auditor\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "results": {
+        "navigation": null,
+        "components": [],
+        "forms": [],
+        "tables": [],
+        "buttons": [],
+        "interactions": [],
+        "errors": [
+          "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/acciones-auditor\", waiting until \"domcontentloaded\"\u001b[22m\n"
+        ]
+      },
+      "timestamp": "2025-10-06T23:02:10.082Z"
+    }
+  ],
+  "recommendations": [
+    {
+      "severity": "critical",
+      "module": "Auditorías - Dashboard",
+      "issue": "Página no accesible: page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/auditorias\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente",
+      "priority": 1
+    },
+    {
+      "severity": "critical",
+      "module": "Hallazgos",
+      "issue": "Página no accesible: page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/hallazgos\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente",
+      "priority": 1
+    },
+    {
+      "severity": "critical",
+      "module": "Acciones Correctivas",
+      "issue": "Página no accesible: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/acciones\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/acciones\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente",
+      "priority": 1
+    },
+    {
+      "severity": "critical",
+      "module": "Acciones Auditor",
+      "issue": "Página no accesible: page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/acciones-auditor\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "recommendation": "Verificar que la ruta exista y el componente se renderice correctamente",
+      "priority": 1
+    }
+  ],
+  "summary": {
+    "totalModules": 4,
+    "errorModules": 4,
+    "criticalModules": 0,
+    "workingModules": 0,
+    "averageLoadTime": null
+  }
+}

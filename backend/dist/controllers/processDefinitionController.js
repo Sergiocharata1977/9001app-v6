@@ -154,6 +154,9 @@ const updateProcessDefinition = async (req, res) => {
             });
             return;
         }
+        if (updateData.hasExternalSystem || updateData.hasSpecificRegistries) {
+            updateData.enableRegistries = false;
+        }
         Object.assign(process, updateData);
         process.updated_by = updated_by;
         const updatedProcess = await process.save();

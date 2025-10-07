@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reporte de Testing - Módulo de Auditorías</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+      color: #333;
+    }
+    .container { 
+      max-width: 1400px; 
+      margin: 0 auto; 
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    .header { 
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+    .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+    .header .subtitle { font-size: 1.2em; opacity: 0.9; }
+    
+    .metrics { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 40px;
+      background: #f8f9fa;
+    }
+    .metric-card {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .metric-card .value { 
+      font-size: 3em; 
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .metric-card.working .value { color: #27ae60; }
+    .metric-card.error .value { color: #e74c3c; }
+    .metric-card.critical .value { color: #e67e22; }
+    .metric-card.average .value { color: #3498db; }
+    
+    .section { padding: 40px; }
+    .section h2 { 
+      font-size: 2em;
+      margin-bottom: 30px;
+      color: #f5576c;
+      border-bottom: 3px solid #f5576c;
+      padding-bottom: 10px;
+    }
+    
+    .module-grid {
+      display: grid;
+      gap: 20px;
+    }
+    .module-card {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 15px;
+      border-left: 5px solid #f5576c;
+    }
+    .module-card.excellent { border-left-color: #27ae60; background: #f0fff4; }
+    .module-card.good { border-left-color: #2ecc71; background: #f0fff4; }
+    .module-card.acceptable { border-left-color: #f39c12; background: #fffbf0; }
+    .module-card.slow { border-left-color: #e67e22; background: #fff5f0; }
+    .module-card.critical { border-left-color: #e74c3c; background: #fff5f5; }
+    .module-card.error { border-left-color: #c0392b; background: #ffe5e5; }
+    
+    .module-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .module-name { font-size: 1.5em; font-weight: bold; }
+    .module-time { 
+      font-size: 1.5em;
+      font-weight: bold;
+      padding: 5px 15px;
+      background: white;
+      border-radius: 10px;
+    }
+    
+    .module-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #ddd;
+    }
+    .detail-item { display: flex; flex-direction: column; }
+    .detail-label { 
+      font-size: 0.8em;
+      color: #666;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .detail-value { font-size: 1.1em; font-weight: 600; }
+    
+    .recommendations {
+      background: #fff3cd;
+      padding: 30px;
+      margin: 40px;
+      border-radius: 15px;
+      border: 2px solid #ffc107;
+    }
+    .recommendations h3 {
+      font-size: 1.8em;
+      color: #856404;
+      margin-bottom: 20px;
+    }
+    .recommendation-item {
+      background: white;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border-left: 4px solid #ffc107;
+    }
+    .recommendation-item.critical { border-left-color: #e74c3c; }
+    .recommendation-item.high { border-left-color: #e67e22; }
+    .recommendation-item.medium { border-left-color: #f39c12; }
+    .recommendation-item.low { border-left-color: #3498db; }
+    
+    .audit-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .audit-feature {
+      padding: 5px 12px;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border-radius: 15px;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+    .audit-feature.missing {
+      background: #ffebee;
+      color: #c62828;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🔍 Reporte de Testing - Módulo de Auditorías</h1>
+      <div class="subtitle">Sistema de Gestión de Calidad ISO 9001 - 9001app v6</div>
+    </div>
+    
+    <div class="metrics">
+      <div class="metric-card">
+        <div class="label">Total Módulos</div>
+        <div class="value">4</div>
+      </div>
+      <div class="metric-card working">
+        <div class="label">Funcionales</div>
+        <div class="value">0</div>
+      </div>
+      <div class="metric-card error">
+        <div class="label">Con Errores</div>
+        <div class="value">4</div>
+      </div>
+      <div class="metric-card critical">
+        <div class="label">Críticos</div>
+        <div class="value">0</div>
+      </div>
+      <div class="metric-card average">
+        <div class="label">Tiempo Promedio</div>
+        <div class="value">NaN<span style="font-size: 0.4em;">ms</span></div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>📊 Resultados por Módulo</h2>
+      <div class="module-grid">
+        
+          <div class="module-card error">
+            <div class="module-header">
+              <div class="module-name">Auditorías - Dashboard</div>
+              <div class="module-time">ERROR</div>
+            </div>
+            <div style="color: #666; margin-bottom: 15px;">Panel principal de gestión de auditorías</div>
+            
+            
+              <div class="module-details">
+                <div class="detail-item">
+                  <div class="detail-label">Tablas</div>
+                  <div class="detail-value"></div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Formularios</div>
+                  <div class="detail-value"></div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Creación</div>
+                  <div class="detail-value">0</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Edición</div>
+                  <div class="detail-value">0</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Eliminación</div>
+                  <div class="detail-value">0</div>
+                </div>
+              </div>
+            
+            <div style="color: #e74c3c; margin-top: 10px;">⚠️ page.goto: Timeout 15000ms exceeded.
+Call log:
+[2m  - navigating to "http://localhost:3000/auditorias", waiting until "domcontentloaded"[22m
+</div>
+          </div>
+        
+          <div class="module-card error">
+            <div class="module-header">
+              <div class="module-name">Hallazgos</div>
+              <div class="module-time">ERROR</div>
+            </div>
+            <div style="color: #666; margin-bottom: 15px;">Gestión de hallazgos de auditoría</div>
+            
+            
+              <div class="module-details">
+                <div class="detail-item">
+                  <div class="detail-label">Tablas</div>
+                  <div class="detail-value"></div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Formularios</div>
+                  <div class="detail-value"></div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Creación</div>
+                  <div class="detail-value">0</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Edición</div>
+                  <div class="detail-value">0</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Eliminación</div>
+                  <div class="detail-value">0</div>
+                </div>
+              </div>
+            
+            <div style="color: #e74c3c; margin-top: 10px;">⚠️ page.goto: Timeout 15000ms exceeded.
+Call log:
+[2m  - navigating to "http://localhost:3000/hallazgos", waiting until "domcontentloaded"[22m
+</div>
+          </div>
+        
+          <div class="module-card error">
+            <div class="module-header">
+              <div class="module-name">Acciones Correctivas</div>
+              <div class="module-time">ERROR</div>
+            </div>
+            <div style="color: #666; margin-bottom: 15px;">Seguimiento de acciones correctivas y preventivas</div>
+            
+            
+              <div class="module-details">
+                <div class="detail-item">
+                  <div class="detail-label">Tablas</div>
+                  <div class="detail-value"></div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Formularios</div>
+                  <div class="detail-value"></div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Creación</div>
+                  <div class="detail-value">0</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Edición</div>
+                  <div class="detail-value">0</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Eliminación</div>
+                  <div class="detail-value">0</div>
+                </div>
+              </div>
+            
+            <div style="color: #e74c3c; margin-top: 10px;">⚠️ page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/acciones
+Call log:
+[2m  - navigating to "http://localhost:3000/acciones", waiting until "domcontentloaded"[22m
+</div>
+          </div>
+        
+          <div class="module-card error">
+            <div class="module-header">
+              <div class="module-name">Acciones Auditor</div>
+              <div class="module-time">ERROR</div>
+            </div>
+            <div style="color: #666; margin-bottom: 15px;">Gestión de acciones desde perspectiva del auditor</div>
+            
+            
+              <div class="module-details">
+                <div class="detail-item">
+                  <div class="detail-label">Tablas</div>
+                  <div class="detail-value"></div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Formularios</div>
+                  <div class="detail-value"></div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Creación</div>
+                  <div class="detail-value">0</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Edición</div>
+                  <div class="detail-value">0</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Eliminación</div>
+                  <div class="detail-value">0</div>
+                </div>
+              </div>
+            
+            <div style="color: #e74c3c; margin-top: 10px;">⚠️ page.goto: Timeout 15000ms exceeded.
+Call log:
+[2m  - navigating to "http://localhost:3000/acciones-auditor", waiting until "domcontentloaded"[22m
+</div>
+          </div>
+        
+      </div>
+    </div>
+    
+    
+      <div class="recommendations">
+        <h3>💡 Recomendaciones de Mejora</h3>
+        
+          <div class="recommendation-item critical">
+            <div style="display: flex; justify-between; align-items: center; margin-bottom: 10px;">
+              <div style="font-weight: bold; font-size: 1.1em;">Auditorías - Dashboard</div>
+              <div style="padding: 5px 15px; background: #856404; color: white; border-radius: 20px; font-size: 0.8em; text-transform: uppercase;">critical</div>
+            </div>
+            <div style="color: #856404; margin-bottom: 10px; font-weight: 600;">⚠️ Página no accesible: page.goto: Timeout 15000ms exceeded.
+Call log:
+[2m  - navigating to "http://localhost:3000/auditorias", waiting until "domcontentloaded"[22m
+</div>
+            <div style="color: #666;">💡 Verificar que la ruta exista y el componente se renderice correctamente</div>
+          </div>
+        
+          <div class="recommendation-item critical">
+            <div style="display: flex; justify-between; align-items: center; margin-bottom: 10px;">
+              <div style="font-weight: bold; font-size: 1.1em;">Hallazgos</div>
+              <div style="padding: 5px 15px; background: #856404; color: white; border-radius: 20px; font-size: 0.8em; text-transform: uppercase;">critical</div>
+            </div>
+            <div style="color: #856404; margin-bottom: 10px; font-weight: 600;">⚠️ Página no accesible: page.goto: Timeout 15000ms exceeded.
+Call log:
+[2m  - navigating to "http://localhost:3000/hallazgos", waiting until "domcontentloaded"[22m
+</div>
+            <div style="color: #666;">💡 Verificar que la ruta exista y el componente se renderice correctamente</div>
+          </div>
+        
+          <div class="recommendation-item critical">
+            <div style="display: flex; justify-between; align-items: center; margin-bottom: 10px;">
+              <div style="font-weight: bold; font-size: 1.1em;">Acciones Correctivas</div>
+              <div style="padding: 5px 15px; background: #856404; color: white; border-radius: 20px; font-size: 0.8em; text-transform: uppercase;">critical</div>
+            </div>
+            <div style="color: #856404; margin-bottom: 10px; font-weight: 600;">⚠️ Página no accesible: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/acciones
+Call log:
+[2m  - navigating to "http://localhost:3000/acciones", waiting until "domcontentloaded"[22m
+</div>
+            <div style="color: #666;">💡 Verificar que la ruta exista y el componente se renderice correctamente</div>
+          </div>
+        
+          <div class="recommendation-item critical">
+            <div style="display: flex; justify-between; align-items: center; margin-bottom: 10px;">
+              <div style="font-weight: bold; font-size: 1.1em;">Acciones Auditor</div>
+              <div style="padding: 5px 15px; background: #856404; color: white; border-radius: 20px; font-size: 0.8em; text-transform: uppercase;">critical</div>
+            </div>
+            <div style="color: #856404; margin-bottom: 10px; font-weight: 600;">⚠️ Página no accesible: page.goto: Timeout 15000ms exceeded.
+Call log:
+[2m  - navigating to "http://localhost:3000/acciones-auditor", waiting until "domcontentloaded"[22m
+</div>
+            <div style="color: #666;">💡 Verificar que la ruta exista y el componente se renderice correctamente</div>
+          </div>
+        
+      </div>
+    
+    
+    <div style="background: #2c3e50; color: white; padding: 30px; text-align: center;">
+      <div class="timestamp">Generado: 6/10/2025, 20:02:18</div>
+      <div style="margin-top: 10px;">Sistema de Testing Automático - Módulo de Auditorías ISO 9001</div>
+    </div>
+  </div>
+</body>
+</html>
+  

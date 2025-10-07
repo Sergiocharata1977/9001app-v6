@@ -1,7 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   BookOpen, 
   CheckCircle, 
@@ -12,12 +14,26 @@ import {
   Target,
   FileText,
   Users,
-  Calendar
+  Calendar,
+  Link as LinkIcon,
+  BarChart3
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { IsoClauseTable } from '@/components/modules/iso/tables/IsoClauseTable';
 
 export default function NormasPage() {
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams) {
+      const tab = searchParams.get('tab');
+      if (tab && ['dashboard', 'relaciones', 'cumplimiento', 'evaluaciones', 'hallazgos', 'plan'].includes(tab)) {
+        setActiveTab(tab);
+      }
+    }
+  }, [searchParams]);
+
   const stats = [
     {
       title: 'Total Cláusulas',
@@ -227,45 +243,82 @@ export default function NormasPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Puntos de Norma ISO 9001</h1>
-        <p className="text-gray-600 mt-2">
-          Seguimiento y evaluación del cumplimiento de los requisitos ISO 9001:2015
-        </p>
-      </div>
+    <div className="flex h-screen bg-gray-50">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        <header className="bg-white border-b border-gray-200 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Puntos de Norma ISO 9001
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Seguimiento y evaluación del cumplimiento de los requisitos ISO 9001:2015
+              </p>
+            </div>
+          </div>
+        </header>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
-        {stats.map((stat, index) => (
-          <Card key={index} className="hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
-                  <p className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</p>
-                  <div className="flex items-center gap-1">
-                    <span className={`text-sm font-medium ${
-                      stat.changeType === 'positive' ? 'text-green-600' : 
-                      stat.changeType === 'negative' ? 'text-red-600' : 'text-gray-500'
-                    }`}>
-                      {stat.change}
-                    </span>
-                    <span className="text-xs text-gray-500">vs evaluación anterior</span>
-                  </div>
-                </div>
-                <div className={`p-3 rounded-lg ${stat.bgColor} flex-shrink-0`}>
-                  <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                </div>
+        <div className="flex-1 overflow-auto p-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-6">
+              <TabsTrigger value="dashboard" className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                <BookOpen className="w-4 h-4" />
+                <span className="hidden sm:inline">Cláusulas ISO</span>
+              </TabsTrigger>
+              <TabsTrigger value="relaciones" className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                <LinkIcon className="w-4 h-4" />
+                <span className="hidden sm:inline">Relaciones</span>
+              </TabsTrigger>
+              <TabsTrigger value="cumplimiento" className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                <BarChart3 className="w-4 h-4" />
+                <span className="hidden sm:inline">Cumplimiento</span>
+              </TabsTrigger>
+              <TabsTrigger value="evaluaciones" className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                <CheckCircle className="w-4 h-4" />
+                <span className="hidden sm:inline">Evaluaciones</span>
+              </TabsTrigger>
+              <TabsTrigger value="hallazgos" className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                <AlertTriangle className="w-4 h-4" />
+                <span className="hidden sm:inline">Hallazgos</span>
+              </TabsTrigger>
+              <TabsTrigger value="plan" className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                <Target className="w-4 h-4" />
+                <span className="hidden sm:inline">Plan</span>
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="dashboard" className="space-y-6 mt-6">
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+                {stats.map((stat, index) => (
+                  <Card key={index} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
+                          <p className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</p>
+                          <div className="flex items-center gap-1">
+                            <span className={`text-sm font-medium ${
+                              stat.changeType === 'positive' ? 'text-green-600' : 
+                              stat.changeType === 'negative' ? 'text-red-600' : 'text-gray-500'
+                            }`}>
+                              {stat.change}
+                            </span>
+                            <span className="text-xs text-gray-500">vs evaluación anterior</span>
+                          </div>
+                        </div>
+                        <div className={`p-3 rounded-lg ${stat.bgColor} flex-shrink-0`}>
+                          <stat.icon className={`h-6 w-6 ${stat.color}`} />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
 
-      {/* Secondary Stats Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Secondary Stats Row */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chapter Compliance */}
         <Card className="lg:col-span-2">
           <CardHeader>
@@ -412,6 +465,50 @@ export default function NormasPage() {
           />
         </CardContent>
       </Card>
+            </TabsContent>
+
+            <TabsContent value="relaciones" className="space-y-6 mt-6">
+              <div className="text-center py-12">
+                <LinkIcon className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">Relaciones Norma-Proceso</h3>
+                <p className="mt-1 text-sm text-gray-500">Contenido de relaciones en desarrollo...</p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="cumplimiento" className="space-y-6 mt-6">
+              <div className="text-center py-12">
+                <BarChart3 className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">Dashboard de Cumplimiento</h3>
+                <p className="mt-1 text-sm text-gray-500">Contenido de cumplimiento en desarrollo...</p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="evaluaciones" className="space-y-6 mt-6">
+              <div className="text-center py-12">
+                <CheckCircle className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">Evaluaciones</h3>
+                <p className="mt-1 text-sm text-gray-500">Contenido de evaluaciones en desarrollo...</p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="hallazgos" className="space-y-6 mt-6">
+              <div className="text-center py-12">
+                <AlertTriangle className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">Hallazgos</h3>
+                <p className="mt-1 text-sm text-gray-500">Contenido de hallazgos en desarrollo...</p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="plan" className="space-y-6 mt-6">
+              <div className="text-center py-12">
+                <Target className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">Plan de Cumplimiento</h3>
+                <p className="mt-1 text-sm text-gray-500">Contenido del plan en desarrollo...</p>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
     </div>
   );
 }

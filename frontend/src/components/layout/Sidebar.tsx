@@ -61,29 +61,8 @@ const navigation: MenuItem[] = [
   { name: 'Diseño y desarrollo de Producto', href: '/diseno-producto', icon: Package },
   { name: 'Recursos Humanos', href: '/rrhh', icon: Users },
   { name: 'Comercial / CRM', href: '/crm/dashboard', icon: Briefcase },
-        {
-          name: 'Documentos',
-          href: '/documentos',
-          icon: FileText,
-          children: [
-            { name: 'Gestión de Documentos', href: '/documentos', icon: FileText },
-            { name: 'Categorías', href: '/documentos/categorias', icon: FolderOpen },
-            { name: 'Control de Versiones', href: '/documentos/versiones', icon: ClipboardCheck }
-          ]
-        },
-  {
-    name: 'Puntos de Norma',
-    href: '/normas',
-    icon: BookOpen,
-    children: [
-      { name: 'Cláusulas ISO', href: '/normas', icon: BookOpen },
-      { name: 'Relaciones Norma-Proceso', href: '/relaciones-norma', icon: LinkIcon },
-      { name: 'Dashboard de Cumplimiento', href: '/dashboard-cumplimiento', icon: BarChart3 },
-      { name: 'Evaluaciones', href: '/normas/evaluaciones', icon: CheckCircle },
-      { name: 'Hallazgos', href: '/normas/hallazgos', icon: AlertTriangle },
-      { name: 'Plan de Cumplimiento', href: '/normas/plan', icon: Target }
-    ]
-  },
+        { name: 'Documentos', href: '/documentos', icon: FileText },
+  { name: 'Puntos de Norma', href: '/normas', icon: BookOpen },
   { name: 'Configuración', href: '/configuracion', icon: Settings },
 ];
 

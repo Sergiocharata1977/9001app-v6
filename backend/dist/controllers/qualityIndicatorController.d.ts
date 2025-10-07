@@ -8,6 +8,7 @@ declare class QualityIndicatorController extends BaseController {
     getValueHistory: (req: any, res: any) => Promise<void>;
     getAlertsIndicators: (req: any, res: any) => Promise<void>;
     getStatistics: (req: any, res: any) => Promise<void>;
+    findAll: (req: any, res: any) => Promise<void>;
 }
 export declare const qualityIndicatorController: QualityIndicatorController;
 export {};

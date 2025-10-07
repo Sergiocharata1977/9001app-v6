@@ -16,6 +16,9 @@ export interface IProcessDefinition extends Document {
     categoria: string;
     nivel_critico: 'bajo' | 'medio' | 'alto';
     estado: 'activo' | 'inactivo' | 'revision' | 'obsoleto';
+    hasExternalSystem: boolean;
+    hasSpecificRegistries: boolean;
+    enableRegistries: boolean;
     is_active: boolean;
     is_archived: boolean;
     created_by: mongoose.Types.ObjectId;

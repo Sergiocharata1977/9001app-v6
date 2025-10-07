@@ -1,0 +1,31 @@
+{
+  "module": "Puestos de Trabajo RRHH",
+  "status": "Passed",
+  "testsRun": 10,
+  "testsPassed": 10,
+  "testsFailed": 0,
+  "timestamp": "2025-10-06T20:31:27.589Z",
+  "screenshotsPath": "C:\\Users\\Usuario\\Documents\\Proyectos\\ISO -conjunto\\9001app-v6\\frontend\\test-results\\puestos",
+  "functionalitiesTested": [
+    "Carga de página principal",
+    "Sistema de filtros y búsqueda",
+    "Vista tarjetas",
+    "Vista lista",
+    "Mock data de puestos",
+    "Botón Nuevo Puesto",
+    "Información detallada",
+    "Navegación a detalles",
+    "Badges y niveles jerárquicos",
+    "Responsive design (móvil)"
+  ],
+  "summary": {
+    "Puestos encontrados": 3,
+    "Tarjetas de puestos": 0,
+    "Filtros": 2,
+    "Badges": 0,
+    "Niveles jerárquicos": 0,
+    "Responsabilidades": 0,
+    "Requisitos": 0,
+    "Departamentos": 3
+  }
+}
