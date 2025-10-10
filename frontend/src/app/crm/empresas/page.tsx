@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -9,7 +9,6 @@ import {
   Building2,
   Plus,
   Search,
-  Filter,
   MapPin,
   Phone,
   Mail,
@@ -19,52 +18,100 @@ import {
   Grid3X3,
   List,
   User,
-  TrendingUp
+  TrendingUp,
+  Loader2
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useOrganization } from '@/contexts/OrganizationContext';
+import { crmClienteService } from '@/services/crmService';
+import type { CRMCliente } from '@/types/crm';
+import { toast } from 'sonner';
+import { 
+  NuevaEmpresaModal, 
+  EditarEmpresaModal, 
+  EliminarEmpresaModal 
+} from '@/components/crm/modals';
+import CrmCard from '@/components/crm/cards/CrmCard';
 
 export default function EmpresasPage() {
+  const router = useRouter();
+  const { organizationId } = useOrganization();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'cards' | 'list'>('cards');
   const [filterTipo, setFilterTipo] = useState('todos');
+  const [empresas, setEmpresas] = useState<CRMCliente[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({ total: 0, totalSuperficie: 0 });
 
-  const empresas = [
-    {
-      id: 'CLI-2024-001',
-      razonSocial: 'Estancia San Miguel',
-      rfc: 'ESM-123456',
-      tipoCliente: 'grande',
-      zona: 'Pampa Húmeda',
-      ciudad: 'Buenos Aires',
-      telefono: '+54 11 1234-5678',
-      email: 'contacto@estanciasanmiguel.com',
-      superficieTotal: 5000,
-      vendedor: 'Juan Pérez'
-    },
-    {
-      id: 'CLI-2024-002',
-      razonSocial: 'Agropecuaria Los Pinos',
-      rfc: 'ALP-789012',
-      tipoCliente: 'mediano',
-      zona: 'Región Centro',
-      ciudad: 'Córdoba',
-      telefono: '+54 351 987-6543',
-      email: 'info@lospinos.com',
-      superficieTotal: 2500,
-      vendedor: 'María González'
-    },
-    {
-      id: 'CLI-2024-003',
-      razonSocial: 'Campo Verde SA',
-      rfc: 'CVS-345678',
-      tipoCliente: 'corporativo',
-      zona: 'Litoral',
-      ciudad: 'Santa Fe',
-      telefono: '+54 342 555-1234',
-      email: 'ventas@campoverde.com',
-      superficieTotal: 8000,
-      vendedor: 'Carlos Rodríguez'
-    },
-  ];
+  // Estados de modales
+  const [showNuevaModal, setShowNuevaModal] = useState(false);
+  const [showEditarModal, setShowEditarModal] = useState(false);
+  const [showEliminarModal, setShowEliminarModal] = useState(false);
+  const [empresaSeleccionada, setEmpresaSeleccionada] = useState<any>(null);
+
+  const loadEmpresas = useCallback(async () => {
+    try {
+      setLoading(true);
+      const filters = {
+        ...(filterTipo !== 'todos' && { tipo_cliente: filterTipo }),
+        limit: 100, // Cargar más para filtrado local
+      };
+      
+      const response = await crmClienteService.getAll(organizationId, filters);
+      if (response.success && response.data) {
+        setEmpresas(response.data);
+      }
+    } catch (error) {
+      console.error('Error cargando empresas:', error);
+      toast.error('Error al cargar empresas');
+    } finally {
+      setLoading(false);
+    }
+  }, [organizationId, filterTipo]);
+
+  const loadStats = useCallback(async () => {
+    try {
+      const response = await crmClienteService.getStats(organizationId);
+      if (response.success && response.data) {
+        setStats({
+          total: response.data.total,
+          totalSuperficie: response.data.totalSuperficie,
+        });
+      }
+    } catch (error) {
+      console.error('Error cargando estadísticas:', error);
+    }
+  }, [organizationId]);
+
+  // Cargar empresas
+  useEffect(() => {
+    loadEmpresas();
+    loadStats();
+  }, [loadEmpresas, loadStats]);
+
+  // Handlers de modales
+  const handleNuevaEmpresa = () => {
+    setShowNuevaModal(true);
+  };
+
+  const handleEditarEmpresa = (empresa: any) => {
+    setEmpresaSeleccionada(empresa);
+    setShowEditarModal(true);
+  };
+
+  const handleEliminarEmpresa = (empresa: any) => {
+    setEmpresaSeleccionada(empresa);
+    setShowEliminarModal(true);
+  };
+
+  const handleVerEmpresa = (empresa: any) => {
+    router.push(`/crm/empresas/${empresa.id}`);
+  };
+
+  const handleModalSuccess = () => {
+    loadEmpresas();
+    loadStats();
+  };
 
   const getTipoClienteColor = (tipo: string) => {
     const colors = {
@@ -81,11 +128,19 @@ export default function EmpresasPage() {
   };
 
   const filteredEmpresas = empresas.filter(empresa => {
-    const matchesSearch = empresa.razonSocial.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         empresa.ciudad.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesTipo = filterTipo === 'todos' || empresa.tipoCliente === filterTipo;
-    return matchesSearch && matchesTipo;
+    const matchesSearch = empresa.razon_social.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         empresa.ciudad?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         empresa.zona_geografica?.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesSearch;
   });
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -95,7 +150,10 @@ export default function EmpresasPage() {
           <h1 className="text-3xl font-bold text-gray-900">Empresas</h1>
           <p className="text-gray-600 mt-2">Gestión de clientes y empresas agropecuarias</p>
         </div>
-        <Button className="flex items-center gap-2">
+        <Button 
+          className="flex items-center gap-2"
+          onClick={handleNuevaEmpresa}
+        >
           <Plus className="h-4 w-4" />
           Nueva Empresa
         </Button>
@@ -134,14 +192,14 @@ export default function EmpresasPage() {
         <Card>
           <CardContent className="p-4">
             <div className="text-sm text-gray-600">Total Empresas</div>
-            <div className="text-2xl font-bold text-gray-900 mt-1">{empresas.length}</div>
+            <div className="text-2xl font-bold text-gray-900 mt-1">{stats.total}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-sm text-gray-600">Superficie Total</div>
             <div className="text-2xl font-bold text-gray-900 mt-1">
-              {empresas.reduce((sum, e) => sum + e.superficieTotal, 0).toLocaleString()} ha
+              {stats.totalSuperficie?.toLocaleString() || 0} ha
             </div>
           </CardContent>
         </Card>
@@ -149,7 +207,7 @@ export default function EmpresasPage() {
           <CardContent className="p-4">
             <div className="text-sm text-gray-600">Clientes Grandes</div>
             <div className="text-2xl font-bold text-gray-900 mt-1">
-              {empresas.filter(e => e.tipoCliente === 'grande' || e.tipoCliente === 'corporativo').length}
+              {empresas.filter(e => e.tipo_cliente === 'grande' || e.tipo_cliente === 'corporativo').length}
             </div>
           </CardContent>
         </Card>
@@ -157,7 +215,7 @@ export default function EmpresasPage() {
           <CardContent className="p-4">
             <div className="text-sm text-gray-600">Zonas Activas</div>
             <div className="text-2xl font-bold text-gray-900 mt-1">
-              {new Set(empresas.map(e => e.zona)).size}
+              {new Set(empresas.map(e => e.zona_geografica).filter(Boolean)).size}
             </div>
           </CardContent>
         </Card>
@@ -198,103 +256,28 @@ export default function EmpresasPage() {
       {viewMode === 'cards' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEmpresas.map((empresa) => (
-            <Card key={empresa.id} className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center text-white font-semibold text-lg">
-                    {getInitials(empresa.razonSocial)}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{empresa.razonSocial}</h3>
-                    <p className="text-sm text-gray-600">{empresa.id}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2 text-sm text-gray-600 mb-4">
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4" />
-                  <span>{empresa.ciudad}, {empresa.zona}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Phone className="h-4 w-4" />
-                  <span>{empresa.telefono}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  <span className="truncate">{empresa.email}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span>Vendedor: {empresa.vendedor}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4" />
-                  <span>Superficie: {empresa.superficieTotal.toLocaleString()} ha</span>
-                </div>
-              </div>
-
-              <div className="flex gap-2 mb-4">
-                <Badge className={getTipoClienteColor(empresa.tipoCliente)}>
-                  {empresa.tipoCliente}
-                </Badge>
-              </div>
-
-              <div className="flex gap-2 pt-4 border-t border-gray-100">
-                <Button size="sm" className="flex-1" variant="outline">
-                  <Eye className="h-4 w-4 mr-2" />
-                  Ver
-                </Button>
-                <Button size="sm" variant="outline">
-                  <Edit className="h-4 w-4" />
-                </Button>
-                <Button size="sm" variant="outline">
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </Card>
+            <CrmCard
+              key={empresa.id}
+              item={empresa}
+              type="empresa"
+              onView={handleVerEmpresa}
+              onEdit={handleEditarEmpresa}
+              onDelete={handleEliminarEmpresa}
+            />
           ))}
         </div>
       ) : (
         /* Vista Lista */
         <div className="space-y-4">
           {filteredEmpresas.map((empresa) => (
-            <Card key={empresa.id} className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4 flex-1">
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center text-white font-semibold text-lg flex-shrink-0">
-                    {getInitials(empresa.razonSocial)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold text-gray-900">{empresa.razonSocial}</h3>
-                      <Badge className={getTipoClienteColor(empresa.tipoCliente)}>
-                        {empresa.tipoCliente}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center gap-6 text-sm text-gray-600">
-                      <span>{empresa.ciudad}, {empresa.zona}</span>
-                      <span>{empresa.email}</span>
-                      <span>{empresa.telefono}</span>
-                      <span>Superficie: {empresa.superficieTotal.toLocaleString()} ha</span>
-                      <span>Vendedor: {empresa.vendedor}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 ml-4">
-                  <Button size="sm" variant="outline">
-                    <Eye className="h-4 w-4 mr-2" />
-                    Ver Detalles
-                  </Button>
-                  <Button size="sm" variant="outline">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button size="sm" variant="outline">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </Card>
+            <CrmCard
+              key={empresa.id}
+              item={empresa}
+              type="empresa"
+              onView={handleVerEmpresa}
+              onEdit={handleEditarEmpresa}
+              onDelete={handleEliminarEmpresa}
+            />
           ))}
         </div>
       )}
@@ -306,6 +289,27 @@ export default function EmpresasPage() {
           <p className="text-gray-500">Intenta ajustar los filtros de búsqueda</p>
         </div>
       )}
+
+      {/* Modales */}
+      <NuevaEmpresaModal
+        isOpen={showNuevaModal}
+        onClose={() => setShowNuevaModal(false)}
+        onSuccess={handleModalSuccess}
+      />
+
+      <EditarEmpresaModal
+        isOpen={showEditarModal}
+        onClose={() => setShowEditarModal(false)}
+        empresa={empresaSeleccionada}
+        onSuccess={handleModalSuccess}
+      />
+
+      <EliminarEmpresaModal
+        isOpen={showEliminarModal}
+        onClose={() => setShowEliminarModal(false)}
+        empresa={empresaSeleccionada}
+        onSuccess={handleModalSuccess}
+      />
     </div>
   );
 }

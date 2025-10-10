@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useCallback, memo } from 'react';
+import React, { useState, useMemo, useCallback, memo, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -46,30 +46,45 @@ interface MenuItem {
 
 const navigation: MenuItem[] = [
   { name: 'Dashboard', href: '/', icon: Home },
-  { name: 'Procesos', href: '/procesos', icon: Workflow },
-  { name: 'Auditorías', href: '/auditorias', icon: Search },
+  { name: 'Módulo Calidad', href: '/calidad', icon: Award },
   {
-    name: 'Mejoras',
+    name: 'Mejora',
     href: '/mejoras',
     icon: Zap,
     children: [
-      { name: 'Hallazgos', href: '/hallazgos', icon: AlertTriangle },
+      { name: 'Auditoria', href: '/auditorias', icon: Search },
+      { name: 'Detección Personal', href: '/deteccion-personal', icon: Users },
+      { name: 'Satisfacción de Partes', href: '/satisfaccion-partes', icon: MessageSquare },
+      { name: 'Hallazgos y tratamientos', href: '/hallazgos', icon: AlertTriangle },
       { name: 'Acciones', href: '/acciones', icon: CheckCircle }
     ]
   },
-  { name: 'Módulo de Calidad', href: '/calidad', icon: Award },
-  { name: 'Diseño y desarrollo de Producto', href: '/diseno-producto', icon: Package },
-  { name: 'Recursos Humanos', href: '/rrhh', icon: Users },
-  { name: 'Comercial / CRM', href: '/crm/dashboard', icon: Briefcase },
-        { name: 'Documentos', href: '/documentos', icon: FileText },
-  { name: 'Puntos de Norma', href: '/normas', icon: BookOpen },
-  { name: 'Configuración', href: '/configuracion', icon: Settings },
+  { name: 'Procesos', href: '/procesos', icon: Workflow },
+  { name: 'Documentos', href: '/documentos', icon: FileText },
+  { name: 'Puntos de la norma', href: '/normas', icon: BookOpen },
+  { name: 'CRM', href: '/crm/dashboard', icon: Briefcase },
+  { name: 'RRHH', href: '/rrhh', icon: Users },
 ];
 
 export const Sidebar = memo(function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
-  const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set(['Procesos']));
+  const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set(['Mejora']));
+  const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
+
+  // Evitar errores de hidratación renderizando solo en el cliente
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Componente para renderizar iconos de manera segura
+  const SafeIcon = memo(({ Icon, className }: { Icon: React.ComponentType<{ className?: string }>, className?: string }) => {
+    if (!isMounted) {
+      return <div className={className} style={{ width: '1.25rem', height: '1.25rem' }} />;
+    }
+    return <Icon className={className} />;
+  });
+  SafeIcon.displayName = 'SafeIcon';
 
   // Optimización: Memoizar función de toggle para evitar recreación
   const toggleMenu = useCallback((menuName: string) => {
@@ -124,9 +139,9 @@ export const Sidebar = memo(function Sidebar() {
           className="p-1 rounded-md hover:bg-slate-700 transition-colors"
         >
           {collapsed ? (
-            <ChevronRight className="h-5 w-5" />
+            <SafeIcon Icon={ChevronRight} className="h-5 w-5" />
           ) : (
-            <ChevronLeft className="h-5 w-5" />
+            <SafeIcon Icon={ChevronLeft} className="h-5 w-5" />
           )}
         </button>
       </div>
@@ -149,17 +164,17 @@ export const Sidebar = memo(function Sidebar() {
                         : 'text-white hover:bg-slate-700 hover:text-white'
                     }`}
                   >
-                    <item.icon
+                    <SafeIcon 
+                      Icon={item.icon}
                       className={`${collapsed ? 'mr-0' : 'mr-3'} h-5 w-5 flex-shrink-0`}
-                      aria-hidden="true"
                     />
                     {!collapsed && (
                       <>
                         <span className="flex-1 text-left">{item.name}</span>
                         {isExpanded ? (
-                          <ChevronUp className="h-4 w-4" />
+                          <SafeIcon Icon={ChevronUp} className="h-4 w-4" />
                         ) : (
-                          <ChevronDown className="h-4 w-4" />
+                          <SafeIcon Icon={ChevronDown} className="h-4 w-4" />
                         )}
                       </>
                     )}
@@ -173,9 +188,9 @@ export const Sidebar = memo(function Sidebar() {
                         : 'text-white hover:bg-slate-700 hover:text-white'
                     }`}
                   >
-                    <item.icon
+                    <SafeIcon 
+                      Icon={item.icon}
                       className={`${collapsed ? 'mr-0' : 'mr-3'} h-5 w-5 flex-shrink-0`}
-                      aria-hidden="true"
                     />
                     {!collapsed && item.name}
                   </Link>
@@ -196,7 +211,7 @@ export const Sidebar = memo(function Sidebar() {
                               : 'text-white hover:bg-slate-600 hover:text-white'
                           }`}
                         >
-                          <child.icon className="mr-2 h-4 w-4 flex-shrink-0" />
+                          <SafeIcon Icon={child.icon} className="mr-2 h-4 w-4 flex-shrink-0" />
                           {child.name}
                         </Link>
                       );
@@ -211,19 +226,24 @@ export const Sidebar = memo(function Sidebar() {
 
       {!collapsed && (
         <div className="p-4 border-t border-slate-700 mt-auto">
-          <div className="bg-slate-700 rounded-lg p-3">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="h-8 w-8 rounded-full bg-emerald-600 flex items-center justify-center">
-                  <Users className="h-4 w-4 text-white" />
+          <Link href="/configuracion" className="block">
+            <div className="bg-slate-700 rounded-lg p-3 hover:bg-slate-600 transition-colors cursor-pointer group">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="h-8 w-8 rounded-full bg-emerald-600 flex items-center justify-center group-hover:bg-emerald-500 transition-colors">
+                    <SafeIcon Icon={Users} className="h-4 w-4 text-white" />
+                  </div>
+                </div>
+                <div className="ml-3 flex-1">
+                  <p className="text-sm font-medium text-white">Usuario</p>
+                  <p className="text-xs text-slate-400">Administrador</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <SafeIcon Icon={Settings} className="h-4 w-4 text-slate-400 group-hover:text-white transition-colors" />
                 </div>
               </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-white">Usuario</p>
-                <p className="text-xs text-slate-400">Administrador</p>
-              </div>
             </div>
-          </div>
+          </Link>
         </div>
       )}
     </div>

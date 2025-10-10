@@ -16,7 +16,10 @@ import {
   ChevronRight,
   ArrowLeft,
   X,
-  Menu
+  Menu,
+  ClipboardList,
+  TestTube2,
+  Monitor
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -29,6 +32,7 @@ interface MenuItem {
 
 const superAdminNavigation: MenuItem[] = [
   { name: 'Dashboard', href: '/super-admin', icon: BarChart3 },
+  { name: 'Roadmap Kanban', href: '/super-admin/tareas', icon: ClipboardList },
   {
     name: 'Administración',
     icon: Shield,
@@ -39,13 +43,21 @@ const superAdminNavigation: MenuItem[] = [
     ]
   },
   {
-    name: 'Gestión de Proyecto',
-    icon: BookOpen,
+    name: 'Testing',
+    icon: TestTube2,
     children: [
-      { name: 'Dashboard Proyecto', href: '/super-admin/proyecto', icon: BarChart3 },
-      { name: 'Análisis Técnico-Funcional', href: '/super-admin/proyecto/analisis-tecnico', icon: Target },
-      { name: 'Análisis ABM por Subsistema', href: '/super-admin/proyecto/abm-analysis', icon: Shield },
-      { name: 'Análisis Disponibles', href: '/super-admin/proyecto/analisis', icon: FileText },
+      { name: 'Dashboard Testing', href: '/super-admin/testing', icon: Monitor },
+      { name: 'Tests RRHH', href: '/super-admin/testing/rrhh', icon: Users },
+      { name: 'Tests CRM', href: '/super-admin/testing/crm', icon: Target },
+      { name: 'Tests Auditorías', href: '/super-admin/testing/auditorias', icon: FileText },
+    ]
+  },
+  {
+    name: 'Documentación',
+    icon: FileText,
+    children: [
+      { name: 'Casos de Uso', href: '/super-admin/casos-uso', icon: BookOpen },
+      { name: 'Documentación Módulos', href: '/super-admin/documentacion', icon: FileText },
     ]
   },
 ];

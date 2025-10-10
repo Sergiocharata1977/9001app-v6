@@ -30,7 +30,16 @@ node test-rrhh-personal-optimizado.js
 echo.
 
 echo ========================================
-echo   FASE 2: MONITOREO DE RENDIMIENTO
+echo   FASE 2: CRM - SISTEMA COMPLETO
+echo ========================================
+echo.
+
+echo [4/4] Testing Sistema Completo (CRM + RRHH + Super Admin)...
+node test-sistema-completo.js
+echo.
+
+echo ========================================
+echo   FASE 3: MONITOREO DE RENDIMIENTO
 echo ========================================
 echo.
 

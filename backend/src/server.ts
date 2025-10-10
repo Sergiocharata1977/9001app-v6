@@ -78,6 +78,8 @@ import './models/crm_contactos';
 import './models/crm_oportunidades_agro';
 import './models/crm_actividades_agro';
 import './models/crm_productos_agro';
+// Modelos Roadmap
+import './models/RoadmapTask';
 
 // Importar rutas
 import processRoutes from './routes/processRoutes';
@@ -98,6 +100,7 @@ import findingRoutes from './routes/findingRoutes';
 import actionRoutes from './routes/actionRoutes';
 import employeeDeclarationRoutes from './routes/employeeDeclarationRoutes';
 import documentCategoryRoutes from './routes/documentCategoryRoutes';
+import roadmapRoutes from './routes/roadmapRoutes';
 import documentVersionRoutes from './routes/documentVersionRoutes';
 import documentTemplateRoutes from './routes/documentTemplateRoutes';
 // import customerSurveyRoutes from './routes/customerSurveyRoutes'; // TEMPORALMENTE DESACTIVADO
@@ -123,6 +126,7 @@ app.use('/api/departments', departmentRoutes);
 app.use('/api/personnel', personnelRoutes);
 app.use('/api/positions', positionRoutes);
 app.use('/api/audits', auditRoutes);
+app.use('/api/roadmap', roadmapRoutes);
 app.use('/api/findings', findingRoutes);
 app.use('/api/actions', actionRoutes);
 app.use('/api/employee-declarations', employeeDeclarationRoutes);

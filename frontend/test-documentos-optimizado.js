@@ -162,3 +162,10 @@ async function testDocumentosOptimizado() {
 // Ejecutar las pruebas
 testDocumentosOptimizado().catch(console.error);
 
+
+
+
+
+
+
+

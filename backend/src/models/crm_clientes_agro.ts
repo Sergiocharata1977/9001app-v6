@@ -5,8 +5,9 @@ export interface ICRMClientesAgro extends Document {
   organization_id: string;
   contacto_id?: string;
   razon_social: string;
+  cuit?: string;                        // Agregado para validación única
   rfc?: string;
-  tipo_cliente?: string;
+  tipo_cliente?: 'agricultor' | 'distribuidor' | 'proveedor' | 'otro';
   categoria_agro?: string;
   zona_geografica?: string;
   region?: string;
@@ -26,6 +27,19 @@ export interface ICRMClientesAgro extends Document {
   fecha_ultimo_contacto?: Date;
   preferencias_estacionales?: string;
   observaciones?: string;
+  
+  // Campos para ISO 9001 - Evaluación y Satisfacción
+  estado_cliente: 'activo' | 'inactivo' | 'prospecto' | 'suspendido';
+  scoring_actual?: number;              // Último scoring de evaluación
+  fecha_ultima_evaluacion?: Date;
+  nivel_riesgo?: 'bajo' | 'medio' | 'alto' | 'critico';
+  satisfaccion_promedio?: number;       // Promedio de encuestas de satisfacción
+  fecha_ultima_encuesta?: Date;
+  
+  // Relaciones con evaluaciones y encuestas
+  evaluaciones_count?: number;          // Contador de evaluaciones
+  encuestas_count?: number;             // Contador de encuestas enviadas
+  
   created_at?: Date;
   updated_at?: Date;
   created_by?: string;

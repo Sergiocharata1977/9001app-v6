@@ -200,12 +200,26 @@ export default function SuperAdminPage() {
             Centro de control de todos los subsistemas, funcionalidades y testing
           </p>
         </div>
-        <Link href="/super-admin/settings">
-          <Button variant="outline">
-                  <Settings className="w-4 h-4 mr-2" />
-            Configuración
-                </Button>
-              </Link>
+        <div className="flex gap-3">
+          <Link href="/super-admin/tareas">
+            <Button>
+              <ClipboardList className="w-4 h-4 mr-2" />
+              Roadmap Kanban
+            </Button>
+          </Link>
+          <Link href="/super-admin/casos-uso">
+            <Button variant="outline">
+              <BookOpen className="w-4 h-4 mr-2" />
+              Casos de Uso
+            </Button>
+          </Link>
+          <Link href="/super-admin/settings">
+            <Button variant="outline">
+              <Settings className="w-4 h-4 mr-2" />
+              Configuración
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Estadísticas Principales */}

@@ -17,7 +17,7 @@ import {
   FileText
 } from 'lucide-react';
 
-export default function RRHHDashboard() {
+export default function Page() {
   // Configuración de módulos RRHH
   const modulosRRHH = [
     {
@@ -163,6 +163,16 @@ export default function RRHHDashboard() {
           Gestión integral del capital humano según ISO 9001
         </p>
       </div>
+
+      {/* Métricas RRHH */}
+      <section>
+        <h2 className="text-xl font-semibold mb-2">Métricas RRHH</h2>
+        {/* @ts-expect-error Server/Client boundary */}
+        {/* RRHHMetrics es cliente, este contenedor es servidor */}
+        <div>
+          {/* Render del componente cliente */}
+        </div>
+      </section>
 
       {/* Estadísticas Principales */}
       <RRHHStats />

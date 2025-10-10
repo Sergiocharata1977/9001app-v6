@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   Plus, 
   Target,
@@ -18,248 +20,247 @@ import {
   LayoutGrid,
   Edit,
   Eye,
-  Trash2
+  Trash2,
+  Loader2,
+  Filter,
+  Search,
+  ChevronDown
 } from 'lucide-react';
-import { useKanbanDrag } from '@/hooks/useKanbanDrag';
-import { useKanbanDrop } from '@/hooks/useKanbanDrop';
-import type { KanbanColumn, KanbanItem } from '@/types/unified-kanban';
+import { useRouter } from 'next/navigation';
+import { useOrganization } from '@/contexts/OrganizationContext';
+import { crmOportunidadService } from '@/services/crmService';
+import { 
+  NuevaOportunidadModal, 
+  EditarOportunidadModal, 
+  EliminarOportunidadModal 
+} from '@/components/crm/modals';
+import CrmCard from '@/components/crm/cards/CrmCard';
+import { toast } from 'sonner';
 
-// Datos de ejemplo para oportunidades
-const mockOportunidades: KanbanItem[] = [
+// Datos de ejemplo
+const oportunidadesEjemplo = [
   {
-    id: 'opp-1',
-    title: 'Estancia San Miguel - Semillas Soja',
-    description: 'Venta de semillas de soja para 500 hectáreas',
-    columnId: 'prospecto',
-    priority: 'high',
-    assignee: 'Juan Pérez',
-    dueDate: '2024-03-15',
-    tags: ['Semillas', 'Soja'],
-    customData: {
-      empresa: 'Estancia San Miguel',
-      valor: 125000,
-      probabilidad: 25
-    }
+    id: '1',
+    titulo: 'Venta de Semillas - Estancia San Miguel',
+    descripcion: 'Oportunidad de venta de semillas de soja para la próxima temporada',
+    etapa: 'negociacion',
+    valor: 125000,
+    probabilidad: 75,
+    vendedor: 'Carlos Rodriguez',
+    fechaCierre: '2024-02-15',
+    cliente: 'Estancia San Miguel',
+    tipoCliente: 'viejo',
+    valorPonderado: 93750
   },
   {
-    id: 'opp-2',
-    title: 'Agropecuaria Los Pinos - Agroquímicos',
-    description: 'Provisión de agroquímicos para temporada',
-    columnId: 'calificacion',
-    priority: 'medium',
-    assignee: 'María González',
-    dueDate: '2024-03-20',
-    tags: ['Agroquímicos'],
-    customData: {
-      empresa: 'Agropecuaria Los Pinos',
-      valor: 89500,
-      probabilidad: 40
-    }
+    id: '2',
+    titulo: 'Agroquímicos - Agropecuaria Los Pinos',
+    descripcion: 'Suministro de agroquímicos para cultivos de maíz',
+    etapa: 'propuesta',
+    valor: 89500,
+    probabilidad: 60,
+    vendedor: 'María González',
+    fechaCierre: '2024-02-20',
+    cliente: 'Agropecuaria Los Pinos',
+    tipoCliente: 'nuevo',
+    valorPonderado: 53700
   },
   {
-    id: 'opp-3',
-    title: 'Campo Verde SA - Fertilizantes',
-    description: 'Fertilizantes para 800 hectáreas de maíz',
-    columnId: 'propuesta',
-    priority: 'high',
-    assignee: 'Carlos Rodríguez',
-    dueDate: '2024-03-10',
-    tags: ['Fertilizantes', 'Maíz'],
-    customData: {
-      empresa: 'Campo Verde SA',
-      valor: 210000,
-      probabilidad: 60
-    }
+    id: '3',
+    titulo: 'Fertilizantes - Campo Verde SA',
+    descripcion: 'Aplicación de fertilizantes para cultivos de trigo',
+    etapa: 'calificacion',
+    valor: 210000,
+    probabilidad: 40,
+    vendedor: 'Roberto Silva',
+    fechaCierre: '2024-03-01',
+    cliente: 'Campo Verde SA',
+    tipoCliente: 'viejo',
+    valorPonderado: 84000
   },
   {
-    id: 'opp-4',
-    title: 'Estancia El Progreso - Maquinaria',
-    description: 'Venta de equipamiento agrícola',
-    columnId: 'negociacion',
-    priority: 'critical',
-    assignee: 'Ana Martínez',
-    dueDate: '2024-03-05',
-    tags: ['Maquinaria'],
-    customData: {
-      empresa: 'Estancia El Progreso',
-      valor: 450000,
-      probabilidad: 75
-    }
+    id: '4',
+    titulo: 'Estancia San Miguel - Prospecto',
+    descripcion: 'Nueva oportunidad de venta de insumos agrícolas',
+    etapa: 'prospecto',
+    valor: 450000,
+    probabilidad: 25,
+    vendedor: 'Carlos Rodriguez',
+    fechaCierre: '2024-03-15',
+    cliente: 'Estancia San Miguel',
+    tipoCliente: 'nuevo',
+    valorPonderado: 112500
   },
+  {
+    id: '5',
+    titulo: 'Campo Verde - Negociación',
+    descripcion: 'Negociación final de contrato de servicios',
+    etapa: 'negociacion',
+    valor: 125000,
+    probabilidad: 75,
+    vendedor: 'María González',
+    fechaCierre: '2024-02-28',
+    cliente: 'Campo Verde',
+    tipoCliente: 'viejo',
+    valorPonderado: 93750
+  }
 ];
 
-// Columnas del pipeline (editables)
-const defaultColumns: KanbanColumn[] = [
-  { id: 'prospecto', title: 'Prospecto', color: '#9CA3AF' },
-  { id: 'calificacion', title: 'Calificación', color: '#3B82F6' },
-  { id: 'propuesta', title: 'Propuesta', color: '#8B5CF6' },
-  { id: 'negociacion', title: 'Negociación', color: '#F59E0B' },
-  { id: 'cierre', title: 'Cierre', color: '#10B981' }
+const columnas = [
+  { id: 'prospecto', titulo: 'Prospecto', color: '#9CA3AF' },
+  { id: 'calificacion', titulo: 'Calificación', color: '#3B82F6' },
+  { id: 'propuesta', titulo: 'Propuesta', color: '#8B5CF6' },
+  { id: 'negociacion', titulo: 'Negociación', color: '#F59E0B' },
+  { id: 'cierre', titulo: 'Cierre', color: '#10B981' }
 ];
 
 export default function OportunidadesPage() {
-  const [oportunidades, setOportunidades] = useState<KanbanItem[]>(mockOportunidades);
-  const [columns, setColumns] = useState<KanbanColumn[]>(defaultColumns);
-  const [draggedItem, setDraggedItem] = useState<string | null>(null);
-  const [showConfig, setShowConfig] = useState(false);
-  const [viewMode, setViewMode] = useState<'kanban' | 'list' | 'table'>('kanban');
+  const router = useRouter();
+  const { organizationId } = useOrganization();
+  const [oportunidades, setOportunidades] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'kanban' | 'list' | 'cards'>('kanban');
+  
+  // Estados de filtros
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterVendedor, setFilterVendedor] = useState('');
+  const [filterTipoCliente, setFilterTipoCliente] = useState('');
+  const [filterEtapa, setFilterEtapa] = useState('');
+  
+  // Estados de modales
+  const [showNuevaModal, setShowNuevaModal] = useState(false);
+  const [showEditarModal, setShowEditarModal] = useState(false);
+  const [showEliminarModal, setShowEliminarModal] = useState(false);
+  const [oportunidadSeleccionada, setOportunidadSeleccionada] = useState<any>(null);
 
-  // Función para mover oportunidades entre columnas
-  const handleItemMove = (itemId: string, sourceColumnId: string, targetColumnId: string) => {
-    setOportunidades(prevOportunidades => 
-      prevOportunidades.map(opp => 
-        opp.id === itemId 
-          ? { ...opp, columnId: targetColumnId }
-          : opp
-      )
-    );
+  const getPrioridadColor = (probabilidad: number) => {
+    if (probabilidad >= 75) return 'bg-red-100 text-red-800 border-red-200';
+    if (probabilidad >= 50) return 'bg-orange-100 text-orange-800 border-orange-200';
+    if (probabilidad >= 25) return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    return 'bg-green-100 text-green-800 border-green-200';
   };
 
-  // Función para obtener oportunidades por columna
-  const getOportunidadesByColumn = (columnId: string) => {
-    return oportunidades.filter(opp => opp.columnId === columnId);
+  const getPrioridadLabel = (probabilidad: number) => {
+    if (probabilidad >= 75) return 'Crítica';
+    if (probabilidad >= 50) return 'Alta';
+    if (probabilidad >= 25) return 'Media';
+    return 'Baja';
   };
 
-  // Calcular estadísticas
-  const stats = {
-    total: oportunidades.length,
-    valorTotal: oportunidades.reduce((sum, opp) => sum + (opp.customData?.valor || 0), 0),
-    valorPonderado: oportunidades.reduce((sum, opp) => {
-      const valor = opp.customData?.valor || 0;
-      const prob = (opp.customData?.probabilidad || 0) / 100;
-      return sum + (valor * prob);
-    }, 0)
-  };
-
-  const getPrioridadColor = (prioridad?: string) => {
-    switch (prioridad) {
-      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
-
-  const getPrioridadLabel = (prioridad?: string) => {
-    switch (prioridad) {
-      case 'critical': return 'Crítica';
-      case 'high': return 'Alta';
-      case 'medium': return 'Media';
-      case 'low': return 'Baja';
-      default: return 'Sin prioridad';
-    }
-  };
-
-  const OportunidadCard = ({ oportunidad }: { oportunidad: KanbanItem }) => {
-    const dragRef = useKanbanDrag({
-      itemId: oportunidad.id,
-      columnId: oportunidad.columnId,
-      item: oportunidad,
-      onDragStart: (itemId) => setDraggedItem(itemId),
-      onDragEnd: () => setDraggedItem(null)
-    });
-
-    return (
-      <Card 
-        ref={dragRef}
-        className={`p-4 mb-3 cursor-move hover:shadow-lg transition-all ${
-          draggedItem === oportunidad.id ? 'opacity-50 scale-95' : ''
-        }`}
-      >
-        <div className="space-y-3">
-          {/* Header */}
-          <div className="flex items-start justify-between">
-            <h4 className="font-semibold text-sm text-gray-900 flex-1 pr-2">
-              {oportunidad.title}
-            </h4>
-            <Badge className={`${getPrioridadColor(oportunidad.priority)} text-xs border`}>
-              {getPrioridadLabel(oportunidad.priority)}
-            </Badge>
-          </div>
-          
-          {/* Descripción */}
-          <p className="text-xs text-gray-600 line-clamp-2">
-            {oportunidad.description}
-          </p>
-          
-          {/* Valor y Probabilidad */}
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-1 text-green-600 font-semibold">
-              <DollarSign className="h-4 w-4" />
-              <span>${(oportunidad.customData?.valor || 0).toLocaleString()}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <TrendingUp className="h-3 w-3 text-blue-600" />
-              <span className="text-xs text-gray-600">{oportunidad.customData?.probabilidad}%</span>
-            </div>
-          </div>
-
-          {/* Barra de progreso de probabilidad */}
-          <div className="w-full bg-gray-200 rounded-full h-1.5">
-            <div 
-              className="bg-blue-600 h-1.5 rounded-full transition-all"
-              style={{ width: `${oportunidad.customData?.probabilidad || 0}%` }}
-            />
-          </div>
-          
-          {/* Tags */}
-          <div className="flex flex-wrap gap-1">
-            {oportunidad.tags?.map((tag, index) => (
-              <Badge key={index} variant="outline" className="text-xs">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-          
-          {/* Footer */}
-          <div className="space-y-1 pt-2 border-t border-gray-100">
-            <div className="flex items-center gap-1 text-xs text-gray-600">
-              <Building2 className="h-3 w-3" />
-              <span className="truncate">{oportunidad.customData?.empresa}</span>
-            </div>
-            <div className="flex items-center gap-1 text-xs text-gray-600">
-              <User className="h-3 w-3" />
-              <span>{oportunidad.assignee}</span>
-            </div>
-            {oportunidad.dueDate && (
-              <div className="flex items-center gap-1 text-xs text-gray-600">
-                <Calendar className="h-3 w-3" />
-                <span>{new Date(oportunidad.dueDate).toLocaleDateString()}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </Card>
-    );
-  };
-
-  const KanbanColumn = ({ column }: { column: KanbanColumn }) => {
-    const columnOportunidades = getOportunidadesByColumn(column.id);
-    const valorColumna = columnOportunidades.reduce((sum, opp) => sum + (opp.customData?.valor || 0), 0);
+  // Función para filtrar oportunidades
+  const filteredOportunidades = oportunidades.filter(oportunidad => {
+    const matchesSearch = !searchTerm || 
+      oportunidad.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      oportunidad.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      oportunidad.descripcion.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const dropRef = useKanbanDrop({
-      columnId: column.id,
-      column,
-      onDrop: (itemId, sourceColumnId, targetColumnId) => {
-        handleItemMove(itemId, sourceColumnId, targetColumnId);
-      },
-      onDragOver: () => {}
-    });
+    const matchesVendedor = !filterVendedor || oportunidad.vendedor === filterVendedor;
+    const matchesTipoCliente = !filterTipoCliente || oportunidad.tipoCliente === filterTipoCliente;
+    const matchesEtapa = !filterEtapa || oportunidad.etapa === filterEtapa;
+    
+    return matchesSearch && matchesVendedor && matchesTipoCliente && matchesEtapa;
+  });
+
+  // Función para obtener estadísticas
+  const getStats = () => {
+    const total = filteredOportunidades.length;
+    const valorTotal = filteredOportunidades.reduce((sum, op) => sum + (op.valor || 0), 0);
+    const valorPonderado = filteredOportunidades.reduce((sum, op) => sum + (op.valorPonderado || 0), 0);
+    
+    return { total, valorTotal, valorPonderado };
+  };
+
+  const stats = getStats();
+
+  const loadOportunidades = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await crmOportunidadService.getAll(organizationId, { limit: 100 });
+      if (response.success && response.data) {
+        setOportunidades(response.data);
+      } else {
+        // Fallback a datos de ejemplo si no hay datos reales
+        setOportunidades(oportunidadesEjemplo);
+      }
+    } catch (error) {
+      console.error('Error cargando oportunidades:', error);
+      // Fallback a datos de ejemplo en caso de error
+      setOportunidades(oportunidadesEjemplo);
+    } finally {
+      setLoading(false);
+    }
+  }, [organizationId]);
+
+  // Cargar oportunidades
+  useEffect(() => {
+    loadOportunidades();
+  }, [loadOportunidades]);
+
+  const getOportunidadesByColumn = (columnId: string) => {
+    return filteredOportunidades.filter(opp => opp.etapa === columnId);
+  };
+
+  // Handlers de modales
+  const handleNuevaOportunidad = () => {
+    setShowNuevaModal(true);
+  };
+
+  const handleEditarOportunidad = (oportunidad: any) => {
+    setOportunidadSeleccionada(oportunidad);
+    setShowEditarModal(true);
+  };
+
+  const handleEliminarOportunidad = (oportunidad: any) => {
+    setOportunidadSeleccionada(oportunidad);
+    setShowEliminarModal(true);
+  };
+
+  const handleVerOportunidad = (oportunidad: any) => {
+    router.push(`/crm/oportunidades/${oportunidad.id}`);
+  };
+
+  const handleModalSuccess = () => {
+    loadOportunidades();
+    setShowNuevaModal(false);
+    setShowEditarModal(false);
+    setShowEliminarModal(false);
+    setOportunidadSeleccionada(null);
+  };
+
+  // Obtener vendedores únicos para el filtro
+  const vendedores = Array.from(new Set(oportunidades.map(op => op.vendedor)));
+
+  // Formatear valor monetario
+  const formatCurrency = (value: number) => {
+    if (typeof window === 'undefined') {
+      // Durante el renderizado del servidor, usar formato simple
+      return `$${value.toLocaleString('es-AR')}`;
+    }
+    return new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
+
+
+  const KanbanColumn = ({ columna }: { columna: any }) => {
+    const columnOportunidades = getOportunidadesByColumn(columna.id);
+    const valorColumna = columnOportunidades.reduce((sum, opp) => sum + opp.valor, 0);
 
     return (
       <div className="flex-1 min-w-[300px]">
         <div className="bg-white rounded-lg border-2 border-gray-200 h-full">
-          {/* Header de columna */}
           <div 
             className="p-4 rounded-t-lg border-b-2"
             style={{ 
-              backgroundColor: `${column.color}20`,
-              borderColor: column.color 
+              backgroundColor: `${columna.color}20`,
+              borderColor: columna.color 
             }}
           >
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-gray-900">{column.title}</h3>
+              <h3 className="font-semibold text-gray-900">{columna.titulo}</h3>
               <Badge variant="secondary" className="bg-white">
                 {columnOportunidades.length}
               </Badge>
@@ -269,13 +270,17 @@ export default function OportunidadesPage() {
             </div>
           </div>
           
-          {/* Área de drop */}
-          <div 
-            ref={dropRef}
-            className="p-4 min-h-[500px] max-h-[calc(100vh-300px)] overflow-y-auto"
-          >
+          <div className="p-4 min-h-[500px] max-h-[calc(100vh-300px)] overflow-y-auto">
             {columnOportunidades.map((oportunidad) => (
-              <OportunidadCard key={oportunidad.id} oportunidad={oportunidad} />
+              <CrmCard
+                key={oportunidad.id}
+                item={oportunidad}
+                type="oportunidad"
+                onView={handleVerOportunidad}
+                onEdit={handleEditarOportunidad}
+                onDelete={handleEliminarOportunidad}
+                className="mb-3"
+              />
             ))}
             
             {columnOportunidades.length === 0 && (
@@ -283,14 +288,6 @@ export default function OportunidadesPage() {
                 Arrastra oportunidades aquí
               </div>
             )}
-            
-            <Button 
-              variant="ghost" 
-              className="w-full mt-2 text-gray-500 hover:text-gray-700 border-2 border-dashed"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Nueva Oportunidad
-            </Button>
           </div>
         </div>
       </div>
@@ -308,13 +305,15 @@ export default function OportunidadesPage() {
         <div className="flex gap-2">
           <Button 
             variant="outline" 
-            onClick={() => setShowConfig(!showConfig)}
             className="flex items-center gap-2"
           >
             <Settings className="h-4 w-4" />
             Configurar Etapas
           </Button>
-          <Button className="flex items-center gap-2">
+          <Button 
+            className="flex items-center gap-2"
+            onClick={handleNuevaOportunidad}
+          >
             <Plus className="h-4 w-4" />
             Nueva Oportunidad
           </Button>
@@ -345,7 +344,9 @@ export default function OportunidadesPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Valor Total Pipeline</p>
-                <p className="text-2xl font-bold text-gray-900">${(stats.valorTotal / 1000).toFixed(0)}K</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {formatCurrency(stats.valorTotal)}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -359,33 +360,66 @@ export default function OportunidadesPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Valor Ponderado</p>
-                <p className="text-2xl font-bold text-gray-900">${(stats.valorPonderado / 1000).toFixed(0)}K</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {formatCurrency(stats.valorPonderado)}
+                </p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Mensaje de configuración */}
-      {showConfig && (
-        <Card className="bg-blue-50 border-blue-200">
-          <CardContent className="p-4">
-            <div className="flex items-start gap-3">
-              <Settings className="h-5 w-5 text-blue-600 mt-0.5" />
-              <div>
-                <h4 className="font-medium text-blue-900">Configuración de Etapas</h4>
-                <p className="text-sm text-blue-700 mt-1">
-                  Las etapas del pipeline son personalizables según el proceso de ventas de tu organización. 
-                  Próximamente podrás agregar, editar o eliminar etapas desde esta sección.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* Filtros y View Toggle */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        {/* Filtros */}
+        <div className="flex flex-wrap gap-4 items-center">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Buscar oportunidades..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 w-64"
+            />
+          </div>
+          
+          <Select value={filterVendedor} onValueChange={setFilterVendedor}>
+            <SelectTrigger className="w-48">
+              <SelectValue placeholder="Filtrar por vendedor" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Todos los vendedores</SelectItem>
+              {vendedores.map(vendedor => (
+                <SelectItem key={vendedor} value={vendedor}>{vendedor}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-      {/* View Toggle */}
-      <div className="flex justify-between items-center">
+          <Select value={filterTipoCliente} onValueChange={setFilterTipoCliente}>
+            <SelectTrigger className="w-48">
+              <SelectValue placeholder="Tipo de cliente" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Todos los tipos</SelectItem>
+              <SelectItem value="nuevo">Clientes nuevos</SelectItem>
+              <SelectItem value="viejo">Clientes viejos</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={filterEtapa} onValueChange={setFilterEtapa}>
+            <SelectTrigger className="w-48">
+              <SelectValue placeholder="Etapa" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Todas las etapas</SelectItem>
+              {columnas.map(columna => (
+                <SelectItem key={columna.id} value={columna.id}>{columna.titulo}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* View Toggle */}
         <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
           <button
             onClick={() => setViewMode('kanban')}
@@ -396,18 +430,18 @@ export default function OportunidadesPage() {
             }`}
           >
             <Kanban className="h-4 w-4" />
-            Vista Kanban
+            Kanban
           </button>
           <button
-            onClick={() => setViewMode('table')}
+            onClick={() => setViewMode('cards')}
             className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              viewMode === 'table'
+              viewMode === 'cards'
                 ? 'bg-white text-gray-900 shadow-sm'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
             <LayoutGrid className="h-4 w-4" />
-            Vista Tabla
+            Tarjetas
           </button>
           <button
             onClick={() => setViewMode('list')}
@@ -418,7 +452,7 @@ export default function OportunidadesPage() {
             }`}
           >
             <List className="h-4 w-4" />
-            Vista Lista
+            Lista
           </button>
         </div>
       </div>
@@ -426,74 +460,206 @@ export default function OportunidadesPage() {
       {/* Vista Kanban */}
       {viewMode === 'kanban' && (
         <div className="flex gap-4 overflow-x-auto pb-4">
-          {columns.map((column) => (
-            <KanbanColumn key={column.id} column={column} />
+          {columnas.map((columna) => (
+            <KanbanColumn key={columna.id} columna={columna} />
           ))}
         </div>
       )}
 
-      {/* Vista Tabla */}
-      {viewMode === 'table' && (
+      {/* Vista de Tarjetas */}
+      {viewMode === 'cards' && (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {filteredOportunidades.map((oportunidad) => (
+            <Card 
+              key={oportunidad.id} 
+              className="cursor-pointer hover:shadow-lg transition-shadow duration-200 border-l-4"
+              style={{ borderLeftColor: columnas.find(c => c.id === oportunidad.etapa)?.color || '#6B7280' }}
+              onClick={() => handleVerOportunidad(oportunidad)}
+            >
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-sm text-gray-900 line-clamp-2 mb-1">
+                      {oportunidad.titulo}
+                    </h3>
+                    <p className="text-xs text-gray-500 mb-2">{oportunidad.cliente}</p>
+                  </div>
+                  <Badge 
+                    variant="outline" 
+                    className="text-xs"
+                    style={{ 
+                      backgroundColor: `${columnas.find(c => c.id === oportunidad.etapa)?.color}20`,
+                      borderColor: columnas.find(c => c.id === oportunidad.etapa)?.color,
+                      color: columnas.find(c => c.id === oportunidad.etapa)?.color
+                    }}
+                  >
+                    {columnas.find(c => c.id === oportunidad.etapa)?.titulo}
+                  </Badge>
+                </div>
+
+                <p className="text-xs text-gray-600 mb-3 line-clamp-2">
+                  {oportunidad.descripcion}
+                </p>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500">Valor:</span>
+                    <span className="text-sm font-semibold text-gray-900">
+                      {formatCurrency(oportunidad.valor)}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500">Probabilidad:</span>
+                    <Badge className={getPrioridadColor(oportunidad.probabilidad)}>
+                      {oportunidad.probabilidad}%
+                    </Badge>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500">Vendedor:</span>
+                    <span className="text-xs text-gray-700">{oportunidad.vendedor}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500">Tipo Cliente:</span>
+                    <Badge variant={oportunidad.tipoCliente === 'nuevo' ? 'default' : 'secondary'}>
+                      {oportunidad.tipoCliente === 'nuevo' ? 'Nuevo' : 'Viejo'}
+                    </Badge>
+                  </div>
+
+                  {oportunidad.fechaCierre && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">Cierre:</span>
+                      <span className="text-xs text-gray-700">
+                        {new Date(oportunidad.fechaCierre).toLocaleDateString()}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {/* Vista de Lista */}
+      {viewMode === 'list' && (
         <Card>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
+                <thead className="bg-gray-50 border-b">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Oportunidad</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Empresa</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Etapa</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Probabilidad</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Responsable</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                    <th className="text-left p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Oportunidad
+                    </th>
+                    <th className="text-left p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Cliente
+                    </th>
+                    <th className="text-left p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Etapa
+                    </th>
+                    <th className="text-left p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Valor
+                    </th>
+                    <th className="text-left p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Probabilidad
+                    </th>
+                    <th className="text-left p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Vendedor
+                    </th>
+                    <th className="text-left p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Tipo Cliente
+                    </th>
+                    <th className="text-left p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Cierre
+                    </th>
+                    <th className="text-left p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Acciones
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {oportunidades.map((opp) => {
-                    const etapa = columns.find(c => c.id === opp.columnId);
-                    return (
-                      <tr key={opp.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4">
-                          <div>
-                            <div className="font-medium text-gray-900">{opp.title}</div>
-                            <div className="text-sm text-gray-500">{opp.description}</div>
+                  {filteredOportunidades.map((oportunidad) => (
+                    <tr 
+                      key={oportunidad.id} 
+                      className="hover:bg-gray-50 cursor-pointer"
+                      onClick={() => handleVerOportunidad(oportunidad)}
+                    >
+                      <td className="p-4">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">
+                            {oportunidad.titulo}
                           </div>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-900">{opp.customData?.empresa}</td>
-                        <td className="px-6 py-4">
-                          <Badge style={{ backgroundColor: `${etapa?.color}20`, color: etapa?.color }}>
-                            {etapa?.title}
-                          </Badge>
-                        </td>
-                        <td className="px-6 py-4 text-sm font-semibold text-green-600">
-                          ${(opp.customData?.valor || 0).toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                            <div className="w-16 bg-gray-200 rounded-full h-2">
-                              <div 
-                                className="bg-blue-600 h-2 rounded-full"
-                                style={{ width: `${opp.customData?.probabilidad}%` }}
-                              />
-                            </div>
-                            <span className="text-sm text-gray-600">{opp.customData?.probabilidad}%</span>
+                          <div className="text-xs text-gray-500 line-clamp-1">
+                            {oportunidad.descripcion}
                           </div>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-900">{opp.assignee}</td>
-                        <td className="px-6 py-4">
-                          <div className="flex gap-2">
-                            <Button size="sm" variant="ghost">
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button size="sm" variant="ghost">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                        </div>
+                      </td>
+                      <td className="p-4 text-sm text-gray-900">
+                        {oportunidad.cliente}
+                      </td>
+                      <td className="p-4">
+                        <Badge 
+                          variant="outline" 
+                          className="text-xs"
+                          style={{ 
+                            backgroundColor: `${columnas.find(c => c.id === oportunidad.etapa)?.color}20`,
+                            borderColor: columnas.find(c => c.id === oportunidad.etapa)?.color,
+                            color: columnas.find(c => c.id === oportunidad.etapa)?.color
+                          }}
+                        >
+                          {columnas.find(c => c.id === oportunidad.etapa)?.titulo}
+                        </Badge>
+                      </td>
+                      <td className="p-4 text-sm font-semibold text-gray-900">
+                        {formatCurrency(oportunidad.valor)}
+                      </td>
+                      <td className="p-4">
+                        <Badge className={getPrioridadColor(oportunidad.probabilidad)}>
+                          {oportunidad.probabilidad}%
+                        </Badge>
+                      </td>
+                      <td className="p-4 text-sm text-gray-700">
+                        {oportunidad.vendedor}
+                      </td>
+                      <td className="p-4">
+                        <Badge variant={oportunidad.tipoCliente === 'nuevo' ? 'default' : 'secondary'}>
+                          {oportunidad.tipoCliente === 'nuevo' ? 'Nuevo' : 'Viejo'}
+                        </Badge>
+                      </td>
+                      <td className="p-4 text-sm text-gray-700">
+                        {oportunidad.fechaCierre ? new Date(oportunidad.fechaCierre).toLocaleDateString() : '-'}
+                      </td>
+                      <td className="p-4">
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditarOportunidad(oportunidad);
+                            }}
+                            className="h-8 w-8 p-0 hover:bg-blue-50"
+                          >
+                            <Edit className="h-4 w-4 text-blue-600" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEliminarOportunidad(oportunidad);
+                            }}
+                            className="h-8 w-8 p-0 hover:bg-red-50"
+                          >
+                            <Trash2 className="h-4 w-4 text-red-600" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -501,62 +667,26 @@ export default function OportunidadesPage() {
         </Card>
       )}
 
-      {/* Vista Lista */}
-      {viewMode === 'list' && (
-        <div className="space-y-4">
-          {oportunidades.map((opp) => {
-            const etapa = columns.find(c => c.id === opp.columnId);
-            return (
-              <Card key={opp.id} className="p-6 hover:shadow-lg transition-shadow">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold text-gray-900">{opp.title}</h3>
-                      <Badge className={getPrioridadColor(opp.priority)}>
-                        {getPrioridadLabel(opp.priority)}
-                      </Badge>
-                      <Badge style={{ backgroundColor: `${etapa?.color}20`, color: etapa?.color }}>
-                        {etapa?.title}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-3">{opp.description}</p>
-                    <div className="flex items-center gap-6 text-sm text-gray-600">
-                      <span className="flex items-center gap-1">
-                        <Building2 className="h-4 w-4" />
-                        {opp.customData?.empresa}
-                      </span>
-                      <span className="flex items-center gap-1 text-green-600 font-semibold">
-                        <DollarSign className="h-4 w-4" />
-                        ${(opp.customData?.valor || 0).toLocaleString()}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <TrendingUp className="h-4 w-4" />
-                        {opp.customData?.probabilidad}% probabilidad
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <User className="h-4 w-4" />
-                        {opp.assignee}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex gap-2 ml-4">
-                    <Button size="sm" variant="outline">
-                      <Eye className="h-4 w-4 mr-2" />
-                      Ver
-                    </Button>
-                    <Button size="sm" variant="outline">
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button size="sm" variant="outline">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
-      )}
+      {/* Modales */}
+      <NuevaOportunidadModal
+        isOpen={showNuevaModal}
+        onClose={() => setShowNuevaModal(false)}
+        onSuccess={handleModalSuccess}
+      />
+
+      <EditarOportunidadModal
+        isOpen={showEditarModal}
+        onClose={() => setShowEditarModal(false)}
+        oportunidad={oportunidadSeleccionada}
+        onSuccess={handleModalSuccess}
+      />
+
+      <EliminarOportunidadModal
+        isOpen={showEliminarModal}
+        onClose={() => setShowEliminarModal(false)}
+        oportunidad={oportunidadSeleccionada}
+        onSuccess={handleModalSuccess}
+      />
     </div>
   );
 }

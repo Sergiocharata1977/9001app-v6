@@ -111,7 +111,8 @@ export function DepartmentListing({
 
   // Función para obtener iniciales del departamento
   const getInitials = (nombre: string) => {
-    return nombre.split(' ').map(word => word.charAt(0)).join('').toUpperCase().substring(0, 2)
+    if (!nombre) return 'DP';
+    return nombre.split(' ').map(word => word.charAt(0)).join('').toUpperCase().substring(0, 2);
   }
 
   return (

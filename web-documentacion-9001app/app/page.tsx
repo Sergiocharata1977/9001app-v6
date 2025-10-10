@@ -33,6 +33,19 @@ export default function DocumentacionPage() {
 
   const documentos = [
     {
+      id: 13,
+      titulo: 'Vistas Single CRM - Implementación Completa',
+      descripcion: 'Sistema completo de vistas detalladas para Oportunidades, Empresas, Contactos y Actividades del CRM. Componentes reutilizables y datos cruzados.',
+      categoria: 'api',
+      modulos: ['CRM', 'React', 'TypeScript', 'Componentes', 'UI/UX'],
+      fecha: '2025-01-18',
+      autor: 'Equipo Desarrollo',
+      tiempo_lectura: '30 min',
+      nivel: 'Avanzado',
+      destacado: true,
+      url: '/docs/vistas-single-crm'
+    },
+    {
       id: 12,
       titulo: 'Sistema de Monitoreo de Rendimiento',
       descripcion: 'Monitoreo automático de velocidad y rendimiento con propuestas de mejora inteligentes. Testing continuo con reportes HTML visuales.',
@@ -281,7 +294,7 @@ export default function DocumentacionPage() {
             { label: 'Documentos', value: documentos.length, icon: FileText },
             { label: 'Casos de Uso', value: documentos.filter(d => d.categoria === 'casos-uso').length, icon: Lightbulb },
             { label: 'Manuales', value: documentos.filter(d => d.categoria === 'manuales').length, icon: BookOpen },
-            { label: 'Tutoriales', value: documentos.filter(d => d.categoria === 'tutoriales').length, icon: Users }
+            { label: 'API Docs', value: documentos.filter(d => d.categoria === 'api').length, icon: Code }
           ].map((stat, index) => (
             <motion.div
               key={index}

@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -17,86 +17,105 @@ import {
   Edit,
   Trash2,
   Eye,
-  MessageSquare
+  MessageSquare,
+  Loader2
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useOrganization } from '@/contexts/OrganizationContext';
+import { crmContactoService } from '@/services/crmService';
+import { toast } from 'sonner';
+import { 
+  NuevoContactoModal, 
+  EditarContactoModal, 
+  EliminarContactoModal 
+} from '@/components/crm/modals';
+import CrmCard from '@/components/crm/cards/CrmCard';
 
 export default function ContactosPage() {
+  const router = useRouter();
+  const { organizationId } = useOrganization();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'cards' | 'list'>('cards');
-  const [filterImportancia, setFilterImportancia] = useState('todos');
+  const [filterTipo, setFilterTipo] = useState('todos');
+  const [contactos, setContactos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({ total: 0, empresas: 0, activos: 0 });
 
-  const contactos = [
-    {
-      id: 'CONT-001',
-      nombre: 'Carlos',
-      apellido: 'Rodriguez',
-      cargo: 'Gerente General',
-      empresa: 'Estancia San Miguel',
-      empresaId: 'CLI-2024-001',
-      email: 'carlos.rodriguez@estanciasanmiguel.com',
-      telefono: '+54 11 1234-5678',
-      importancia: 'alta',
-      tipoContacto: 'decision'
-    },
-    {
-      id: 'CONT-002',
-      nombre: 'María',
-      apellido: 'González',
-      cargo: 'Directora de Compras',
-      empresa: 'Agropecuaria Los Pinos',
-      empresaId: 'CLI-2024-002',
-      email: 'maria.gonzalez@lospinos.com',
-      telefono: '+54 351 987-6543',
-      importancia: 'alta',
-      tipoContacto: 'decision'
-    },
-    {
-      id: 'CONT-003',
-      nombre: 'Roberto',
-      apellido: 'Silva',
-      cargo: 'Ingeniero Agrónomo',
-      empresa: 'Campo Verde SA',
-      empresaId: 'CLI-2024-003',
-      email: 'roberto.silva@campoverde.com',
-      telefono: '+54 342 555-1234',
-      importancia: 'media',
-      tipoContacto: 'tecnico'
-    },
-  ];
+  // Estados de modales
+  const [showNuevoModal, setShowNuevoModal] = useState(false);
+  const [showEditarModal, setShowEditarModal] = useState(false);
+  const [showEliminarModal, setShowEliminarModal] = useState(false);
+  const [contactoSeleccionado, setContactoSeleccionado] = useState<any>(null);
 
-  const getImportanciaColor = (importancia: string) => {
-    const colors = {
-      alta: 'bg-red-100 text-red-800',
-      media: 'bg-yellow-100 text-yellow-800',
-      baja: 'bg-green-100 text-green-800'
-    };
-    return colors[importancia as keyof typeof colors] || colors.media;
+  const loadContactos = useCallback(async () => {
+    try {
+      setLoading(true);
+      const filters = {
+        ...(filterTipo !== 'todos' && { tipo_contacto: filterTipo }),
+        limit: 100,
+      };
+      
+      const response = await crmContactoService.getAll(organizationId, filters);
+      if (response.success && response.data) {
+        setContactos(response.data);
+        setStats({
+          total: response.data.length,
+          empresas: new Set(response.data.map((c: any) => c.empresa_id).filter(Boolean)).size,
+          activos: response.data.filter((c: any) => c.activo).length,
+        });
+      }
+    } catch (error) {
+      console.error('Error cargando contactos:', error);
+      toast.error('Error al cargar contactos');
+    } finally {
+      setLoading(false);
+    }
+  }, [organizationId, filterTipo]);
+
+  useEffect(() => {
+    loadContactos();
+  }, [loadContactos]);
+
+  // Handlers de modales
+  const handleNuevoContacto = () => {
+    setShowNuevoModal(true);
   };
 
-  const getTipoContactoColor = (tipo: string) => {
-    const colors = {
-      decision: 'bg-purple-100 text-purple-800',
-      influenciador: 'bg-blue-100 text-blue-800',
-      usuario: 'bg-green-100 text-green-800',
-      tecnico: 'bg-orange-100 text-orange-800',
-      financiero: 'bg-pink-100 text-pink-800'
-    };
-    return colors[tipo as keyof typeof colors] || colors.usuario;
+  const handleEditarContacto = (contacto: any) => {
+    setContactoSeleccionado(contacto);
+    setShowEditarModal(true);
   };
 
-  const getInitials = (nombre: string, apellido: string) => {
-    return `${nombre[0]}${apellido[0]}`.toUpperCase();
+  const handleEliminarContacto = (contacto: any) => {
+    setContactoSeleccionado(contacto);
+    setShowEliminarModal(true);
+  };
+
+  const handleVerContacto = (contacto: any) => {
+    router.push(`/crm/contactos/${contacto.id}`);
+  };
+
+  const handleModalSuccess = () => {
+    loadContactos();
   };
 
   const filteredContactos = contactos.filter(contacto => {
     const matchesSearch = 
-      contacto.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      contacto.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      contacto.empresa.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      contacto.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesImportancia = filterImportancia === 'todos' || contacto.importancia === filterImportancia;
-    return matchesSearch && matchesImportancia;
+      contacto.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contacto.apellidos?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contacto.empresa?.razon_social?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contacto.email?.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return matchesSearch;
   });
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -106,7 +125,10 @@ export default function ContactosPage() {
           <h1 className="text-3xl font-bold text-gray-900">Contactos</h1>
           <p className="text-gray-600 mt-2">Gestión de contactos de clientes</p>
         </div>
-        <Button className="flex items-center gap-2">
+        <Button 
+          className="flex items-center gap-2"
+          onClick={handleNuevoContacto}
+        >
           <Plus className="h-4 w-4" />
           Nuevo Contacto
         </Button>
@@ -127,14 +149,16 @@ export default function ContactosPage() {
         </div>
         <div className="flex gap-2">
           <select
-            value={filterImportancia}
-            onChange={(e) => setFilterImportancia(e.target.value)}
+            value={filterTipo}
+            onChange={(e) => setFilterTipo(e.target.value)}
             className="px-3 py-2 border border-gray-300 rounded-md text-sm"
           >
-            <option value="todos">Todas las importancias</option>
-            <option value="alta">Alta</option>
-            <option value="media">Media</option>
-            <option value="baja">Baja</option>
+            <option value="todos">Todos los tipos</option>
+            <option value="comercial">Comercial</option>
+            <option value="tecnico">Técnico</option>
+            <option value="decision">Tomador de Decisiones</option>
+            <option value="influencer">Influencer</option>
+            <option value="usuario_final">Usuario Final</option>
           </select>
         </div>
       </div>
@@ -149,7 +173,7 @@ export default function ContactosPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Total Contactos</p>
-                <p className="text-2xl font-bold text-gray-900">{contactos.length}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
               </div>
             </div>
           </CardContent>
@@ -159,11 +183,11 @@ export default function ContactosPage() {
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
               <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <Mail className="h-6 w-6 text-green-600" />
+                <Building2 className="h-6 w-6 text-green-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Con Email</p>
-                <p className="text-2xl font-bold text-gray-900">{contactos.filter(c => c.email).length}</p>
+                <p className="text-sm text-gray-600">Empresas Relacionadas</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.empresas}</p>
               </div>
             </div>
           </CardContent>
@@ -173,11 +197,11 @@ export default function ContactosPage() {
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
               <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <Phone className="h-6 w-6 text-purple-600" />
+                <MessageSquare className="h-6 w-6 text-purple-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Con Teléfono</p>
-                <p className="text-2xl font-bold text-gray-900">{contactos.filter(c => c.telefono).length}</p>
+                <p className="text-sm text-gray-600">Contactos Activos</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.activos}</p>
               </div>
             </div>
           </CardContent>
@@ -215,104 +239,31 @@ export default function ContactosPage() {
         </div>
       </div>
 
-      {/* Content - Vista Tarjetas */}
+      {/* Content */}
       {viewMode === 'cards' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredContactos.map((contacto) => (
-            <Card key={contacto.id} className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
-                    {getInitials(contacto.nombre, contacto.apellido)}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{contacto.nombre} {contacto.apellido}</h3>
-                    <p className="text-sm text-gray-600">{contacto.cargo}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2 text-sm text-gray-600 mb-4">
-                <div className="flex items-center gap-2">
-                  <Building2 className="h-4 w-4" />
-                  <span className="truncate">{contacto.empresa}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  <span className="truncate">{contacto.email}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Phone className="h-4 w-4" />
-                  <span>{contacto.telefono}</span>
-                </div>
-              </div>
-
-              <div className="flex gap-2 mb-4">
-                <Badge className={getImportanciaColor(contacto.importancia)}>
-                  {contacto.importancia}
-                </Badge>
-                <Badge className={getTipoContactoColor(contacto.tipoContacto)}>
-                  {contacto.tipoContacto}
-                </Badge>
-              </div>
-
-              <div className="flex gap-2 pt-4 border-t border-gray-100">
-                <Button size="sm" className="flex-1" variant="outline">
-                  <Eye className="h-4 w-4 mr-2" />
-                  Ver
-                </Button>
-                <Button size="sm" variant="outline">
-                  <MessageSquare className="h-4 w-4" />
-                </Button>
-                <Button size="sm" variant="outline">
-                  <Edit className="h-4 w-4" />
-                </Button>
-              </div>
-            </Card>
+            <CrmCard
+              key={contacto.id}
+              item={contacto}
+              type="contacto"
+              onView={handleVerContacto}
+              onEdit={handleEditarContacto}
+              onDelete={handleEliminarContacto}
+            />
           ))}
         </div>
       ) : (
-        /* Vista Lista */
         <div className="space-y-4">
           {filteredContactos.map((contacto) => (
-            <Card key={contacto.id} className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4 flex-1">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-semibold text-lg flex-shrink-0">
-                    {getInitials(contacto.nombre, contacto.apellido)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold text-gray-900">{contacto.nombre} {contacto.apellido}</h3>
-                      <Badge className={getImportanciaColor(contacto.importancia)}>
-                        {contacto.importancia}
-                      </Badge>
-                      <Badge className={getTipoContactoColor(contacto.tipoContacto)}>
-                        {contacto.tipoContacto}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center gap-6 text-sm text-gray-600">
-                      <span>{contacto.cargo}</span>
-                      <span>{contacto.empresa}</span>
-                      <span>{contacto.email}</span>
-                      <span>{contacto.telefono}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 ml-4">
-                  <Button size="sm" variant="outline">
-                    <Eye className="h-4 w-4 mr-2" />
-                    Ver Detalles
-                  </Button>
-                  <Button size="sm" variant="outline">
-                    <MessageSquare className="h-4 w-4" />
-                  </Button>
-                  <Button size="sm" variant="outline">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </Card>
+            <CrmCard
+              key={contacto.id}
+              item={contacto}
+              type="contacto"
+              onView={handleVerContacto}
+              onEdit={handleEditarContacto}
+              onDelete={handleEliminarContacto}
+            />
           ))}
         </div>
       )}
@@ -324,6 +275,27 @@ export default function ContactosPage() {
           <p className="text-gray-500">Intenta ajustar los filtros de búsqueda</p>
         </div>
       )}
+
+      {/* Modales */}
+      <NuevoContactoModal
+        isOpen={showNuevoModal}
+        onClose={() => setShowNuevoModal(false)}
+        onSuccess={handleModalSuccess}
+      />
+
+      <EditarContactoModal
+        isOpen={showEditarModal}
+        onClose={() => setShowEditarModal(false)}
+        contacto={contactoSeleccionado}
+        onSuccess={handleModalSuccess}
+      />
+
+      <EliminarContactoModal
+        isOpen={showEliminarModal}
+        onClose={() => setShowEliminarModal(false)}
+        contacto={contactoSeleccionado}
+        onSuccess={handleModalSuccess}
+      />
     </div>
   );
 }

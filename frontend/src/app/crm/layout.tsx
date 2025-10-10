@@ -19,9 +19,12 @@ import {
   AlertTriangle,
   FileText,
   CheckCircle,
-  MapPin
+  MapPin,
+  Briefcase
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { OrganizationProvider } from '@/contexts/OrganizationContext';
+import { Toaster } from 'sonner';
 
 interface MenuItem {
   name: string;
@@ -31,13 +34,13 @@ interface MenuItem {
 
 const crmNavigation: MenuItem[] = [
   { name: 'Dashboard', href: '/crm/dashboard', icon: BarChart3 },
-  { name: 'Clientes', href: '/crm/clientes', icon: Building2 },
-  { name: 'Análisis de Riesgo', href: '/crm/analisis-riesgo', icon: AlertTriangle },
-  { name: 'Legajos de Clientes', href: '/crm/legajos', icon: FileText },
-  { name: 'Aprobación de Créditos', href: '/crm/aprobacion', icon: CheckCircle },
-  { name: 'Inmuebles', href: '/crm/inmuebles', icon: MapPin },
   { name: 'Oportunidades', href: '/crm/oportunidades', icon: Target },
-  { name: 'Actividades', href: '/crm/actividades', icon: Calendar },
+  { name: 'Empresas', href: '/crm/empresas', icon: Building2 },
+  { name: 'Acciones', href: '/crm/actividades', icon: Calendar },
+  { name: 'Contactos', href: '/crm/contactos', icon: Users },
+  { name: 'Vendedores', href: '/rrhh/personal?tipo=vendedor', icon: Briefcase },
+  { name: 'Análisis de Riesgo', href: '/crm/analisis-riesgo', icon: AlertTriangle },
+  { name: 'Legajos', href: '/crm/legajos', icon: FileText },
 ];
 
 export default function CRMLayout({
@@ -49,7 +52,9 @@ export default function CRMLayout({
   const pathname = usePathname();
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <OrganizationProvider>
+      <Toaster position="top-right" richColors />
+      <div className="flex h-screen bg-gray-50">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -159,6 +164,7 @@ export default function CRMLayout({
         </main>
       </div>
     </div>
+    </OrganizationProvider>
   );
 }
 
