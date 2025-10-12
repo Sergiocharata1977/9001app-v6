@@ -465,3 +465,7 @@ Antes de empezar, verifica:
 > 💡 **Filosofía**: Probar rápido y barato. Si funciona, invertir más. Si no funciona, no pierdes mucho. **Lean Startup aplicado a IA.**
 
 
+
+
+
+

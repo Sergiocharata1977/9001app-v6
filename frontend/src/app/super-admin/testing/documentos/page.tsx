@@ -1,19 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   ArrowLeft,
   CheckCircle,
-  FileText,
+  ClipboardList,
   Download,
-  Image as ImageIcon,
-  ClipboardList
+  Image as ImageIcon
 } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function TestingDocumentosDetailPage() {
   const [activeTab, setActiveTab] = useState('resumen');
@@ -112,7 +111,11 @@ export default function TestingDocumentosDetailPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/super-admin/testing">
-            <Button variant="outline" size="icon">
+            <Button 
+              variant="default" 
+              size="icon"
+              className="bg-blue-600 hover:bg-blue-700 text-white border-2 border-blue-800 shadow-lg hover:shadow-xl transition-all duration-200"
+            >
               <ArrowLeft className="w-4 h-4" />
             </Button>
           </Link>
@@ -401,6 +404,9 @@ export default function TestingDocumentosDetailPage() {
     </div>
   );
 }
+
+
+
 
 
 

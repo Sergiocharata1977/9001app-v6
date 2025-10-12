@@ -111,6 +111,39 @@ CASOS_DE_USO.html
 PROMPT_DON_CANDIDO_ESPECIFICO.md
 ENV_CONFIGURATION.md
 
+# Documentos de planificación y análisis (NO SUBIR)
+*-planificacion-*.md
+*-analisis-*.md
+RRHH-*.md
+PLAN-*.md
+FASE-*.md
+GUIA-*.md
+INSTRUCCIONES-*.md
+INICIO_*.md
+QUICK-START-*.md
+TARJETA-*.md
+TEST-*.md
+IMPLEMENTACION-*.md
+
+# Documentos específicos del proyecto
+ANALISIS-RIESGO-ROADMAP-COMPLETO.md
+don-candido-analisis.md
+RESUMEN-IMPLEMENTACION-LEGAJOS.md
+RESUMEN_MODALES_CRM.md
+PLAN_IMPLEMENTACION_*.md
+README-DON-CANDIDO*.md
+RESUMEN-EJECUTIVO-DON-CANDIDO.md
+ROADMAP-KANBAN-README.md
+ETAPA_1_CRM_COMPLETADA.md
+
+# EXCEPCIONES - Mantener estos archivos importantes
+!README.md
+!frontend/README.md
+!backend/README.md
+!CONTRIBUTING.md
+!CHANGELOG.md
+!LICENSE.md
+
 # Archivos con secretos/claves API
 *SECRET*
 *API_KEY*

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { CRM_ClientesAgro } from '../models/crm_clientes_agro';
+import { Legajo } from '../models/Legajo';
 
 // Esquemas de validación Zod
 const clienteCreateSchema = z.object({
@@ -333,6 +334,110 @@ export const getClienteStats = async (req: Request, res: Response) => {
     return res.status(500).json({
       success: false,
       message: 'Error interno del servidor'
+    });
+  }
+};
+
+/**
+ * POST /api/crm/clientes/:id/legajo
+ * Obtiene el legajo de una empresa o lo crea automáticamente si no existe
+ * 
+ * FLUJO:
+ * 1. Verifica que la empresa exista
+ * 2. Si la empresa ya tiene legajo_id, retorna ese legajo
+ * 3. Si no tiene legajo, crea uno nuevo automáticamente
+ * 4. Vincula el legajo a la empresa (actualiza legajo_id)
+ * 5. Retorna el legajo con populate de company_id
+ * 
+ * GARANTÍAS:
+ * - 1 Empresa → 1 Legajo (único por company_id + organization_id)
+ * - Creación automática sin errores de vinculación
+ * - Trazabilidad completa (created_by, created_at)
+ */
+export const getOrCreateLegajo = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params; // ID de la empresa
+    const { organization_id, user_id } = req.body; // Desde middleware de auth
+
+    // 1. Buscar la empresa
+    const empresa = await CRM_ClientesAgro.findOne({ 
+      _id: id, 
+      organization_id,
+      is_active: 1 
+    });
+
+    if (!empresa) {
+      return res.status(404).json({
+        success: false,
+        message: 'Empresa no encontrada o inactiva'
+      });
+    }
+
+    // 2. Si la empresa ya tiene legajo, retornarlo
+    if (empresa.legajo_id) {
+      const legajoExistente = await Legajo.findById(empresa.legajo_id)
+        .populate('company_id', 'razon_social cuit zona_geografica')
+        .populate('risk_links.risk_analysis_id', 'nivel_riesgo_general puntuacion_total fecha_analisis');
+
+      if (legajoExistente) {
+        return res.status(200).json({
+          success: true,
+          message: 'Legajo encontrado',
+          data: legajoExistente,
+          is_new: false
+        });
+      }
+    }
+
+    // 3. Si no tiene legajo o el legajo_id es inválido, crear uno nuevo
+    const nuevoLegajo = await Legajo.create({
+      company_id: empresa._id,
+      organization_id: empresa.organization_id,
+      fiscal_years: [],
+      assets: {
+        properties: [],
+        vehicles: [],
+        machinery: []
+      },
+      risk_links: [],
+      documents: [],
+      is_active: true,
+      created_by: user_id,
+      created_at: new Date(),
+      updated_at: new Date()
+    });
+
+    // 4. Vincular el legajo a la empresa
+    empresa.legajo_id = nuevoLegajo._id;
+    await empresa.save();
+
+    // 5. Retornar el legajo con populate
+    const legajoPopulado = await Legajo.findById(nuevoLegajo._id)
+      .populate('company_id', 'razon_social cuit zona_geografica');
+
+    return res.status(201).json({
+      success: true,
+      message: 'Legajo creado automáticamente',
+      data: legajoPopulado,
+      is_new: true
+    });
+
+  } catch (error: any) {
+    console.error('Error en getOrCreateLegajo:', error);
+    
+    // Error de duplicado (por si acaso)
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: 'Esta empresa ya tiene un legajo asociado',
+        error: error.message
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: 'Error al obtener o crear legajo',
+      error: error.message
     });
   }
 };

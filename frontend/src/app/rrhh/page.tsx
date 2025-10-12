@@ -14,11 +14,13 @@ import {
   Calendar,
   DollarSign,
   BarChart3,
-  FileText
+  FileText,
+  Target,
+  Clock
 } from 'lucide-react';
 
 export default function Page() {
-  // Configuración de módulos RRHH
+  // Configuración de módulos RRHH ACTUALIZADA
   const modulosRRHH = [
     {
       id: 'personal',
@@ -27,7 +29,7 @@ export default function Page() {
       icon: Users,
       ruta: '/rrhh/personal',
       color: 'blue',
-      habilitado: true, // ✅ Funcional
+      habilitado: true,
       estadisticas: { total: 45, activos: 42 }
     },
     {
@@ -37,7 +39,7 @@ export default function Page() {
       icon: Building2,
       ruta: '/rrhh/departamentos',
       color: 'purple',
-      habilitado: true, // ✅ Funcional
+      habilitado: true,
       estadisticas: { total: 6 }
     },
     {
@@ -47,7 +49,7 @@ export default function Page() {
       icon: Briefcase,
       ruta: '/rrhh/puestos',
       color: 'indigo',
-      habilitado: true, // ✅ Funcional
+      habilitado: true,
       estadisticas: { total: 12 }
     },
     {
@@ -57,7 +59,7 @@ export default function Page() {
       icon: GraduationCap,
       ruta: '/rrhh/competencias',
       color: 'teal',
-      habilitado: true, // ✅ Funcional
+      habilitado: true,
       estadisticas: { total: 25 }
     },
     {
@@ -67,7 +69,7 @@ export default function Page() {
       icon: GraduationCap,
       ruta: '/rrhh/capacitaciones',
       color: 'green',
-      habilitado: true, // ✅ Funcional
+      habilitado: true,
       estadisticas: { programadas: 8, completadas: 15 }
     },
     {
@@ -77,9 +79,10 @@ export default function Page() {
       icon: ClipboardCheck,
       ruta: '/rrhh/evaluaciones',
       color: 'orange',
-      habilitado: true, // ✅ Funcional
+      habilitado: true,
       estadisticas: { pendientes: 5, completadas: 32 }
     },
+    // 🆕 NUEVOS MÓDULOS IMPLEMENTADOS
     {
       id: 'clima-laboral',
       titulo: 'Clima Laboral',
@@ -87,142 +90,124 @@ export default function Page() {
       icon: TrendingUp,
       ruta: '/rrhh/clima-laboral',
       color: 'cyan',
-      habilitado: true, // 🆕 Nuevo módulo
-      estadisticas: { ultima_encuesta: '85% satisfacción' }
+      habilitado: true,
+      estadisticas: { satisfaccion: '85%', respuestas: 42 }
     },
     {
       id: 'desempeno',
       titulo: 'Gestión de Desempeño',
       descripcion: 'Objetivos y seguimiento continuo',
-      icon: BarChart3,
+      icon: Target,
       ruta: '/rrhh/desempeno',
       color: 'emerald',
-      habilitado: true, // 🆕 Nuevo módulo
-      estadisticas: { objetivos_activos: 120 }
+      habilitado: true,
+      estadisticas: { objetivos_activos: 156, cumplimiento: '78%' }
     },
     {
       id: 'ausencias',
       titulo: 'Control de Ausencias',
-      descripcion: 'Vacaciones, permisos y licencias',
+      descripcion: 'Licencias, vacaciones y ausencias',
       icon: Calendar,
       ruta: '/rrhh/ausencias',
       color: 'amber',
-      habilitado: true, // 🆕 Nuevo módulo
-      estadisticas: { solicitudes_pendientes: 3 }
+      habilitado: true,
+      estadisticas: { pendientes: 3, aprobadas: 28 }
     },
     {
       id: 'reclutamiento',
       titulo: 'Reclutamiento y Selección',
-      descripcion: 'Gestión de vacantes y candidatos',
+      descripcion: 'Vacantes y proceso de contratación',
       icon: UserPlus,
       ruta: '/rrhh/reclutamiento',
-      color: 'pink',
-      habilitado: true, // 🆕 Nuevo módulo
-      estadisticas: { vacantes_abiertas: 2 }
+      color: 'violet',
+      habilitado: true,
+      estadisticas: { vacantes_activas: 4, candidatos: 23 }
     },
     {
       id: 'nomina',
       titulo: 'Gestión de Nómina',
-      descripcion: 'Procesamiento de nómina y pagos',
+      descripcion: 'Cálculo de salarios y liquidaciones',
       icon: DollarSign,
       ruta: '/rrhh/nomina',
-      color: 'gray',
-      habilitado: false, // ❌ BLOQUEADO - Próximamente
-      estadisticas: null
+      color: 'rose',
+      habilitado: false, // 🚧 Pendiente de planificación específica
+      estadisticas: { periodo_actual: 'Nov 2024' }
     },
     {
       id: 'indicadores',
       titulo: 'Indicadores RRHH',
-      descripcion: 'KPIs y métricas de recursos humanos',
+      descripcion: 'Dashboard de métricas y KPIs',
       icon: BarChart3,
-      ruta: '/rrhh/indicadores-rrhh',
-      color: 'violet',
-      habilitado: true, // 🆕 Nuevo módulo
-      estadisticas: { indicadores: 8 }
-    },
-    {
-      id: 'reportes',
-      titulo: 'Reportes e Informes',
-      descripcion: 'Generación de reportes gerenciales',
-      icon: FileText,
-      ruta: '/rrhh/reportes',
+      ruta: '/rrhh/indicadores',
       color: 'slate',
-      habilitado: true, // 🆕 Nuevo módulo
-      estadisticas: { reportes_generados: 12 }
+      habilitado: true,
+      estadisticas: { kpis_actualizados: 6 }
     }
   ];
 
   return (
-    <div className="space-y-6">
-      {/* Header del Dashboard */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">
-          Recursos Humanos
-        </h1>
-        <p className="text-gray-600 mt-2">
-          Gestión integral del capital humano según ISO 9001
+    <div className="container mx-auto p-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Recursos Humanos</h1>
+        <p className="text-muted-foreground">
+          Sistema integral de gestión de recursos humanos ISO 9001
         </p>
       </div>
 
-      {/* Métricas RRHH */}
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Métricas RRHH</h2>
-        {/* @ts-expect-error Server/Client boundary */}
-        {/* RRHHMetrics es cliente, este contenedor es servidor */}
-        <div>
-          {/* Render del componente cliente */}
-        </div>
-      </section>
-
-      {/* Estadísticas Principales */}
+      {/* Estadísticas Generales */}
       <RRHHStats />
 
       {/* Grid de Módulos */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
         {modulosRRHH.map((modulo) => (
           <RRHHDashboardCard
             key={modulo.id}
-            {...modulo}
+            modulo={modulo}
           />
         ))}
       </div>
 
-      {/* Acceso Rápido a Otros Módulos */}
-      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-            <TrendingUp className="h-6 w-6 text-white" />
+      {/* Accesos Rápidos */}
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Link href="/rrhh/clima-laboral" className="p-4 border rounded-lg hover:bg-accent transition-colors">
+          <div className="flex items-center gap-3">
+            <TrendingUp className="h-5 w-5 text-cyan-600" />
+            <div>
+              <p className="font-medium">Nueva Encuesta</p>
+              <p className="text-sm text-muted-foreground">Clima laboral</p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-semibold text-green-900">Acceso a CRM</h3>
-            <p className="text-sm text-green-700">Módulo comercial y análisis de riesgo</p>
-          </div>
-        </div>
-        <Link 
-          href="/crm/dashboard" 
-          className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-        >
-          <TrendingUp className="h-4 w-4" />
-          Ir a CRM Comercial
         </Link>
-      </div>
 
-      {/* Alertas IA */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-            <span className="text-white text-xl">🤖</span>
+        <Link href="/rrhh/ausencias" className="p-4 border rounded-lg hover:bg-accent transition-colors">
+          <div className="flex items-center gap-3">
+            <Calendar className="h-5 w-5 text-amber-600" />
+            <div>
+              <p className="font-medium">Solicitar Ausencia</p>
+              <p className="text-sm text-muted-foreground">Licencias y vacaciones</p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-semibold text-blue-900">Asistente IA</h3>
-            <p className="text-sm text-blue-700">Sugerencias inteligentes</p>
+        </Link>
+
+        <Link href="/rrhh/desempeno" className="p-4 border rounded-lg hover:bg-accent transition-colors">
+          <div className="flex items-center gap-3">
+            <Target className="h-5 w-5 text-emerald-600" />
+            <div>
+              <p className="font-medium">Mis Objetivos</p>
+              <p className="text-sm text-muted-foreground">Seguimiento de metas</p>
+            </div>
           </div>
-        </div>
-        <ul className="space-y-2 text-sm text-blue-800">
-          <li>• 3 capacitaciones pendientes de programar</li>
-          <li>• 5 evaluaciones de desempeño vencen esta semana</li>
-          <li>• Rotación de personal aumentó 15% - Análisis recomendado</li>
-        </ul>
+        </Link>
+
+        <Link href="/rrhh/indicadores" className="p-4 border rounded-lg hover:bg-accent transition-colors">
+          <div className="flex items-center gap-3">
+            <BarChart3 className="h-5 w-5 text-slate-600" />
+            <div>
+              <p className="font-medium">Dashboard KPIs</p>
+              <p className="text-sm text-muted-foreground">Métricas RRHH</p>
+            </div>
+          </div>
+        </Link>
       </div>
     </div>
   );

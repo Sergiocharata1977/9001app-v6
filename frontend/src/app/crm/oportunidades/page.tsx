@@ -123,9 +123,9 @@ export default function OportunidadesPage() {
   
   // Estados de filtros
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterVendedor, setFilterVendedor] = useState('');
-  const [filterTipoCliente, setFilterTipoCliente] = useState('');
-  const [filterEtapa, setFilterEtapa] = useState('');
+  const [filterVendedor, setFilterVendedor] = useState('todos');
+  const [filterTipoCliente, setFilterTipoCliente] = useState('todos');
+  const [filterEtapa, setFilterEtapa] = useState('todas');
   
   // Estados de modales
   const [showNuevaModal, setShowNuevaModal] = useState(false);
@@ -154,9 +154,9 @@ export default function OportunidadesPage() {
       oportunidad.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
       oportunidad.descripcion.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesVendedor = !filterVendedor || oportunidad.vendedor === filterVendedor;
-    const matchesTipoCliente = !filterTipoCliente || oportunidad.tipoCliente === filterTipoCliente;
-    const matchesEtapa = !filterEtapa || oportunidad.etapa === filterEtapa;
+    const matchesVendedor = filterVendedor === 'todos' || oportunidad.vendedor === filterVendedor;
+    const matchesTipoCliente = filterTipoCliente === 'todos' || oportunidad.tipoCliente === filterTipoCliente;
+    const matchesEtapa = filterEtapa === 'todas' || oportunidad.etapa === filterEtapa;
     
     return matchesSearch && matchesVendedor && matchesTipoCliente && matchesEtapa;
   });
@@ -232,16 +232,8 @@ export default function OportunidadesPage() {
 
   // Formatear valor monetario
   const formatCurrency = (value: number) => {
-    if (typeof window === 'undefined') {
-      // Durante el renderizado del servidor, usar formato simple
-      return `$${value.toLocaleString('es-AR')}`;
-    }
-    return new Intl.NumberFormat('es-AR', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
+    // Usar formato consistente para servidor y cliente
+    return `US$ ${value.toLocaleString('es-AR')}`;
   };
 
 
@@ -388,7 +380,7 @@ export default function OportunidadesPage() {
               <SelectValue placeholder="Filtrar por vendedor" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos los vendedores</SelectItem>
+              <SelectItem value="todos">Todos los vendedores</SelectItem>
               {vendedores.map(vendedor => (
                 <SelectItem key={vendedor} value={vendedor}>{vendedor}</SelectItem>
               ))}
@@ -400,7 +392,7 @@ export default function OportunidadesPage() {
               <SelectValue placeholder="Tipo de cliente" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos los tipos</SelectItem>
+              <SelectItem value="todos">Todos los tipos</SelectItem>
               <SelectItem value="nuevo">Clientes nuevos</SelectItem>
               <SelectItem value="viejo">Clientes viejos</SelectItem>
             </SelectContent>
@@ -411,7 +403,7 @@ export default function OportunidadesPage() {
               <SelectValue placeholder="Etapa" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todas las etapas</SelectItem>
+              <SelectItem value="todas">Todas las etapas</SelectItem>
               {columnas.map(columna => (
                 <SelectItem key={columna.id} value={columna.id}>{columna.titulo}</SelectItem>
               ))}

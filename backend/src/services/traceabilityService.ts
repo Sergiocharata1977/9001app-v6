@@ -165,6 +165,50 @@ export class TraceabilityService {
 
     return chain.reverse(); // [audit, finding, action]
   }
+
+  /**
+   * Generar número único para encuesta de cliente
+   * Formato: CLI-YYYY-XXX (ej: CLI-2024-001)
+   */
+  async generateEncuestaClienteNumber(): Promise<string> {
+    const year = new Date().getFullYear();
+    const counterId = `encuesta_cliente_${this.organizationId}_${year}`;
+
+    const counter = await Counter.findByIdAndUpdate(
+      counterId,
+      {
+        $inc: { seq: 1 },
+        $setOnInsert: { organization_id: this.organizationId }
+      },
+      {
+        new: true,
+        upsert: true
+      }
+    );
+
+    const sequence = counter.seq.toString().padStart(3, '0');
+    return `CLI-${year}-${sequence}`;
+  }
+
+  async generateRequisitoNumber(): Promise<string> {
+    const year = new Date().getFullYear();
+    const counterId = `requisito_${this.organizationId}_${year}`;
+
+    const counter = await Counter.findByIdAndUpdate(
+      counterId,
+      {
+        $inc: { seq: 1 },
+        $setOnInsert: { organization_id: this.organizationId }
+      },
+      {
+        new: true,
+        upsert: true
+      }
+    );
+
+    const sequence = counter.seq.toString().padStart(3, '0');
+    return `REQ-${year}-${sequence}`;
+  }
 }
 
 export default TraceabilityService;

@@ -40,6 +40,9 @@ export interface ICRMClientesAgro extends Document {
   evaluaciones_count?: number;          // Contador de evaluaciones
   encuestas_count?: number;             // Contador de encuestas enviadas
   
+  // Relación con Legajo (1 empresa → 1 legajo)
+  legajo_id?: mongoose.Types.ObjectId;  // Referencia al legajo único de la empresa
+  
   created_at?: Date;
   updated_at?: Date;
   created_by?: string;
@@ -73,6 +76,10 @@ const crmClientesAgroSchema = new Schema<ICRMClientesAgro>({
   fecha_ultimo_contacto: { type: Date },
   preferencias_estacionales: { type: String },
   observaciones: { type: String },
+  
+  // Relación con Legajo
+  legajo_id: { type: Schema.Types.ObjectId, ref: 'Legajo', default: null, index: true },
+  
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
   created_by: { type: String },

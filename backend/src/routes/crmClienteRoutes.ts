@@ -5,7 +5,8 @@ import {
   createCliente,
   updateCliente,
   deleteCliente,
-  getClienteStats
+  getClienteStats,
+  getOrCreateLegajo
 } from '../controllers/crmClienteController';
 
 const router = express.Router();
@@ -21,6 +22,9 @@ router.get('/', getAllClientes);
 
 // GET /api/crm/clientes/:id - Obtener cliente por ID
 router.get('/:id', getClienteById);
+
+// POST /api/crm/clientes/:id/legajo - Obtener o crear legajo de la empresa
+router.post('/:id/legajo', getOrCreateLegajo);
 
 // POST /api/crm/clientes - Crear nuevo cliente
 router.post('/', createCliente);

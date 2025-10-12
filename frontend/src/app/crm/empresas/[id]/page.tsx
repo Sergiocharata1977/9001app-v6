@@ -27,13 +27,15 @@ import {
   Wheat,
   Plus,
   Eye,
-  Download
+  Download,
+  FolderOpen
 } from 'lucide-react';
 import Link from 'next/link';
 import { crmClienteService, crmContactoService, crmOportunidadService, crmActividadService } from '@/services/crmService';
 import { useOrganization } from '@/contexts/OrganizationContext';
 import { RelatedEntityCard, NotesTimeline, HistoryLog } from '@/components/crm/shared';
 import { toast } from 'sonner';
+import axios from 'axios';
 
 // Datos de ejemplo más realistas
 const datosEjemplo = {
@@ -213,6 +215,49 @@ export default function EmpresaSinglePage() {
     }
   };
 
+  /**
+   * Maneja el clic en "Ver Legajo"
+   * - Si la empresa ya tiene legajo, abre ese legajo
+   * - Si no tiene legajo, crea uno automáticamente
+   * - Redirige a la vista del legajo
+   */
+  const handleVerLegajo = async () => {
+    try {
+      setLoading(true);
+      toast.loading('Cargando legajo...', { id: 'legajo-loading' });
+
+      // Llamar al endpoint que obtiene o crea el legajo
+      const response = await axios.post(
+        `/api/crm/clientes/${empresaId}/legajo`,
+        {
+          organization_id: organizationId,
+          user_id: 'USER-001' // TODO: Obtener del contexto de auth
+        }
+      );
+
+      const legajo = response.data.data;
+      const isNew = response.data.is_new;
+
+      toast.dismiss('legajo-loading');
+
+      if (isNew) {
+        toast.success('Legajo creado automáticamente');
+      } else {
+        toast.success('Legajo encontrado');
+      }
+
+      // Redirigir a la vista del legajo
+      router.push(`/crm/legajos/${legajo._id}`);
+
+    } catch (error: any) {
+      toast.dismiss('legajo-loading');
+      console.error('Error al obtener/crear legajo:', error);
+      toast.error(error.response?.data?.message || 'Error al acceder al legajo');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getTipoClienteColor = (tipo: string) => {
     const colors = {
       pequeño: 'bg-blue-100 text-blue-800',
@@ -281,6 +326,15 @@ export default function EmpresaSinglePage() {
           </div>
         </div>
         <div className="flex items-center space-x-2">
+          {/* Botón destacado: Ver Legajo */}
+          <Button 
+            onClick={handleVerLegajo}
+            disabled={loading}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+          >
+            <FolderOpen className="h-4 w-4 mr-2" />
+            Ver Legajo
+          </Button>
           <Button variant="outline" size="sm">
             <Edit className="h-4 w-4 mr-2" />
             Editar

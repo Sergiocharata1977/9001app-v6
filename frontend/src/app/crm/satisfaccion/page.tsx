@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   Plus, 
   Star,
@@ -13,11 +15,26 @@ import {
   Calendar,
   Building2,
   Grid3X3,
-  List
+  List,
+  Search,
+  Filter,
+  Loader2
 } from 'lucide-react';
+import { useOrganization } from '@/contexts/OrganizationContext';
 
 export default function SatisfaccionClientesPage() {
+  const { organizationId } = useOrganization();
   const [viewMode, setViewMode] = useState<'cards' | 'list'>('cards');
+  const [loading, setLoading] = useState(true);
+  
+  // Estados de filtros
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterTipoEncuesta, setFilterTipoEncuesta] = useState('todos');
+  const [filterFechaDesde, setFilterFechaDesde] = useState('');
+  const [filterFechaHasta, setFilterFechaHasta] = useState('');
+  const [filterPuntuacionMin, setFilterPuntuacionMin] = useState('cualquiera');
+  const [filterNPSMin, setFilterNPSMin] = useState('cualquiera');
+  const [filterEstado, setFilterEstado] = useState('todos');
 
   // Datos de ejemplo de encuestas
   const encuestas = [
@@ -91,8 +108,25 @@ export default function SatisfaccionClientesPage() {
     );
   };
 
-  const promedioNPS = encuestas.reduce((sum, enc) => sum + enc.nps, 0) / encuestas.length;
-  const promedioPuntuacion = encuestas.reduce((sum, enc) => sum + enc.puntuacion, 0) / encuestas.length;
+  // Función para filtrar encuestas
+  const filteredEncuestas = encuestas.filter(encuesta => {
+    const matchesSearch = !searchTerm || 
+      encuesta.empresa.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      encuesta.id.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesTipo = filterTipoEncuesta === 'todos' || encuesta.tipo === filterTipoEncuesta;
+    const matchesFechaDesde = !filterFechaDesde || new Date(encuesta.fecha) >= new Date(filterFechaDesde);
+    const matchesFechaHasta = !filterFechaHasta || new Date(encuesta.fecha) <= new Date(filterFechaHasta);
+    const matchesPuntuacion = filterPuntuacionMin === 'cualquiera' || encuesta.puntuacion >= Number(filterPuntuacionMin);
+    const matchesNPS = filterNPSMin === 'cualquiera' || encuesta.nps >= Number(filterNPSMin);
+    const matchesEstado = filterEstado === 'todos' || encuesta.estado === filterEstado;
+    
+    return matchesSearch && matchesTipo && matchesFechaDesde && 
+           matchesFechaHasta && matchesPuntuacion && matchesNPS && matchesEstado;
+  });
+
+  const promedioNPS = filteredEncuestas.reduce((sum, enc) => sum + enc.nps, 0) / filteredEncuestas.length;
+  const promedioPuntuacion = filteredEncuestas.reduce((sum, enc) => sum + enc.puntuacion, 0) / filteredEncuestas.length;
 
   return (
     <div className="space-y-6">
@@ -118,7 +152,7 @@ export default function SatisfaccionClientesPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Total Encuestas</p>
-                <p className="text-2xl font-bold text-gray-900">{encuestas.length}</p>
+                <p className="text-2xl font-bold text-gray-900">{filteredEncuestas.length}</p>
               </div>
             </div>
           </CardContent>
@@ -160,11 +194,121 @@ export default function SatisfaccionClientesPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Clientes Encuestados</p>
-                <p className="text-2xl font-bold text-gray-900">{new Set(encuestas.map(e => e.empresaId)).size}</p>
+                <p className="text-2xl font-bold text-gray-900">{new Set(filteredEncuestas.map(e => e.empresaId)).size}</p>
               </div>
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Filtros */}
+      <div className="bg-white p-6 rounded-lg border">
+        <div className="flex items-center gap-2 mb-4">
+          <Filter className="h-5 w-5 text-gray-500" />
+          <h3 className="text-lg font-semibold text-gray-900">Filtros</h3>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Búsqueda */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Buscar por cliente o ID..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          
+          {/* Tipo de Encuesta */}
+          <Select value={filterTipoEncuesta} onValueChange={setFilterTipoEncuesta}>
+            <SelectTrigger>
+              <SelectValue placeholder="Tipo de encuesta" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="todos">Todos los tipos</SelectItem>
+              <SelectItem value="Post-Entrega">Post-Entrega</SelectItem>
+              <SelectItem value="Satisfacción Anual">Satisfacción Anual</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Fecha Desde */}
+          <Input
+            type="date"
+            placeholder="Fecha desde"
+            value={filterFechaDesde}
+            onChange={(e) => setFilterFechaDesde(e.target.value)}
+          />
+
+          {/* Fecha Hasta */}
+          <Input
+            type="date"
+            placeholder="Fecha hasta"
+            value={filterFechaHasta}
+            onChange={(e) => setFilterFechaHasta(e.target.value)}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          {/* Puntuación Mínima */}
+          <Select value={filterPuntuacionMin} onValueChange={setFilterPuntuacionMin}>
+            <SelectTrigger>
+              <SelectValue placeholder="Puntuación mínima" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="cualquiera">Cualquier puntuación</SelectItem>
+              <SelectItem value="1">1+ estrella</SelectItem>
+              <SelectItem value="2">2+ estrellas</SelectItem>
+              <SelectItem value="3">3+ estrellas</SelectItem>
+              <SelectItem value="4">4+ estrellas</SelectItem>
+              <SelectItem value="5">5 estrellas</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* NPS Mínimo */}
+          <Select value={filterNPSMin} onValueChange={setFilterNPSMin}>
+            <SelectTrigger>
+              <SelectValue placeholder="NPS mínimo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="cualquiera">Cualquier NPS</SelectItem>
+              <SelectItem value="0">0+ (Neutral)</SelectItem>
+              <SelectItem value="7">7+ (Pasivo)</SelectItem>
+              <SelectItem value="9">9+ (Promotor)</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Estado */}
+          <Select value={filterEstado} onValueChange={setFilterEstado}>
+            <SelectTrigger>
+              <SelectValue placeholder="Estado" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="todos">Todos los estados</SelectItem>
+              <SelectItem value="completada">Completada</SelectItem>
+              <SelectItem value="pendiente">Pendiente</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Botón limpiar filtros */}
+        <div className="mt-4 flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setSearchTerm('');
+              setFilterTipoEncuesta('');
+              setFilterFechaDesde('');
+              setFilterFechaHasta('');
+              setFilterPuntuacionMin('');
+              setFilterNPSMin('');
+              setFilterEstado('');
+            }}
+          >
+            Limpiar Filtros
+          </Button>
+        </div>
       </div>
 
       {/* View Toggle */}
@@ -194,14 +338,14 @@ export default function SatisfaccionClientesPage() {
           </button>
         </div>
         <div className="text-sm text-gray-600">
-          {encuestas.length} encuestas registradas
+          {filteredEncuestas.length} de {encuestas.length} encuestas
         </div>
       </div>
 
       {/* Vista Tarjetas */}
       {viewMode === 'cards' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {encuestas.map((encuesta) => (
+          {filteredEncuestas.map((encuesta) => (
             <Card key={encuesta.id} className="p-6 hover:shadow-lg transition-shadow">
               <div className="space-y-4">
                 <div className="flex items-start justify-between">
@@ -258,7 +402,7 @@ export default function SatisfaccionClientesPage() {
       ) : (
         /* Vista Lista */
         <div className="space-y-4">
-          {encuestas.map((encuesta) => (
+          {filteredEncuestas.map((encuesta) => (
             <Card key={encuesta.id} className="p-6 hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between">
                 <div className="flex-1">

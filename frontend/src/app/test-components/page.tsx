@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ProcessDefinitionFormV2 } from '@/components/forms/ProcessDefinitionFormV2'
+import { ProcessDefinitionFormV2 } from '@/components/modules/processes/forms/ProcessDefinitionFormV2'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui'
 
 export default function TestComponentsPage() {
@@ -10,10 +10,10 @@ export default function TestComponentsPage() {
   const handleSubmit = async (data: any) => {
     setIsLoading(true)
     console.log('Datos del formulario:', data)
-    
+
     // Simular llamada a API
     await new Promise(resolve => setTimeout(resolve, 2000))
-    
+
     alert('¡Proceso creado exitosamente!')
     setIsLoading(false)
   }

@@ -66,21 +66,30 @@ export const submitPostDeliverySurvey = async (req: Request, res: Response) => {
     const surveyData: Partial<IEncuestaCliente> = {
       id: `survey-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       organization_id,
-      surveyNumber,
-      surveyType: 'post_delivery',
-      customerId,
-      customerName,
-      postDeliveryData: {
-        ...validatedData,
-        deliveryDate: new Date(validatedData.deliveryDate)
+      numeroEncuesta: surveyNumber,
+      tipoEncuesta: 'post_entrega',
+      clienteId: customerId,
+      nombreCliente: customerName,
+      datosPostEntrega: {
+        pedidoId: validatedData.orderId,
+        numeroPedido: validatedData.orderNumber,
+        productoEntregado: validatedData.productDelivered,
+        fechaEntrega: new Date(validatedData.deliveryDate),
+        calificaciones: {
+          calidadProducto: validatedData.ratings.productQuality,
+          tiempoEntrega: validatedData.ratings.deliveryTime,
+          embalaje: validatedData.ratings.packaging,
+          servicioCliente: validatedData.ratings.customerService,
+          satisfaccionGeneral: validatedData.ratings.overallSatisfaction
+        }
       },
-      positiveComments: validatedData.positiveComments,
-      negativeComments: validatedData.negativeComments,
-      suggestions: validatedData.suggestions,
-      autoGenerateFindings: true,
-      generatedFindings: [],
-      status: 'completed',
-      isActive: true
+      comentariosPositivos: validatedData.positiveComments,
+      comentariosNegativos: validatedData.negativeComments,
+      sugerencias: validatedData.suggestions,
+      autoGenerarHallazgos: true,
+      hallazgosGenerados: [],
+      estado: 'completada',
+      estaActivo: true
     };
 
     const survey = new EncuestaCliente(surveyData);
@@ -138,19 +147,34 @@ export const submitAnnualSurvey = async (req: Request, res: Response) => {
     const surveyData: Partial<IEncuestaCliente> = {
       id: `survey-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       organization_id,
-      surveyNumber,
-      surveyType: 'annual',
-      customerId,
-      customerName,
-      annualData: validatedData,
-      strengths: validatedData.strengths,
-      weaknesses: validatedData.weaknesses,
-      improvements: validatedData.improvements,
-      competitorComparison: validatedData.competitorComparison,
-      autoGenerateFindings: true,
-      generatedFindings: [],
-      status: 'completed',
-      isActive: true
+      numeroEncuesta: surveyNumber,
+      tipoEncuesta: 'anual',
+      clienteId: customerId,
+      nombreCliente: customerName,
+      datosAnuales: {
+        anoEncuesta: validatedData.surveyYear,
+        duracionRelacion: validatedData.relationshipDuration,
+        calificaciones: {
+          calidadProducto: validatedData.ratings.productQuality,
+          calidadServicio: validatedData.ratings.serviceQuality,
+          capacidadRespuesta: validatedData.ratings.responsiveness,
+          soporteTecnico: validatedData.ratings.technicalSupport,
+          relacionPrecioValor: validatedData.ratings.priceValue,
+          innovacion: validatedData.ratings.innovation,
+          confiabilidad: validatedData.ratings.reliability,
+          satisfaccionGeneral: validatedData.ratings.overallSatisfaction
+        },
+        continuara: validatedData.willContinue,
+        recomendara: validatedData.willRecommend
+      },
+      fortalezas: validatedData.strengths,
+      debilidades: validatedData.weaknesses,
+      mejoras: validatedData.improvements,
+      comparacionCompetidores: validatedData.competitorComparison,
+      autoGenerarHallazgos: true,
+      hallazgosGenerados: [],
+      estado: 'completada',
+      estaActivo: true
     };
 
     const survey = new EncuestaCliente(surveyData);
@@ -195,22 +219,22 @@ async function autoGenerateFindingsFromSurvey(survey: IEncuestaCliente, organiza
     let description = '';
     let severity: 'critical' | 'major' | 'minor' | 'low' = 'minor';
 
-    if (survey.surveyType === 'post_delivery') {
-      const data = survey.postDeliveryData!;
-      if (data.ratings.overallSatisfaction < 3) {
-        title = `Insatisfacción en entrega de producto: ${data.productDelivered}`;
-        description = `Cliente ${survey.customerName} reportó satisfacción general de ${data.ratings.overallSatisfaction}/5 en la entrega del pedido ${data.orderNumber}.`;
-        severity = data.ratings.overallSatisfaction < 2 ? 'major' : 'minor';
+    if (survey.tipoEncuesta === 'post_entrega') {
+      const data = survey.datosPostEntrega!;
+      if (data.calificaciones.satisfaccionGeneral < 3) {
+        title = `Insatisfacción en entrega de producto: ${data.productoEntregado}`;
+        description = `Cliente ${survey.nombreCliente} reportó satisfacción general de ${data.calificaciones.satisfaccionGeneral}/5 en la entrega del pedido ${data.numeroPedido}.`;
+        severity = data.calificaciones.satisfaccionGeneral < 2 ? 'major' : 'minor';
       }
     } else {
-      const data = survey.annualData!;
-      if (!data.willContinue || !data.willRecommend) {
-        title = `Riesgo de pérdida de cliente: ${survey.customerName}`;
-        description = `Cliente ${survey.customerName} indica que ${!data.willContinue ? 'no continuará' : ''} ${!data.willContinue && !data.willRecommend ? 'y ' : ''} ${!data.willRecommend ? 'no recomendará' : ''} nuestros servicios.`;
+      const data = survey.datosAnuales!;
+      if (!data.continuara || !data.recomendara) {
+        title = `Riesgo de pérdida de cliente: ${survey.nombreCliente}`;
+        description = `Cliente ${survey.nombreCliente} indica que ${!data.continuara ? 'no continuará' : ''} ${!data.continuara && !data.recomendara ? 'y ' : ''} ${!data.recomendara ? 'no recomendará' : ''} nuestros servicios.`;
         severity = 'critical';
-      } else if (data.overallSatisfaction < 3) {
-        title = `Baja satisfacción anual: ${survey.customerName}`;
-        description = `Cliente ${survey.customerName} reportó satisfacción general de ${data.overallSatisfaction}/5 en la encuesta anual.`;
+      } else if (data.calificaciones.satisfaccionGeneral < 3) {
+        title = `Baja satisfacción anual: ${survey.nombreCliente}`;
+        description = `Cliente ${survey.nombreCliente} reportó satisfacción general de ${data.calificaciones.satisfaccionGeneral}/5 en la encuesta anual.`;
         severity = 'major';
       }
     }
@@ -223,9 +247,9 @@ async function autoGenerateFindingsFromSurvey(survey: IEncuestaCliente, organiza
         title,
         description,
         source: 'customer',
-        sourceId: survey.customerId,
-        sourceName: survey.customerName,
-        sourceReference: survey.surveyNumber,
+        sourceId: survey.clienteId,
+        sourceName: survey.nombreCliente,
+        sourceReference: survey.numeroEncuesta,
         findingType: 'non_conformity',
         severity,
         category: 'quality',
@@ -247,8 +271,8 @@ async function autoGenerateFindingsFromSurvey(survey: IEncuestaCliente, organiza
       await finding.save();
 
       // Actualizar encuesta con el hallazgo generado
-      survey.generatedFindings.push(finding.id);
-      survey.status = 'findings_generated';
+      survey.hallazgosGenerados.push(finding.id);
+      survey.estado = 'hallazgos_generados';
       await survey.save();
     }
   } catch (error) {
@@ -269,23 +293,23 @@ export const getAllSurveys = async (req: Request, res: Response) => {
     }
 
     const {
-      surveyType,
-      customerId,
+      tipoEncuesta,
+      clienteId,
       page = 1,
       limit = 10,
-      sortBy = 'submittedAt',
+      sortBy = 'fechaCreacion',
       sortOrder = 'desc'
     } = req.query;
 
     // Construir filtros
     const filters: any = { organization_id };
 
-    if (surveyType) {
-      filters.surveyType = surveyType;
+    if (tipoEncuesta) {
+      filters.tipoEncuesta = tipoEncuesta;
     }
 
-    if (customerId) {
-      filters.customerId = customerId;
+    if (clienteId) {
+      filters.clienteId = clienteId;
     }
 
     // Construir ordenamiento

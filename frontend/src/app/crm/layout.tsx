@@ -33,9 +33,10 @@ interface MenuItem {
 }
 
 const crmNavigation: MenuItem[] = [
-  { name: 'Dashboard', href: '/crm/dashboard', icon: BarChart3 },
+  { name: 'Dashboard', href: '/crm', icon: BarChart3 },
   { name: 'Oportunidades', href: '/crm/oportunidades', icon: Target },
   { name: 'Empresas', href: '/crm/empresas', icon: Building2 },
+  { name: 'Satisfacción Clientes', href: '/crm/satisfaccion', icon: Star },
   { name: 'Acciones', href: '/crm/actividades', icon: Calendar },
   { name: 'Contactos', href: '/crm/contactos', icon: Users },
   { name: 'Vendedores', href: '/rrhh/personal?tipo=vendedor', icon: Briefcase },

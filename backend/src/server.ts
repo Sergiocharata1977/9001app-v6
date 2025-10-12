@@ -1,10 +1,10 @@
-import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
+import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import rateLimit from 'express-rate-limit';
 import { connectDB } from './config/database';
-import dotenv from 'dotenv';
 
 // Cargar variables de entorno
 dotenv.config();
@@ -15,26 +15,38 @@ const PORT = process.env.PORT || 5000;
 // Middleware de seguridad
 app.use(helmet());
 
-// Rate limiting
+// Rate limiting - Configuración más permisiva para desarrollo
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // límite de 100 requests por ventana de tiempo
-  message: 'Demasiadas peticiones desde esta IP, intenta de nuevo más tarde.'
+  max: 1000, // límite aumentado a 1000 requests por ventana de tiempo
+  message: 'Demasiadas peticiones desde esta IP, intenta de nuevo más tarde.',
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 app.use(limiter);
 
-// CORS
+// CORS optimizado
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
+  credentials: true,
+  optionsSuccessStatus: 200, // Para soporte de navegadores legacy
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
-// Logging
-app.use(morgan('combined'));
+// Logging optimizado para desarrollo
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
-// Body parsing
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+// Body parsing optimizado
+app.use(express.json({
+  limit: '10mb',
+  type: ['application/json', 'text/plain']
+}));
+app.use(express.urlencoded({
+  extended: true,
+  limit: '10mb',
+  parameterLimit: 50000
+}));
 
 // Rutas básicas
 app.get('/', (req, res) => {
@@ -54,62 +66,103 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Health check para base de datos
+app.get('/api/health/database', async (req, res) => {
+  try {
+    // Importar mongoose para verificar conexión
+    const mongoose = require('mongoose');
+
+    if (mongoose.connection.readyState === 1) {
+      res.json({
+        status: 'connected',
+        database: 'MongoDB',
+        timestamp: new Date().toISOString()
+      });
+    } else {
+      res.status(503).json({
+        status: 'disconnected',
+        database: 'MongoDB',
+        timestamp: new Date().toISOString()
+      });
+    }
+  } catch (error) {
+    res.status(503).json({
+      status: 'error',
+      database: 'MongoDB',
+      error: error instanceof Error ? error.message : 'Unknown error',
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
 // Importar modelos principales (para registrarlos)
+import './models/Audit';
 import './models/Department';
+import './models/DocumentCategory';
+import './models/DocumentTemplate';
+import './models/DocumentVersion';
+import './models/EmployeeDeclaration';
+import './models/NormProcessDocRelation';
+import './models/PROCESO';
 import './models/Personnel';
 import './models/Position';
-import './models/PROCESO';
 import './models/ProcessDefinition';
-import './models/ProcessRecord';
 import './models/ProcessDocument';
-import './models/NormProcessDocRelation';
+import './models/ProcessRecord';
 import './models/User';
-import './models/Audit';
-import './models/hallazgos';
 import './models/acciones';
-import './models/EmployeeDeclaration';
-import './models/DocumentCategory';
-import './models/DocumentVersion';
-import './models/DocumentTemplate';
+import './models/hallazgos';
 // import './models/CustomerSurvey'; // TEMPORALMENTE DESACTIVADO - tiene errores
 // Modelos CRM
+import './models/AnalisisCredito';
+import './models/crm_actividades_agro';
 import './models/crm_clientes_agro';
 import './models/crm_contactos';
 import './models/crm_oportunidades_agro';
-import './models/crm_actividades_agro';
 import './models/crm_productos_agro';
 // Modelos Roadmap
 import './models/RoadmapTask';
 
 // Importar rutas
-import processRoutes from './routes/processRoutes';
-import processDocumentRoutes from './routes/processDocumentRoutes';
-import processDefinitionRoutes from './routes/processDefinitionRoutes';
-import processRecordRoutes from './routes/processRecordRoutes';
-import processUnifiedRoutes from './routes/processUnifiedRoutes';
+import actionRoutes from './routes/actionRoutes';
+import auditRoutes from './routes/auditRoutes';
+import departmentRoutes from './routes/departmentRoutes';
+import documentCategoryRoutes from './routes/documentCategoryRoutes';
+import documentTemplateRoutes from './routes/documentTemplateRoutes';
+import documentVersionRoutes from './routes/documentVersionRoutes';
+import employeeDeclarationRoutes from './routes/employeeDeclarationRoutes';
+import findingRoutes from './routes/findingRoutes';
+import measurementRoutes from './routes/measurementRoutes';
 import normPointRoutes from './routes/normPointRoutes';
 import normProcessDocRelationRoutes from './routes/normProcessDocRelationRoutes';
-import qualityObjectiveRoutes from './routes/qualityObjectiveRoutes';
-import qualityIndicatorRoutes from './routes/qualityIndicatorRoutes';
-import measurementRoutes from './routes/measurementRoutes';
-import departmentRoutes from './routes/departmentRoutes';
 import personnelRoutes from './routes/personnelRoutes';
 import positionRoutes from './routes/positionRoutes';
-import auditRoutes from './routes/auditRoutes';
-import findingRoutes from './routes/findingRoutes';
-import actionRoutes from './routes/actionRoutes';
-import employeeDeclarationRoutes from './routes/employeeDeclarationRoutes';
-import documentCategoryRoutes from './routes/documentCategoryRoutes';
+import processDefinitionRoutes from './routes/processDefinitionRoutes';
+import processDocumentRoutes from './routes/processDocumentRoutes';
+import processRecordRoutes from './routes/processRecordRoutes';
+import processRoutes from './routes/processRoutes';
+import processUnifiedRoutes from './routes/processUnifiedRoutes';
+import qualityIndicatorRoutes from './routes/qualityIndicatorRoutes';
+import qualityObjectiveRoutes from './routes/qualityObjectiveRoutes';
 import roadmapRoutes from './routes/roadmapRoutes';
-import documentVersionRoutes from './routes/documentVersionRoutes';
-import documentTemplateRoutes from './routes/documentTemplateRoutes';
-// import customerSurveyRoutes from './routes/customerSurveyRoutes'; // TEMPORALMENTE DESACTIVADO
+// import customerSurveyRoutes from './routes/customerSurveyRoutes';
+import crmRequisitosRoutes from './routes/crmRequisitosRoutes';
+import customerSatisfactionISORoutes from './routes/customerSatisfactionISORoutes'; // TEMPORALMENTE DESACTIVADO
 // Rutas CRM
+import analisisCreditoRoutes from './routes/analisisCredito';
+import crmActividadRoutes from './routes/crmActividadRoutes';
 import crmClienteRoutes from './routes/crmClienteRoutes';
 import crmContactoRoutes from './routes/crmContactoRoutes';
 import crmOportunidadRoutes from './routes/crmOportunidadRoutes';
-import crmActividadRoutes from './routes/crmActividadRoutes';
 import crmProductoRoutes from './routes/crmProductoRoutes';
+import legajoRoutes from './routes/legajo';
+
+// Rutas RRHH
+import climaLaboralRoutes from './routes/climaLaboralRoutes';
+import controlAusenciasRoutes from './routes/controlAusenciasRoutes';
+import gestionDesempenoRoutes from './routes/gestionDesempenoRoutes';
+import indicadoresRRHHRoutes from './routes/indicadoresRRHHRoutes';
+import reclutamientoRoutes from './routes/reclutamientoRoutes';
 
 // Rutas de API
 app.use('/api/processes', processRoutes);
@@ -133,13 +186,24 @@ app.use('/api/employee-declarations', employeeDeclarationRoutes);
 app.use('/api/document-categories', documentCategoryRoutes);
 app.use('/api/document-versions', documentVersionRoutes);
 app.use('/api/document-templates', documentTemplateRoutes);
-// app.use('/api/customer-surveys', customerSurveyRoutes); // TEMPORALMENTE DESACTIVADO
+// // app.use('/api/customer-surveys', customerSurveyRoutes); // TEMPORALMENTE DESACTIVADO
+app.use('/api/customer-satisfaction', customerSatisfactionISORoutes); // TEMPORALMENTE DESACTIVADO
+app.use('/api/crm', crmRequisitosRoutes);
 // Rutas CRM
 app.use('/api/crm/clientes', crmClienteRoutes);
 app.use('/api/crm/contactos', crmContactoRoutes);
 app.use('/api/crm/oportunidades', crmOportunidadRoutes);
 app.use('/api/crm/actividades', crmActividadRoutes);
 app.use('/api/crm/productos', crmProductoRoutes);
+app.use('/api/crm/analisis-credito', analisisCreditoRoutes);
+app.use('/api/legajos', legajoRoutes);
+
+// Rutas RRHH
+app.use('/api/rrhh/clima-laboral', climaLaboralRoutes);
+app.use('/api/rrhh/desempeno', gestionDesempenoRoutes);
+app.use('/api/rrhh/ausencias', controlAusenciasRoutes);
+app.use('/api/rrhh/reclutamiento', reclutamientoRoutes);
+app.use('/api/rrhh/indicadores', indicadoresRRHHRoutes);
 
 // Rutas de mantenimiento (solo para desarrollo/admin)
 app.post('/api/admin/seed-all', async (req, res) => {
@@ -254,10 +318,10 @@ app.use('*', (req, res) => {
 // Manejo global de errores
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Error:', err);
-  
+
   res.status(err.status || 500).json({
-    error: process.env.NODE_ENV === 'production' 
-      ? 'Error interno del servidor' 
+    error: process.env.NODE_ENV === 'production'
+      ? 'Error interno del servidor'
       : err.message,
     ...(process.env.NODE_ENV !== 'production' && { stack: err.stack })
   });
@@ -268,7 +332,7 @@ async function startServer() {
   try {
     // Conectar a la base de datos
     await connectDB();
-    
+
     // Iniciar servidor
     app.listen(PORT, () => {
       console.log(`🚀 Servidor ejecutándose en puerto ${PORT}`);

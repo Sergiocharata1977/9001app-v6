@@ -27,10 +27,16 @@ import {
   AlertCircle,
   Plus,
   Download,
-  Eye
+  Eye,
+  ClipboardCheck,
+  Star,
+  Filter,
+  X
 } from 'lucide-react';
 import Link from 'next/link';
 import { crmOportunidadService, crmClienteService, crmContactoService, crmActividadService } from '@/services/crmService';
+import { crmRequisitosService } from '@/services/crmRequisitosService';
+import RequisitoForm from '@/components/crm/forms/RequisitoForm';
 import { useOrganization } from '@/contexts/OrganizationContext';
 import { RelatedEntityCard, NotesTimeline, HistoryLog } from '@/components/crm/shared';
 import { toast } from 'sonner';
@@ -48,6 +54,56 @@ const datosEjemplo = {
     probabilidad: 75,
     etapa: 'negociacion',
     fecha_creacion: '2024-01-15',
+    // NUEVO: Evaluación de necesidades ISO 9001
+    evaluacion_necesidades: {
+      requisitos: [
+        {
+          id: 'REQ-001',
+          titulo: 'Certificación orgánica',
+          descripcion: 'El cliente requiere que todas las semillas tengan certificación orgánica válida',
+          tipo: 'calidad',
+          prioridad: 'alta',
+          estado: 'aprobado',
+          fecha_captura: '2024-01-16',
+          fecha_revision: '2024-01-17',
+          responsable: 'Juan Pérez',
+          cumplimiento: 'cumple',
+          observaciones: 'Certificación vigente hasta 2025'
+        },
+        {
+          id: 'REQ-002',
+          titulo: 'Entrega en horario específico',
+          descripcion: 'Entrega únicamente entre las 8:00 y 12:00 horas',
+          tipo: 'entrega',
+          prioridad: 'alta',
+          estado: 'aprobado',
+          fecha_captura: '2024-01-16',
+          fecha_revision: '2024-01-17',
+          responsable: 'María García',
+          cumplimiento: 'cumple',
+          observaciones: 'Horario acordado y confirmado'
+        },
+        {
+          id: 'REQ-003',
+          titulo: 'Embalaje biodegradable',
+          descripcion: 'Todos los productos deben venir en embalaje 100% biodegradable',
+          tipo: 'producto',
+          prioridad: 'media',
+          estado: 'en_revision',
+          fecha_captura: '2024-01-18',
+          responsable: 'Carlos López'
+        }
+      ],
+      evaluacion_completa: false,
+      fecha_evaluacion: '2024-01-16',
+      responsable_evaluacion: 'Ana Martínez',
+      puntuacion_requisitos: 4,
+      observaciones_generales: 'Evaluación en progreso. Pendiente revisión de requisito de embalaje.',
+      requisitos_capturados: 3,
+      requisitos_aprobados: 2,
+      cumplimiento_porcentaje: 67,
+      fecha_revision_iso: '2024-01-20'
+    },
     fecha_cierre_esperada: '2024-03-15',
     fecha_cierre_real: null,
     vendedor_id: 'VEN-001',
@@ -181,19 +237,24 @@ export default function OportunidadSinglePage() {
   const router = useRouter();
   const { organizationId } = useOrganization();
   const [oportunidad, setOportunidad] = useState(datosEjemplo.oportunidad);
+  
+  // Estados para gestión de requisitos
+  const [showRequisitoForm, setShowRequisitoForm] = useState(false);
+  const [requisitoEditando, setRequisitoEditando] = useState<any>(null);
+  const [requisitosLoading, setRequisitosLoading] = useState(false);
   const [cliente, setCliente] = useState(datosEjemplo.cliente);
   const [contacto, setContacto] = useState(datosEjemplo.contacto);
   const [actividades, setActividades] = useState(datosEjemplo.actividades);
   const [loading, setLoading] = useState(false);
 
-  const oportunidadId = params.id as string;
+  const oportunidadId = params?.id as string;
 
   useEffect(() => {
-    if (oportunidadId && oportunidadId !== '1') {
+    if (params?.id && params.id !== '1') {
       // Aquí se haría la llamada real a la API
       loadOportunidadData();
     }
-  }, [oportunidadId, organizationId]);
+  }, [params?.id, organizationId]);
 
   const loadOportunidadData = async () => {
     try {
@@ -207,6 +268,71 @@ export default function OportunidadSinglePage() {
       toast.error('Error al cargar los datos de la oportunidad');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Funciones para gestión de requisitos
+  const handleAgregarRequisito = () => {
+    setRequisitoEditando(null);
+    setShowRequisitoForm(true);
+  };
+
+  const handleEditarRequisito = (requisito: any) => {
+    setRequisitoEditando(requisito);
+    setShowRequisitoForm(true);
+  };
+
+  const handleSubmitRequisito = async (requisitoData: any) => {
+    try {
+      setRequisitosLoading(true);
+      
+      if (requisitoEditando) {
+        // Actualizar requisito existente
+        await crmRequisitosService.updateRequisito(
+          oportunidad.id,
+          requisitoEditando.id,
+          { ...requisitoData, organization_id: organizationId }
+        );
+        toast.success('Requisito actualizado exitosamente');
+      } else {
+        // Crear nuevo requisito
+        await crmRequisitosService.createRequisito(
+          oportunidad.id,
+          { ...requisitoData, organization_id: organizationId }
+        );
+        toast.success('Requisito creado exitosamente');
+      }
+      
+      // Recargar datos de la oportunidad
+      await loadOportunidadData();
+      setShowRequisitoForm(false);
+      setRequisitoEditando(null);
+      
+    } catch (error) {
+      console.error('Error guardando requisito:', error);
+      toast.error('Error al guardar el requisito');
+    } finally {
+      setRequisitosLoading(false);
+    }
+  };
+
+  const handleEliminarRequisito = async (requisitoId: string) => {
+    if (confirm('¿Estás seguro de que quieres eliminar este requisito?')) {
+      try {
+        setRequisitosLoading(true);
+        await crmRequisitosService.deleteRequisito(
+          oportunidad.id,
+          requisitoId,
+          organizationId
+        );
+        toast.success('Requisito eliminado exitosamente');
+        await loadOportunidadData();
+      } catch (error) {
+        console.error('Error eliminando requisito:', error);
+        toast.error('Error al eliminar el requisito');
+      } finally {
+        setRequisitosLoading(false);
+      }
     }
   };
 
@@ -359,6 +485,7 @@ export default function OportunidadSinglePage() {
       <Tabs defaultValue="detalles" className="space-y-4">
         <TabsList>
           <TabsTrigger value="detalles">Detalles</TabsTrigger>
+          <TabsTrigger value="evaluacion">Evaluación ISO 9001</TabsTrigger>
           <TabsTrigger value="cliente">Cliente</TabsTrigger>
           <TabsTrigger value="contactos">Contactos</TabsTrigger>
           <TabsTrigger value="productos">Productos</TabsTrigger>
@@ -425,6 +552,222 @@ export default function OportunidadSinglePage() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        {/* Tab Evaluación de Necesidades ISO 9001 */}
+        <TabsContent value="evaluacion" className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-3">
+            {/* Estadísticas de Evaluación */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ClipboardCheck className="h-5 w-5 text-blue-600" />
+                  Resumen Evaluación
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Requisitos Capturados</span>
+                  <span className="font-semibold">{oportunidad.evaluacion_necesidades?.requisitos_capturados || 0}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Requisitos Aprobados</span>
+                  <span className="font-semibold text-green-600">{oportunidad.evaluacion_necesidades?.requisitos_aprobados || 0}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Cumplimiento</span>
+                  <span className="font-semibold">{oportunidad.evaluacion_necesidades?.cumplimiento_porcentaje || 0}%</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Puntuación General</span>
+                  <div className="flex items-center gap-1">
+                    <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                    <span className="font-semibold">{oportunidad.evaluacion_necesidades?.puntuacion_requisitos || 0}/5</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Estado de Evaluación */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  Estado ISO 9001
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Badge className={oportunidad.evaluacion_necesidades?.evaluacion_completa ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}>
+                    {oportunidad.evaluacion_necesidades?.evaluacion_completa ? 'Completa' : 'En Progreso'}
+                  </Badge>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Responsable Evaluación</label>
+                  <p className="text-sm">{oportunidad.evaluacion_necesidades?.responsable_evaluacion || 'No asignado'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Fecha Evaluación</label>
+                  <p className="text-sm">{oportunidad.evaluacion_necesidades?.fecha_evaluacion ? new Date(oportunidad.evaluacion_necesidades.fecha_evaluacion).toLocaleDateString() : 'No registrada'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Próxima Revisión ISO</label>
+                  <p className="text-sm">{oportunidad.evaluacion_necesidades?.fecha_revision_iso ? new Date(oportunidad.evaluacion_necesidades.fecha_revision_iso).toLocaleDateString() : 'No programada'}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Acciones Rápidas */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Plus className="h-5 w-5 text-blue-600" />
+                  Acciones
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Button 
+                  className="w-full" 
+                  size="sm"
+                  onClick={handleAgregarRequisito}
+                  disabled={requisitosLoading}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Agregar Requisito
+                </Button>
+                <Button variant="outline" className="w-full" size="sm">
+                  <ClipboardCheck className="h-4 w-4 mr-2" />
+                  Revisar Requisitos
+                </Button>
+                <Button variant="outline" className="w-full" size="sm">
+                  <Download className="h-4 w-4 mr-2" />
+                  Exportar Evaluación
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Observaciones Generales */}
+          {oportunidad.evaluacion_necesidades?.observaciones_generales && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Observaciones de la Evaluación</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">{oportunidad.evaluacion_necesidades.observaciones_generales}</p>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Tabla de Requisitos */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Requisitos del Cliente ({oportunidad.evaluacion_necesidades?.requisitos?.length || 0})
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {oportunidad.evaluacion_necesidades?.requisitos && oportunidad.evaluacion_necesidades.requisitos.length > 0 ? (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2">Título</th>
+                        <th className="text-left p-2">Tipo</th>
+                        <th className="text-left p-2">Prioridad</th>
+                        <th className="text-left p-2">Estado</th>
+                        <th className="text-left p-2">Responsable</th>
+                        <th className="text-left p-2">Cumplimiento</th>
+                        <th className="text-left p-2">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {oportunidad.evaluacion_necesidades.requisitos.map((requisito) => (
+                        <tr key={requisito.id} className="border-b">
+                          <td className="p-2">
+                            <div className="font-medium">{requisito.titulo}</div>
+                            <div className="text-xs text-gray-500 truncate max-w-xs">
+                              {requisito.descripcion}
+                            </div>
+                          </td>
+                          <td className="p-2">
+                            <Badge variant="outline" className="text-xs">
+                              {requisito.tipo}
+                            </Badge>
+                          </td>
+                          <td className="p-2">
+                            <Badge className={
+                              requisito.prioridad === 'alta' ? 'bg-red-100 text-red-800' :
+                              requisito.prioridad === 'media' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-green-100 text-green-800'
+                            }>
+                              {requisito.prioridad.toUpperCase()}
+                            </Badge>
+                          </td>
+                          <td className="p-2">
+                            <Badge className={
+                              requisito.estado === 'aprobado' ? 'bg-green-100 text-green-800' :
+                              requisito.estado === 'en_revision' ? 'bg-yellow-100 text-yellow-800' :
+                              requisito.estado === 'rechazado' ? 'bg-red-100 text-red-800' :
+                              requisito.estado === 'implementado' ? 'bg-blue-100 text-blue-800' :
+                              'bg-gray-100 text-gray-800'
+                            }>
+                              {requisito.estado.replace('_', ' ').toUpperCase()}
+                            </Badge>
+                          </td>
+                          <td className="p-2 text-sm">{requisito.responsable}</td>
+                          <td className="p-2">
+                            {requisito.cumplimiento ? (
+                              <Badge className={
+                                requisito.cumplimiento === 'cumple' ? 'bg-green-100 text-green-800' :
+                                requisito.cumplimiento === 'no_cumple' ? 'bg-red-100 text-red-800' :
+                                'bg-yellow-100 text-yellow-800'
+                              }>
+                                {requisito.cumplimiento.replace('_', ' ').toUpperCase()}
+                              </Badge>
+                            ) : (
+                              <span className="text-xs text-gray-500">Sin evaluar</span>
+                            )}
+                          </td>
+                          <td className="p-2">
+                            <div className="flex items-center gap-1">
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleEditarRequisito(requisito)}
+                                disabled={requisitosLoading}
+                              >
+                                <Edit className="h-3 w-3" />
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleEliminarRequisito(requisito.id)}
+                                disabled={requisitosLoading}
+                                className="text-red-600 hover:text-red-700"
+                              >
+                                <X className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <ClipboardCheck className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500 mb-4">No se han capturado requisitos para esta oportunidad</p>
+                  <Button onClick={handleAgregarRequisito} disabled={requisitosLoading}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Capturar Primer Requisito
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* Tab Cliente */}
@@ -635,6 +978,18 @@ export default function OportunidadSinglePage() {
           />
         </TabsContent>
       </Tabs>
+
+      {/* Formulario de Requisitos */}
+      <RequisitoForm
+        isOpen={showRequisitoForm}
+        onClose={() => {
+          setShowRequisitoForm(false);
+          setRequisitoEditando(null);
+        }}
+        onSubmit={handleSubmitRequisito}
+        loading={requisitosLoading}
+        initialData={requisitoEditando}
+      />
     </div>
   );
 }

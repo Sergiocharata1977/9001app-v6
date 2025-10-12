@@ -1,4 +1,4 @@
-import api from '@/lib/api';
+n el mun ellin para poder ir import api from '@/lib/api';
 
 export interface Audit {
   id: string;
