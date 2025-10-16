@@ -2,11 +2,16 @@ import { Request, Response } from 'express';
 import { AnalisisCredito, ISubAspecto } from '../models/AnalisisCredito';
 import { CRM_ClientesAgro } from '../models/crm_clientes_agro';
 
+interface AuthenticatedUser {
+  _id: string;
+  id: string;
+  organization_id: string;
+  role: string;
+  email: string;
+}
+
 interface AuthenticatedRequest extends Request {
-  user?: {
-    id: string;
-    organization_id: string;
-  };
+  user?: AuthenticatedUser;
 }
 
 export class AnalisisCreditoController {
@@ -160,7 +165,7 @@ export class AnalisisCreditoController {
       const nuevoAnalisis = new AnalisisCredito({
         organization_id,
         cliente_id,
-        cliente_nombre: cliente_nombre || cliente.nombre,
+        cliente_nombre: cliente_nombre || cliente.razon_social,
         analista_responsable,
         subaspectos: subaspectosProcessed,
         limite_credito_recomendado,

@@ -36,30 +36,42 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const express_1 = __importDefault(require("express"));
+const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
-const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const database_1 = require("./config/database");
-const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5000;
 app.use((0, helmet_1.default)());
 const limiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000,
-    max: 100,
-    message: 'Demasiadas peticiones desde esta IP, intenta de nuevo más tarde.'
+    max: 1000,
+    message: 'Demasiadas peticiones desde esta IP, intenta de nuevo más tarde.',
+    standardHeaders: true,
+    legacyHeaders: false,
 });
 app.use(limiter);
 app.use((0, cors_1.default)({
     origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-    credentials: true
+    credentials: true,
+    optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
-app.use((0, morgan_1.default)('combined'));
-app.use(express_1.default.json({ limit: '10mb' }));
-app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));
+app.use((0, morgan_1.default)(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+app.use(express_1.default.json({
+    limit: '10mb',
+    type: ['application/json', 'text/plain']
+}));
+app.use(express_1.default.urlencoded({
+    extended: true,
+    limit: '10mb',
+    parameterLimit: 50000
+}));
 app.get('/', (req, res) => {
     res.json({
         message: '9001App v6 Backend API',
@@ -75,52 +87,91 @@ app.get('/health', (req, res) => {
         uptime: process.uptime()
     });
 });
+app.get('/api/health/database', async (req, res) => {
+    try {
+        const mongoose = require('mongoose');
+        if (mongoose.connection.readyState === 1) {
+            res.json({
+                status: 'connected',
+                database: 'MongoDB',
+                timestamp: new Date().toISOString()
+            });
+        }
+        else {
+            res.status(503).json({
+                status: 'disconnected',
+                database: 'MongoDB',
+                timestamp: new Date().toISOString()
+            });
+        }
+    }
+    catch (error) {
+        res.status(503).json({
+            status: 'error',
+            database: 'MongoDB',
+            error: error instanceof Error ? error.message : 'Unknown error',
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+require("./models/Audit");
 require("./models/Department");
+require("./models/DocumentCategory");
+require("./models/DocumentTemplate");
+require("./models/DocumentVersion");
+require("./models/EmployeeDeclaration");
+require("./models/NormProcessDocRelation");
+require("./models/PROCESO");
 require("./models/Personnel");
 require("./models/Position");
-require("./models/PROCESO");
 require("./models/ProcessDefinition");
-require("./models/ProcessRecord");
 require("./models/ProcessDocument");
-require("./models/NormProcessDocRelation");
+require("./models/ProcessRecord");
 require("./models/User");
-require("./models/Audit");
-require("./models/hallazgos");
 require("./models/acciones");
-require("./models/EmployeeDeclaration");
-require("./models/DocumentCategory");
-require("./models/DocumentVersion");
-require("./models/DocumentTemplate");
+require("./models/hallazgos");
+require("./models/AnalisisCredito");
+require("./models/crm_actividades_agro");
 require("./models/crm_clientes_agro");
 require("./models/crm_contactos");
 require("./models/crm_oportunidades_agro");
-require("./models/crm_actividades_agro");
 require("./models/crm_productos_agro");
-const processRoutes_1 = __importDefault(require("./routes/processRoutes"));
-const processDocumentRoutes_1 = __importDefault(require("./routes/processDocumentRoutes"));
-const processDefinitionRoutes_1 = __importDefault(require("./routes/processDefinitionRoutes"));
-const processRecordRoutes_1 = __importDefault(require("./routes/processRecordRoutes"));
-const processUnifiedRoutes_1 = __importDefault(require("./routes/processUnifiedRoutes"));
+require("./models/RoadmapTask");
+const actionRoutes_1 = __importDefault(require("./routes/actionRoutes"));
+const auditRoutes_1 = __importDefault(require("./routes/auditRoutes"));
+const departmentRoutes_1 = __importDefault(require("./routes/departmentRoutes"));
+const documentCategoryRoutes_1 = __importDefault(require("./routes/documentCategoryRoutes"));
+const documentTemplateRoutes_1 = __importDefault(require("./routes/documentTemplateRoutes"));
+const documentVersionRoutes_1 = __importDefault(require("./routes/documentVersionRoutes"));
+const employeeDeclarationRoutes_1 = __importDefault(require("./routes/employeeDeclarationRoutes"));
+const findingRoutes_1 = __importDefault(require("./routes/findingRoutes"));
+const measurementRoutes_1 = __importDefault(require("./routes/measurementRoutes"));
 const normPointRoutes_1 = __importDefault(require("./routes/normPointRoutes"));
 const normProcessDocRelationRoutes_1 = __importDefault(require("./routes/normProcessDocRelationRoutes"));
-const qualityObjectiveRoutes_1 = __importDefault(require("./routes/qualityObjectiveRoutes"));
-const qualityIndicatorRoutes_1 = __importDefault(require("./routes/qualityIndicatorRoutes"));
-const measurementRoutes_1 = __importDefault(require("./routes/measurementRoutes"));
-const departmentRoutes_1 = __importDefault(require("./routes/departmentRoutes"));
 const personnelRoutes_1 = __importDefault(require("./routes/personnelRoutes"));
 const positionRoutes_1 = __importDefault(require("./routes/positionRoutes"));
-const auditRoutes_1 = __importDefault(require("./routes/auditRoutes"));
-const findingRoutes_1 = __importDefault(require("./routes/findingRoutes"));
-const actionRoutes_1 = __importDefault(require("./routes/actionRoutes"));
-const employeeDeclarationRoutes_1 = __importDefault(require("./routes/employeeDeclarationRoutes"));
-const documentCategoryRoutes_1 = __importDefault(require("./routes/documentCategoryRoutes"));
-const documentVersionRoutes_1 = __importDefault(require("./routes/documentVersionRoutes"));
-const documentTemplateRoutes_1 = __importDefault(require("./routes/documentTemplateRoutes"));
+const processDefinitionRoutes_1 = __importDefault(require("./routes/processDefinitionRoutes"));
+const processDocumentRoutes_1 = __importDefault(require("./routes/processDocumentRoutes"));
+const processRecordRoutes_1 = __importDefault(require("./routes/processRecordRoutes"));
+const processRoutes_1 = __importDefault(require("./routes/processRoutes"));
+const processUnifiedRoutes_1 = __importDefault(require("./routes/processUnifiedRoutes"));
+const qualityIndicatorRoutes_1 = __importDefault(require("./routes/qualityIndicatorRoutes"));
+const qualityObjectiveRoutes_1 = __importDefault(require("./routes/qualityObjectiveRoutes"));
+const roadmapRoutes_1 = __importDefault(require("./routes/roadmapRoutes"));
+const crmRequisitosRoutes_1 = __importDefault(require("./routes/crmRequisitosRoutes"));
+const customerSatisfactionISORoutes_1 = __importDefault(require("./routes/customerSatisfactionISORoutes"));
+const analisisCredito_1 = __importDefault(require("./routes/analisisCredito"));
+const crmActividadRoutes_1 = __importDefault(require("./routes/crmActividadRoutes"));
 const crmClienteRoutes_1 = __importDefault(require("./routes/crmClienteRoutes"));
 const crmContactoRoutes_1 = __importDefault(require("./routes/crmContactoRoutes"));
 const crmOportunidadRoutes_1 = __importDefault(require("./routes/crmOportunidadRoutes"));
-const crmActividadRoutes_1 = __importDefault(require("./routes/crmActividadRoutes"));
 const crmProductoRoutes_1 = __importDefault(require("./routes/crmProductoRoutes"));
+const legajo_1 = __importDefault(require("./routes/legajo"));
+const climaLaboralRoutes_1 = __importDefault(require("./routes/climaLaboralRoutes"));
+const controlAusenciasRoutes_1 = __importDefault(require("./routes/controlAusenciasRoutes"));
+const gestionDesempenoRoutes_1 = __importDefault(require("./routes/gestionDesempenoRoutes"));
+const indicadoresRRHHRoutes_1 = __importDefault(require("./routes/indicadoresRRHHRoutes"));
+const reclutamientoRoutes_1 = __importDefault(require("./routes/reclutamientoRoutes"));
 app.use('/api/processes', processRoutes_1.default);
 app.use('/api/process-definitions', processDefinitionRoutes_1.default);
 app.use('/api/process-records', processRecordRoutes_1.default);
@@ -135,17 +186,27 @@ app.use('/api/departments', departmentRoutes_1.default);
 app.use('/api/personnel', personnelRoutes_1.default);
 app.use('/api/positions', positionRoutes_1.default);
 app.use('/api/audits', auditRoutes_1.default);
+app.use('/api/roadmap', roadmapRoutes_1.default);
 app.use('/api/findings', findingRoutes_1.default);
 app.use('/api/actions', actionRoutes_1.default);
 app.use('/api/employee-declarations', employeeDeclarationRoutes_1.default);
 app.use('/api/document-categories', documentCategoryRoutes_1.default);
 app.use('/api/document-versions', documentVersionRoutes_1.default);
 app.use('/api/document-templates', documentTemplateRoutes_1.default);
+app.use('/api/customer-satisfaction', customerSatisfactionISORoutes_1.default);
+app.use('/api/crm', crmRequisitosRoutes_1.default);
 app.use('/api/crm/clientes', crmClienteRoutes_1.default);
 app.use('/api/crm/contactos', crmContactoRoutes_1.default);
 app.use('/api/crm/oportunidades', crmOportunidadRoutes_1.default);
 app.use('/api/crm/actividades', crmActividadRoutes_1.default);
 app.use('/api/crm/productos', crmProductoRoutes_1.default);
+app.use('/api/crm/analisis-credito', analisisCredito_1.default);
+app.use('/api/legajos', legajo_1.default);
+app.use('/api/rrhh/clima-laboral', climaLaboralRoutes_1.default);
+app.use('/api/rrhh/desempeno', gestionDesempenoRoutes_1.default);
+app.use('/api/rrhh/ausencias', controlAusenciasRoutes_1.default);
+app.use('/api/rrhh/reclutamiento', reclutamientoRoutes_1.default);
+app.use('/api/rrhh/indicadores', indicadoresRRHHRoutes_1.default);
 app.post('/api/admin/seed-all', async (req, res) => {
     try {
         console.log('🌱 Ejecutando seeder maestro...');

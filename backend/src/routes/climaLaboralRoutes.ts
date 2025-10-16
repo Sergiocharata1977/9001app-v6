@@ -17,3 +17,9 @@ router.get('/:encuesta_id/resultados', climaLaboralController.obtenerResultados)
 
 export default router;
 
+
+
+
+
+
+

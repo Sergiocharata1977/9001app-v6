@@ -1,37 +1,29 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import CrmCard from '@/components/crm/cards/CrmCard';
 import {
-  Building2,
-  Plus,
-  Search,
-  MapPin,
-  Phone,
-  Mail,
-  Edit,
-  Trash2,
-  Eye,
-  Grid3X3,
-  List,
-  User,
-  TrendingUp,
-  Loader2
-} from 'lucide-react';
-import { useRouter } from 'next/navigation';
+    EditarEmpresaModal,
+    EliminarEmpresaModal,
+    NuevaEmpresaModal
+} from '@/components/crm/modals';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { LoadingList } from '@/components/ui/loading-optimized';
 import { useOrganization } from '@/contexts/OrganizationContext';
 import { crmClienteService } from '@/services/crmService';
 import type { CRMCliente } from '@/types/crm';
+import {
+    Building2,
+    Grid3X3,
+    List,
+    Loader2,
+    Plus,
+    Search
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { 
-  NuevaEmpresaModal, 
-  EditarEmpresaModal, 
-  EliminarEmpresaModal 
-} from '@/components/crm/modals';
-import CrmCard from '@/components/crm/cards/CrmCard';
 
 export default function EmpresasPage() {
   const router = useRouter();
@@ -153,6 +145,7 @@ export default function EmpresasPage() {
         <Button 
           className="flex items-center gap-2"
           onClick={handleNuevaEmpresa}
+          data-testid="btn-crear"
         >
           <Plus className="h-4 w-4" />
           Nueva Empresa
@@ -253,7 +246,9 @@ export default function EmpresasPage() {
       </div>
 
       {/* Content - Vista Tarjetas */}
-      {viewMode === 'cards' ? (
+      {loading ? (
+        <LoadingList count={6} />
+      ) : viewMode === 'cards' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEmpresas.map((empresa) => (
             <CrmCard

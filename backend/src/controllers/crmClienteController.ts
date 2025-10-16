@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
+// import { Legajo } from '../models/Legajo'; // TEMPORALMENTE DESACTIVADO
 import { CRM_ClientesAgro } from '../models/crm_clientes_agro';
-import { Legajo } from '../models/Legajo';
 
 // Esquemas de validación Zod
 const clienteCreateSchema = z.object({
@@ -77,8 +77,10 @@ export const getAllClientes = async (req: Request, res: Response) => {
     // Paginación
     const skip = (Number(page) - 1) * Number(limit);
 
+    // Optimización: Usar lean() y select() para mejor rendimiento
     const [clientes, total] = await Promise.all([
       CRM_ClientesAgro.find(filters)
+        .select('razon_social rfc tipo_cliente categoria_agro zona_geografica direccion ciudad estado superficie_total cultivos_principales vendedor_asignado_id fecha_registro is_active')
         .sort(sort)
         .skip(skip)
         .limit(Number(limit))
@@ -297,11 +299,18 @@ export const getClienteStats = async (req: Request, res: Response) => {
       });
     }
 
+    // Optimización: Pipeline más eficiente con proyección temprana
     const stats = await CRM_ClientesAgro.aggregate([
       {
         $match: {
           organization_id,
           is_active: 1
+        }
+      },
+      {
+        $project: {
+          tipo_cliente: 1,
+          superficie_total: { $ifNull: ['$superficie_total', 0] }
         }
       },
       {
@@ -311,8 +320,7 @@ export const getClienteStats = async (req: Request, res: Response) => {
           totalSuperficie: { $sum: '$superficie_total' },
           porTipo: {
             $push: {
-              tipo: '$tipo_cliente',
-              count: 1
+              tipo: '$tipo_cliente'
             }
           }
         }
@@ -373,53 +381,11 @@ export const getOrCreateLegajo = async (req: Request, res: Response) => {
       });
     }
 
-    // 2. Si la empresa ya tiene legajo, retornarlo
-    if (empresa.legajo_id) {
-      const legajoExistente = await Legajo.findById(empresa.legajo_id)
-        .populate('company_id', 'razon_social cuit zona_geografica')
-        .populate('risk_links.risk_analysis_id', 'nivel_riesgo_general puntuacion_total fecha_analisis');
-
-      if (legajoExistente) {
-        return res.status(200).json({
-          success: true,
-          message: 'Legajo encontrado',
-          data: legajoExistente,
-          is_new: false
-        });
-      }
-    }
-
-    // 3. Si no tiene legajo o el legajo_id es inválido, crear uno nuevo
-    const nuevoLegajo = await Legajo.create({
-      company_id: empresa._id,
-      organization_id: empresa.organization_id,
-      fiscal_years: [],
-      assets: {
-        properties: [],
-        vehicles: [],
-        machinery: []
-      },
-      risk_links: [],
-      documents: [],
-      is_active: true,
-      created_by: user_id,
-      created_at: new Date(),
-      updated_at: new Date()
-    });
-
-    // 4. Vincular el legajo a la empresa
-    empresa.legajo_id = nuevoLegajo._id;
-    await empresa.save();
-
-    // 5. Retornar el legajo con populate
-    const legajoPopulado = await Legajo.findById(nuevoLegajo._id)
-      .populate('company_id', 'razon_social cuit zona_geografica');
-
-    return res.status(201).json({
-      success: true,
-      message: 'Legajo creado automáticamente',
-      data: legajoPopulado,
-      is_new: true
+    // 2-5. TEMPORALMENTE DESACTIVADO - Legajo en mantenimiento
+    return res.status(503).json({
+      success: false,
+      message: 'Funcionalidad de Legajos temporalmente desactivada',
+      error: 'Legajo module is under maintenance'
     });
 
   } catch (error: any) {

@@ -1,0 +1,726 @@
+{
+  "timestamp": "2025-10-12T20:02:48.398Z",
+  "totalTests": 100,
+  "exitosos": 41,
+  "fallidos": 59,
+  "porModulo": {
+    "RRHH": {
+      "total": 20,
+      "exitosos": 10,
+      "fallidos": 10,
+      "modulos": {
+        "Departamentos": {
+          "nombre": "Departamentos",
+          "url": "/rrhh/departamentos",
+          "tests": {
+            "carga": {
+              "exito": false,
+              "tiempo": 10269,
+              "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/rrhh/departamentos\", waiting until \"networkidle\"\u001b[22m\n"
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 8480,
+              "elementos": 3,
+              "error": null
+            },
+            "crear": {
+              "exito": true,
+              "tiempo": 3986,
+              "error": null
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 132,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Puestos": {
+          "nombre": "Puestos",
+          "url": "/rrhh/puestos",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 6333,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6157,
+              "elementos": 3,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 3215,
+              "error": "page.waitForSelector: Timeout 3000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[role=\"dialog\"], .modal, [data-testid=\"modal\"]') to be visible\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 154,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Personal": {
+          "nombre": "Personal",
+          "url": "/rrhh/personal",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 6980,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 12069,
+              "elementos": 13,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 3165,
+              "error": "page.waitForSelector: Timeout 3000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[role=\"dialog\"], .modal, [data-testid=\"modal\"]') to be visible\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 137,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Capacitaciones": {
+          "nombre": "Capacitaciones",
+          "url": "/rrhh/capacitaciones",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 5785,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 12130,
+              "elementos": 13,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30125,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 117,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Evaluaciones": {
+          "nombre": "Evaluaciones",
+          "url": "/rrhh/evaluaciones",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 6284,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 1033,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30120,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 122,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        }
+      }
+    },
+    "CRM": {
+      "total": 28,
+      "exitosos": 12,
+      "fallidos": 16,
+      "modulos": {
+        "Dashboard": {
+          "nombre": "Dashboard",
+          "url": "/crm",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 8713,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6042,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30124,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 109,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Empresas": {
+          "nombre": "Empresas",
+          "url": "/crm/empresas",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 4980,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6080,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30122,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 111,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Contactos": {
+          "nombre": "Contactos",
+          "url": "/crm/contactos",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 8581,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6043,
+              "elementos": 3,
+              "error": null
+            },
+            "crear": {
+              "exito": true,
+              "tiempo": 1814,
+              "error": null
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 110,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Oportunidades": {
+          "nombre": "Oportunidades",
+          "url": "/crm/oportunidades",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 7115,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6079,
+              "elementos": 3,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30181,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 139,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Actividades": {
+          "nombre": "Actividades",
+          "url": "/crm/actividades",
+          "tests": {
+            "carga": {
+              "exito": false,
+              "tiempo": 10184,
+              "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/crm/actividades\", waiting until \"networkidle\"\u001b[22m\n"
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 15131,
+              "elementos": 0,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30113,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 137,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Análisis de Riesgo": {
+          "nombre": "Análisis de Riesgo",
+          "url": "/crm/analisis-riesgo",
+          "tests": {
+            "carga": {
+              "exito": false,
+              "tiempo": 10324,
+              "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/crm/analisis-riesgo\", waiting until \"networkidle\"\u001b[22m\n"
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6118,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30128,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button disabled title=\"Los análisis de riesgo se crean desde el legajo de cada empresa\" class=\"justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 flex items-center gap-2\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    55 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 112,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Legajos": {
+          "nombre": "Legajos",
+          "url": "/crm/legajos",
+          "tests": {
+            "carga": {
+              "exito": false,
+              "tiempo": 10184,
+              "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/crm/legajos\", waiting until \"networkidle\"\u001b[22m\n"
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6359,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30129,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button disabled title=\"Los legajos se crean automáticamente desde el detalle de cada empresa\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    55 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 107,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        }
+      }
+    },
+    "Documentos": {
+      "total": 8,
+      "exitosos": 3,
+      "fallidos": 5,
+      "modulos": {
+        "Documentos": {
+          "nombre": "Documentos",
+          "url": "/documentos",
+          "tests": {
+            "carga": {
+              "exito": false,
+              "tiempo": 10303,
+              "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/documentos\", waiting until \"networkidle\"\u001b[22m\n"
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6040,
+              "elementos": 8,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 3156,
+              "error": "page.waitForSelector: Timeout 3000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[role=\"dialog\"], .modal, [data-testid=\"modal\"]') to be visible\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 108,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Categorías": {
+          "nombre": "Categorías",
+          "url": "/documentos/categorias",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 2337,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 15021,
+              "elementos": 0,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30178,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 133,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        }
+      }
+    },
+    "Auditorías": {
+      "total": 12,
+      "exitosos": 5,
+      "fallidos": 7,
+      "modulos": {
+        "Auditorías": {
+          "nombre": "Auditorías",
+          "url": "/auditorias",
+          "tests": {
+            "carga": {
+              "exito": false,
+              "tiempo": 10130,
+              "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/auditorias\", waiting until \"networkidle\"\u001b[22m\n"
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6128,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30128,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 206,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Hallazgos": {
+          "nombre": "Hallazgos",
+          "url": "/hallazgos",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 9124,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 926,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": true,
+              "tiempo": 572,
+              "error": null
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 110,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Acciones": {
+          "nombre": "Acciones",
+          "url": "/acciones",
+          "tests": {
+            "carga": {
+              "exito": false,
+              "tiempo": 10138,
+              "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/acciones\", waiting until \"networkidle\"\u001b[22m\n"
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6071,
+              "elementos": 13,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30122,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 109,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        }
+      }
+    },
+    "Super Admin": {
+      "total": 32,
+      "exitosos": 11,
+      "fallidos": 21,
+      "modulos": {
+        "Dashboard": {
+          "nombre": "Dashboard",
+          "url": "/super-admin",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 7275,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6090,
+              "elementos": 16,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30129,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 127,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "CRM Single": {
+          "nombre": "CRM Single",
+          "url": "/super-admin/modulos/crm",
+          "tests": {
+            "carga": {
+              "exito": false,
+              "tiempo": 10570,
+              "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/super-admin/modulos/crm\", waiting until \"networkidle\"\u001b[22m\n"
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 15496,
+              "elementos": 0,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 4658,
+              "error": "page.waitForSelector: Timeout 3000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[role=\"dialog\"], .modal, [data-testid=\"modal\"]') to be visible\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 121,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "RRHH Single": {
+          "nombre": "RRHH Single",
+          "url": "/super-admin/modulos/rrhh",
+          "tests": {
+            "carga": {
+              "exito": false,
+              "tiempo": 10206,
+              "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/super-admin/modulos/rrhh\", waiting until \"networkidle\"\u001b[22m\n"
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 7015,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 3608,
+              "error": "page.waitForSelector: Timeout 3000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[role=\"dialog\"], .modal, [data-testid=\"modal\"]') to be visible\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 303,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Procesos Single": {
+          "nombre": "Procesos Single",
+          "url": "/super-admin/modulos/procesos",
+          "tests": {
+            "carga": {
+              "exito": false,
+              "tiempo": 10162,
+              "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/super-admin/modulos/procesos\", waiting until \"networkidle\"\u001b[22m\n"
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6171,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 3658,
+              "error": "page.waitForSelector: Timeout 3000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[role=\"dialog\"], .modal, [data-testid=\"modal\"]') to be visible\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 109,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Auditorías Single": {
+          "nombre": "Auditorías Single",
+          "url": "/super-admin/modulos/auditorias",
+          "tests": {
+            "carga": {
+              "exito": false,
+              "tiempo": 10237,
+              "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/super-admin/modulos/auditorias\", waiting until \"networkidle\"\u001b[22m\n"
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6095,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30123,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 109,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Normas Single": {
+          "nombre": "Normas Single",
+          "url": "/super-admin/modulos/normas",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 9426,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6112,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30121,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 107,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Documentos Single": {
+          "nombre": "Documentos Single",
+          "url": "/super-admin/modulos/documentos",
+          "tests": {
+            "carga": {
+              "exito": true,
+              "tiempo": 8942,
+              "error": null
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6037,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 3275,
+              "error": "page.waitForSelector: Timeout 3000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[role=\"dialog\"], .modal, [data-testid=\"modal\"]') to be visible\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 107,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        },
+        "Calidad Single": {
+          "nombre": "Calidad Single",
+          "url": "/super-admin/modulos/calidad",
+          "tests": {
+            "carga": {
+              "exito": false,
+              "tiempo": 10141,
+              "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/super-admin/modulos/calidad\", waiting until \"networkidle\"\u001b[22m\n"
+            },
+            "listado": {
+              "exito": true,
+              "tiempo": 6034,
+              "elementos": 4,
+              "error": null
+            },
+            "crear": {
+              "exito": false,
+              "tiempo": 30114,
+              "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Nuevo\"), button:has-text(\"Crear\"), [data-testid=\"crear\"]')\u001b[22m\n"
+            },
+            "editar": {
+              "exito": false,
+              "tiempo": 144,
+              "error": "page.click: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': 'button:first' is not a valid selector.\n    at query (<anonymous>:5120:41)\n    at <anonymous>:5130:7\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._queryCSS (<anonymous>:5117:17)\n    at <anonymous>:5006:25\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl._querySimple (<anonymous>:4998:17)\n    at <anonymous>:4945:29\n    at SelectorEvaluatorImpl._cached (<anonymous>:4907:20)\n    at SelectorEvaluatorImpl.query (<anonymous>:4938:19)\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Editar\"):first, [data-testid=\"editar\"]:first')\u001b[22m\n"
+            }
+          }
+        }
+      }
+    }
+  },
+  "resumen": {
+    "excelente": 0,
+    "bueno": 2,
+    "aceptable": 2,
+    "lento": 1,
+    "critico": 0,
+    "crítico": null
+  }
+}

@@ -104,7 +104,7 @@ export const contextoProyectoCompleto = {
         'Productos',
         'Satisfacción del Cliente'
       ],
-      rutas: ['/crm/dashboard', '/crm/clientes', '/crm/analisis-riesgo'],
+      rutas: ['/crm', '/crm/clientes', '/crm/analisis-riesgo'],
       apis: ['/api/crm/clientes', '/api/crm/oportunidades']
     }
   ],

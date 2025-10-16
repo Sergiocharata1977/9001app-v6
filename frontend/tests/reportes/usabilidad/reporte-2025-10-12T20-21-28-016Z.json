@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-10-12T20:21:00.021Z",
+  "tests": [
+    {
+      "nombre": "Dashboard Principal",
+      "url": "/dashboard",
+      "elementos": {
+        "Título principal": {
+          "encontrado": false,
+          "cantidad": 0
+        },
+        "Navegación": {
+          "encontrado": true,
+          "cantidad": 1
+        },
+        "Botones interactivos": {
+          "encontrado": true,
+          "cantidad": 7
+        }
+      },
+      "carga": {
+        "exito": false,
+        "error": "page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/dashboard\", waiting until \"networkidle\"\u001b[22m\n"
+      }
+    },
+    {
+      "nombre": "CRM Dashboard",
+      "url": "/crm",
+      "elementos": {
+        "Título CRM": {
+          "encontrado": true,
+          "cantidad": 1
+        },
+        "Estadísticas": {
+          "encontrado": false,
+          "cantidad": 0
+        },
+        "Botón Nuevo": {
+          "encontrado": false,
+          "cantidad": 0
+        }
+      },
+      "carga": {
+        "exito": true,
+        "tiempo": 7753
+      }
+    },
+    {
+      "nombre": "Super Admin",
+      "url": "/super-admin",
+      "elementos": {
+        "Título Super Admin": {
+          "encontrado": true,
+          "cantidad": 2
+        },
+        "Tarjetas de módulos": {
+          "encontrado": true,
+          "cantidad": 9
+        },
+        "Enlaces clickeables": {
+          "encontrado": true,
+          "cantidad": 9
+        }
+      },
+      "carga": {
+        "exito": true,
+        "tiempo": 2893
+      }
+    }
+  ],
+  "total": 3,
+  "exitosos": 2,
+  "fallidos": 1
+}

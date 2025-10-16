@@ -17,17 +17,35 @@ interface IRequisitoCliente {
 
 // Interface para evaluación de necesidades ISO 9001
 interface IEvaluacionNecesidades {
+  // Información de campaña y relacionamiento
+  campana_id?: string;                    // ID de la campaña asociada
+  campana_nombre?: string;                 // Nombre de la campaña
+  tipo_relacionamiento: 'prospeccion' | 'seguimiento' | 'fidelizacion' | 'reactivacion' | 'cross_sell' | 'up_sell';
+  canal_contacto: 'email' | 'telefono' | 'presencial' | 'whatsapp' | 'linkedin' | 'evento' | 'referido' | 'otro';
+  fecha_contacto: Date;
+  proximo_contacto?: Date;
+  
+  // Requisitos del cliente
   requisitos: IRequisitoCliente[];
   evaluacion_completa: boolean;
   fecha_evaluacion: Date;
   responsable_evaluacion: string;
   puntuacion_requisitos: number; // 1-5
   observaciones_generales?: string;
+  
   // ISO 9001 compliance
   requisitos_capturados: number;
   requisitos_aprobados: number;
   cumplimiento_porcentaje: number;
   fecha_revision_iso?: Date;
+  
+  // Datos de relacionamiento
+  nivel_interes: 'muy_alto' | 'alto' | 'medio' | 'bajo' | 'sin_interes';
+  probabilidad_cierre: number;             // 0-100
+  presupuesto_estimado?: number;
+  decision_maker?: string;                 // Nombre del tomador de decisiones
+  pain_points?: string[];                  // Puntos de dolor identificados
+  necesidades_identificadas?: string[];    // Necesidades específicas
 }
 
 export interface ICRMOportunidadesAgro extends Document {
@@ -99,17 +117,47 @@ const requisitoClienteSchema = new Schema({
 
 // Schema para evaluación de necesidades
 const evaluacionNecesidadesSchema = new Schema({
+  // Información de campaña y relacionamiento
+  campana_id: { type: String },
+  campana_nombre: { type: String },
+  tipo_relacionamiento: { 
+    type: String, 
+    enum: ['prospeccion', 'seguimiento', 'fidelizacion', 'reactivacion', 'cross_sell', 'up_sell'],
+    required: true 
+  },
+  canal_contacto: { 
+    type: String, 
+    enum: ['email', 'telefono', 'presencial', 'whatsapp', 'linkedin', 'evento', 'referido', 'otro'],
+    required: true 
+  },
+  fecha_contacto: { type: Date, required: true },
+  proximo_contacto: { type: Date },
+  
+  // Requisitos del cliente
   requisitos: [requisitoClienteSchema],
   evaluacion_completa: { type: Boolean, default: false },
   fecha_evaluacion: { type: Date, default: Date.now },
   responsable_evaluacion: { type: String, required: true },
   puntuacion_requisitos: { type: Number, min: 1, max: 5 },
   observaciones_generales: { type: String },
+  
   // ISO 9001 compliance
   requisitos_capturados: { type: Number, default: 0 },
   requisitos_aprobados: { type: Number, default: 0 },
   cumplimiento_porcentaje: { type: Number, default: 0 },
-  fecha_revision_iso: { type: Date }
+  fecha_revision_iso: { type: Date },
+  
+  // Datos de relacionamiento
+  nivel_interes: { 
+    type: String, 
+    enum: ['muy_alto', 'alto', 'medio', 'bajo', 'sin_interes'],
+    required: true 
+  },
+  probabilidad_cierre: { type: Number, required: true, min: 0, max: 100 },
+  presupuesto_estimado: { type: Number },
+  decision_maker: { type: String },
+  pain_points: [{ type: String }],
+  necesidades_identificadas: [{ type: String }]
 }, { _id: false });
 
 const crmOportunidadesAgroSchema = new Schema<ICRMOportunidadesAgro>({

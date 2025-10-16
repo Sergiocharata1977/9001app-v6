@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
-import { DocumentTemplate } from '../models/DocumentTemplate';
 import mongoose from 'mongoose';
+import { DocumentTemplate } from '../models/DocumentTemplate';
+import { cacheService } from '../services/CacheService';
 
-// Obtener todas las plantillas
+// Obtener todas las plantillas con paginación
 export const getDocumentTemplates = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { organization_id, category_id, document_type, is_public } = req.query;
+    const { organization_id, category_id, document_type, is_public, search } = req.query;
 
     if (!organization_id) {
       res.status(400).json({
@@ -13,6 +14,11 @@ export const getDocumentTemplates = async (req: Request, res: Response): Promise
       });
       return;
     }
+
+    // Parámetros de paginación
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const skip = (page - 1) * limit;
 
     const query: any = {
       $or: [
@@ -33,16 +39,56 @@ export const getDocumentTemplates = async (req: Request, res: Response): Promise
       query.is_public = is_public === 'true';
     }
 
-    const templates = await DocumentTemplate.find(query)
-      .populate('category_id', 'name color')
-      .populate('created_by', 'name email')
-      .sort({ usage_count: -1, name: 1 });
+    // Búsqueda por nombre o descripción
+    if (search) {
+      query.$and = query.$and || [];
+      query.$and.push({
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { description: { $regex: search, $options: 'i' } }
+        ]
+      });
+    }
 
-    res.json({
+    // Generar cache key
+    const cacheKey = `documents:${JSON.stringify(query)}:${page}:${limit}`;
+    
+    // Intentar obtener del cache
+    const cached = cacheService.get<any>(cacheKey);
+    if (cached) {
+      res.json(cached);
+      return;
+    }
+
+    // Ejecutar query optimizada con paginación
+    const [templates, total] = await Promise.all([
+      DocumentTemplate.find(query)
+        .select('name description document_type category_id is_public usage_count created_by') // Solo campos necesarios
+        .populate('category_id', 'name color')
+        .populate('created_by', 'name email')
+        .sort({ usage_count: -1, name: 1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(), // Retorna plain objects (más rápido)
+      DocumentTemplate.countDocuments(query)
+    ]);
+
+    const response = {
       success: true,
       data: templates,
-      count: templates.length
-    });
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasMore: skip + templates.length < total
+      }
+    };
+
+    // Guardar en cache (5 minutos)
+    cacheService.set(cacheKey, response, 5 * 60 * 1000);
+
+    res.json(response);
   } catch (error) {
     console.error('Error obteniendo plantillas:', error);
     res.status(500).json({
@@ -153,6 +199,9 @@ export const createDocumentTemplate = async (req: Request, res: Response): Promi
     });
 
     const savedTemplate = await newTemplate.save();
+
+    // Invalidar cache de documentos
+    cacheService.invalidatePattern('^documents:');
 
     // Poblar los datos para la respuesta
     const populatedTemplate = await DocumentTemplate.findById(savedTemplate._id)

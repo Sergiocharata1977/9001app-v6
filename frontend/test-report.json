@@ -1,0 +1,268 @@
+{
+  "timestamp": "2025-10-15T13:34:33.066Z",
+  "passed": 0,
+  "failed": 13,
+  "rate": 0,
+  "results": [
+    {
+      "iteration": 1,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 2,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 3,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 4,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 5,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 6,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 7,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 8,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 9,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 10,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 11,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 12,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 13,
+      "tests": {
+        "login": "PASS",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "PASS"
+      },
+      "errors": [
+        "CRM redirige a http://localhost:3000/login",
+        "RRHH redirige a http://localhost:3000/login",
+        "Calidad redirige a http://localhost:3000/login",
+        "Procesos redirige a http://localhost:3000/login",
+        "Documentos redirige a http://localhost:3000/login"
+      ],
+      "overall": "FAIL"
+    }
+  ]
+}

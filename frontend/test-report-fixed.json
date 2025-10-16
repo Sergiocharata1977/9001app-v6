@@ -1,0 +1,61 @@
+{
+  "timestamp": "2025-10-15T14:53:06.256Z",
+  "passed": 0,
+  "failed": 5,
+  "rate": 0,
+  "results": [
+    {
+      "iteration": 1,
+      "tests": {},
+      "errors": [
+        "Error: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/login\", waiting until \"networkidle\"\u001b[22m\n"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 2,
+      "tests": {
+        "login": "FAIL",
+        "crm": "FAIL",
+        "rrhh": "FAIL",
+        "calidad": "FAIL",
+        "procesos": "FAIL",
+        "documentos": "FAIL",
+        "normas": "FAIL"
+      },
+      "errors": [
+        "CRM: page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/crm\", waiting until \"networkidle\"\u001b[22m\n",
+        "RRHH: page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/rrhh\", waiting until \"networkidle\"\u001b[22m\n",
+        "Calidad: page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/calidad\", waiting until \"networkidle\"\u001b[22m\n",
+        "Procesos: page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/procesos\", waiting until \"networkidle\"\u001b[22m\n",
+        "Documentos: page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/documentos\", waiting until \"networkidle\"\u001b[22m\n",
+        "Normas: page.goto: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/normas\", waiting until \"networkidle\"\u001b[22m\n"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 3,
+      "tests": {},
+      "errors": [
+        "Error: page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]')\u001b[22m\n"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 4,
+      "tests": {},
+      "errors": [
+        "Error: page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]')\u001b[22m\n"
+      ],
+      "overall": "FAIL"
+    },
+    {
+      "iteration": 5,
+      "tests": {},
+      "errors": [
+        "Error: page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]')\u001b[22m\n"
+      ],
+      "overall": "FAIL"
+    }
+  ]
+}

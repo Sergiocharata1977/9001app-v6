@@ -51,6 +51,11 @@ export const agregarRequisito = async (req: Request, res: Response) => {
     // Inicializar evaluación de necesidades si no existe
     if (!oportunidad.evaluacion_necesidades) {
       oportunidad.evaluacion_necesidades = {
+        // Información de campaña y relacionamiento
+        tipo_relacionamiento: requisitoData.tipo_relacionamiento || 'prospeccion',
+        canal_contacto: requisitoData.canal_contacto || 'email',
+        fecha_contacto: requisitoData.fecha_contacto ? new Date(requisitoData.fecha_contacto) : new Date(),
+        // Requisitos del cliente
         requisitos: [],
         evaluacion_completa: false,
         fecha_evaluacion: new Date(),
@@ -59,7 +64,10 @@ export const agregarRequisito = async (req: Request, res: Response) => {
         observaciones_generales: '',
         requisitos_capturados: 0,
         requisitos_aprobados: 0,
-        cumplimiento_porcentaje: 0
+        cumplimiento_porcentaje: 0,
+        // Datos de relacionamiento
+        nivel_interes: requisitoData.nivel_interes || 'medio',
+        probabilidad_cierre: requisitoData.probabilidad_cierre || 50
       };
     }
 

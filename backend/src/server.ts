@@ -10,7 +10,7 @@ import { connectDB } from './config/database';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001; // Cambiado de 5000 a 5001 para evitar conflictos
 
 // Middleware de seguridad
 app.use(helmet());
@@ -26,27 +26,33 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // CORS optimizado
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true,
-  optionsSuccessStatus: 200, // Para soporte de navegadores legacy
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    credentials: true,
+    optionsSuccessStatus: 200, // Para soporte de navegadores legacy
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  })
+);
 
 // Logging optimizado para desarrollo
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
 // Body parsing optimizado
-app.use(express.json({
-  limit: '10mb',
-  type: ['application/json', 'text/plain']
-}));
-app.use(express.urlencoded({
-  extended: true,
-  limit: '10mb',
-  parameterLimit: 50000
-}));
+app.use(
+  express.json({
+    limit: '10mb',
+    type: ['application/json', 'text/plain'],
+  })
+);
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: '10mb',
+    parameterLimit: 50000,
+  })
+);
 
 // Rutas básicas
 app.get('/', (req, res) => {
@@ -54,7 +60,7 @@ app.get('/', (req, res) => {
     message: '9001App v6 Backend API',
     version: '1.0.0',
     status: 'running',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -62,7 +68,7 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
   });
 });
 
@@ -76,13 +82,13 @@ app.get('/api/health/database', async (req, res) => {
       res.json({
         status: 'connected',
         database: 'MongoDB',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     } else {
       res.status(503).json({
         status: 'disconnected',
         database: 'MongoDB',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
   } catch (error) {
@@ -90,7 +96,7 @@ app.get('/api/health/database', async (req, res) => {
       status: 'error',
       database: 'MongoDB',
       error: error instanceof Error ? error.message : 'Unknown error',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -155,7 +161,7 @@ import crmClienteRoutes from './routes/crmClienteRoutes';
 import crmContactoRoutes from './routes/crmContactoRoutes';
 import crmOportunidadRoutes from './routes/crmOportunidadRoutes';
 import crmProductoRoutes from './routes/crmProductoRoutes';
-import legajoRoutes from './routes/legajo';
+// import legajoRoutes from './routes/legajo'; // TEMPORALMENTE DESACTIVADO - EN REVISIÓN
 
 // Rutas RRHH
 import climaLaboralRoutes from './routes/climaLaboralRoutes';
@@ -163,6 +169,13 @@ import controlAusenciasRoutes from './routes/controlAusenciasRoutes';
 import gestionDesempenoRoutes from './routes/gestionDesempenoRoutes';
 import indicadoresRRHHRoutes from './routes/indicadoresRRHHRoutes';
 import reclutamientoRoutes from './routes/reclutamientoRoutes';
+
+// Rutas de Métricas
+import mongoDBMetricsRoutes from './routes/mongoDBMetricsRoutes';
+import performanceMetricsRoutes from './routes/performanceMetricsRoutes';
+
+// Rutas de Don Cándido
+import donCandidoRoutes from './routes/donCandido.routes';
 
 // Rutas de API
 app.use('/api/processes', processRoutes);
@@ -196,7 +209,7 @@ app.use('/api/crm/oportunidades', crmOportunidadRoutes);
 app.use('/api/crm/actividades', crmActividadRoutes);
 app.use('/api/crm/productos', crmProductoRoutes);
 app.use('/api/crm/analisis-credito', analisisCreditoRoutes);
-app.use('/api/legajos', legajoRoutes);
+// app.use('/api/legajos', legajoRoutes); // TEMPORALMENTE DESACTIVADO - EN REVISIÓN
 
 // Rutas RRHH
 app.use('/api/rrhh/clima-laboral', climaLaboralRoutes);
@@ -204,6 +217,13 @@ app.use('/api/rrhh/desempeno', gestionDesempenoRoutes);
 app.use('/api/rrhh/ausencias', controlAusenciasRoutes);
 app.use('/api/rrhh/reclutamiento', reclutamientoRoutes);
 app.use('/api/rrhh/indicadores', indicadoresRRHHRoutes);
+
+// Rutas de Métricas
+app.use('/api/metrics/performance', performanceMetricsRoutes);
+app.use('/api/admin/mongodb-metrics', mongoDBMetricsRoutes);
+
+// Rutas de Don Cándido
+app.use('/api/don-candido', donCandidoRoutes);
 
 // Rutas de mantenimiento (solo para desarrollo/admin)
 app.post('/api/admin/seed-all', async (req, res) => {
@@ -216,13 +236,13 @@ app.post('/api/admin/seed-all', async (req, res) => {
     res.json({
       success: true,
       message: 'Seeder maestro ejecutado exitosamente',
-      data: result
+      data: result,
     });
   } catch (error) {
     console.error('❌ Error ejecutando seeder maestro:', error);
     res.status(500).json({
       error: 'Error ejecutando seeder maestro',
-      message: error instanceof Error ? error.message : 'Error desconocido'
+      message: error instanceof Error ? error.message : 'Error desconocido',
     });
   }
 });
@@ -237,13 +257,13 @@ app.post('/api/admin/seed-processes', async (req, res) => {
     res.json({
       success: true,
       message: 'Seeder de procesos ejecutado exitosamente',
-      data: result
+      data: result,
     });
   } catch (error) {
     console.error('❌ Error ejecutando seeder:', error);
     res.status(500).json({
       error: 'Error ejecutando seeder',
-      message: error instanceof Error ? error.message : 'Error desconocido'
+      message: error instanceof Error ? error.message : 'Error desconocido',
     });
   }
 });
@@ -258,13 +278,13 @@ app.delete('/api/admin/clear-all', async (req, res) => {
     res.json({
       success: true,
       message: 'Todos los datos han sido limpiados',
-      data: result
+      data: result,
     });
   } catch (error) {
     console.error('❌ Error limpiando datos:', error);
     res.status(500).json({
       error: 'Error limpiando datos',
-      message: error instanceof Error ? error.message : 'Error desconocido'
+      message: error instanceof Error ? error.message : 'Error desconocido',
     });
   }
 });
@@ -277,41 +297,41 @@ app.post('/api/admin/cleanup-collections', async (req, res) => {
     const { exec } = require('child_process');
     const path = require('path');
 
-    exec(`node ${path.join(__dirname, 'scripts', 'cleanupCollections.js')}`, (error: any, stdout: string, stderr: string) => {
-      if (error) {
-        console.error('❌ Error ejecutando limpieza:', error);
-        res.status(500).json({
-          error: 'Error ejecutando limpieza',
-          message: error.message
+    exec(
+      `node ${path.join(__dirname, 'scripts', 'cleanupCollections.js')}`,
+      (error: any, stdout: string, stderr: string) => {
+        if (error) {
+          console.error('❌ Error ejecutando limpieza:', error);
+          res.status(500).json({
+            error: 'Error ejecutando limpieza',
+            message: error.message,
+          });
+          return;
+        }
+
+        console.log('✅ Limpieza ejecutada exitosamente');
+        res.json({
+          success: true,
+          message: 'Limpieza ejecutada exitosamente',
+          output: stdout,
         });
-        return;
       }
-
-      console.log('✅ Limpieza ejecutada exitosamente');
-      res.json({
-        success: true,
-        message: 'Limpieza ejecutada exitosamente',
-        output: stdout
-      });
-    });
-
+    );
   } catch (error) {
     console.error('❌ Error ejecutando limpieza:', error);
     res.status(500).json({
       error: 'Error ejecutando limpieza',
-      message: error instanceof Error ? error.message : 'Error desconocido'
+      message: error instanceof Error ? error.message : 'Error desconocido',
     });
   }
 });
-
-
 
 // Manejo de errores 404
 app.use('*', (req, res) => {
   res.status(404).json({
     error: 'Ruta no encontrada',
     path: req.originalUrl,
-    method: req.method
+    method: req.method,
   });
 });
 
@@ -320,10 +340,8 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
   console.error('Error:', err);
 
   res.status(err.status || 500).json({
-    error: process.env.NODE_ENV === 'production'
-      ? 'Error interno del servidor'
-      : err.message,
-    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack })
+    error: process.env.NODE_ENV === 'production' ? 'Error interno del servidor' : err.message,
+    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack }),
   });
 });
 

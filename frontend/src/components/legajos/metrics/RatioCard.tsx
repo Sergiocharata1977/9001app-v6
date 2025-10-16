@@ -90,3 +90,19 @@ const RatioCard: React.FC<RatioCardProps> = ({
 
 export default RatioCard;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

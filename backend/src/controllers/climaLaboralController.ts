@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import ClimaLaboral from '../models/ClimaLaboral';
-import RespuestaClimaLaboral from '../models/RespuestaClimaLaboral';
 import { v4 as uuidv4 } from 'uuid';
+import ClimaLaboral from '../models/ClimaLaboral';
+import { RespuestaClimaLaboral } from '../models/RespuestaClimaLaboral';
+// Los imports en líneas 185-187 son duplicados y deben eliminarse
 
 // Crear nueva encuesta de clima laboral
 export const crearEncuesta = async (req: Request, res: Response) => {
@@ -134,17 +135,17 @@ export const obtenerResultados = async (req: Request, res: Response) => {
         // Procesar estadísticas
         const estadisticas = {
             total_respuestas: respuestas.length,
-            preguntas_estadisticas: encuesta.preguntas.map(pregunta => {
-                const respuestasPregunta = respuestas.map(r =>
-                    r.respuestas.find(resp => resp.pregunta_id === pregunta.id)
+            preguntas_estadisticas: encuesta.preguntas.map((pregunta: any) => {
+                const respuestasPregunta = respuestas.map((r: any) =>
+                    r.respuestas.find((resp: any) => resp.pregunta_id === pregunta.id)
                 ).filter(Boolean);
 
                 if (pregunta.tipo === 'escala') {
-                    const valores = respuestasPregunta.map(r => Number(r?.valor)).filter(v => !isNaN(v));
+                    const valores = respuestasPregunta.map((r: any) => Number(r?.valor)).filter((v: number) => !isNaN(v));
                     return {
                         pregunta_id: pregunta.id,
                         texto: pregunta.texto,
-                        promedio: valores.length > 0 ? valores.reduce((a, b) => a + b, 0) / valores.length : 0,
+                        promedio: valores.length > 0 ? valores.reduce((a: number, b: number) => a + b, 0) / valores.length : 0,
                         total_respuestas: valores.length
                     };
                 }
@@ -182,9 +183,8 @@ export const eliminarEncuesta = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Error al eliminar encuesta' });
     }
 };
-import { ClimaLaboral } from '../models/ClimaLaboral';
-import { RespuestaClimaLaboral } from '../models/RespuestaClimaLaboral';
-import { v4 as uuidv4 } from 'uuid';
+
+// Imports duplicados eliminados - ya están al inicio del archivo
 
 export class ClimaLaboralController {
     // Crear encuesta
@@ -216,7 +216,7 @@ export class ClimaLaboralController {
     static async listar(req: Request, res: Response) {
         try {
             const { organization_id } = req.query;
-            const encuestas = await ClimaLaboral.find({ organization_id }).sort({ created_at: -1 });
+            const encuestas = await ClimaLaboral.find({ organization_id: organization_id as string }).sort({ created_at: -1 });
             res.json(encuestas);
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener encuestas' });
@@ -283,17 +283,17 @@ export class ClimaLaboralController {
 
             // Calcular promedio para preguntas tipo Likert
             if (respuestas.length > 0) {
-                const preguntasLikert = encuesta?.preguntas.filter(p => p.tipo === 'likert') || [];
+                const preguntasLikert = encuesta?.preguntas.filter((p: any) => p.tipo === 'escala') || [];
                 let sumaTotal = 0;
                 let contadorTotal = 0;
 
-                preguntasLikert.forEach(pregunta => {
-                    const respuestasPregunta = respuestas.map(r =>
-                        r.respuestas.find(resp => resp.pregunta_id === pregunta.id)?.valor as number
-                    ).filter(v => v !== undefined);
+                preguntasLikert.forEach((pregunta: any) => {
+                    const respuestasPregunta = respuestas.map((r: any) =>
+                        r.respuestas.find((resp: any) => resp.pregunta_id === pregunta.id)?.valor as number
+                    ).filter((v: number) => v !== undefined);
 
                     if (respuestasPregunta.length > 0) {
-                        const promedio = respuestasPregunta.reduce((a, b) => a + b, 0) / respuestasPregunta.length;
+                        const promedio = respuestasPregunta.reduce((a: number, b: number) => a + b, 0) / respuestasPregunta.length;
                         sumaTotal += promedio;
                         contadorTotal++;
                     }

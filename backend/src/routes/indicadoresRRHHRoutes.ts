@@ -14,3 +14,9 @@ router.delete('/:id', indicadoresRRHHController.eliminarIndicador);
 
 export default router;
 
+
+
+
+
+
+

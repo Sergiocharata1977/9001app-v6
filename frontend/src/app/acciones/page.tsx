@@ -1,26 +1,20 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import { Action } from '../../../shared-types/entities/Action';
-import { Finding } from '../../../shared-types/entities/Finding';
-import ActionTable from '../../components/modules/actions/tables/ActionTable';
-import { ActionFormV2 } from '../../components/modules/actions/forms/ActionFormV2';
-import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
-import { Button } from '../../components/ui/button';
-import { Badge } from '../../components/ui/badge';
-import { Modal } from '../../components/ui/Modal';
-import { 
-  Plus, 
-  TrendingUp, 
-  Clock, 
-  AlertTriangle, 
-  CheckCircle,
-  Users,
-  Calendar,
-  BarChart3,
-  Target,
-  Activity
+import {
+    Activity,
+    AlertTriangle,
+    Clock,
+    Plus,
+    Target
 } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { Action } from '../../../shared-types/entities/Action';
+import { ActionFormV2 } from '../../components/modules/actions/forms/ActionFormV2';
+import ActionTable from '../../components/modules/actions/tables/ActionTable';
+import { Modal } from '../../components/ui/Modal';
+import { Badge } from '../../components/ui/badge';
+import { Button } from '../../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 
 // Datos de ejemplo - En producción vendrían de la API
 const mockActions: Action[] = [

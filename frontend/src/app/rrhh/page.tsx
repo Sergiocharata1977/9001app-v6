@@ -1,23 +1,21 @@
 'use client';
 
-import Link from 'next/link';
 import { RRHHDashboardCard } from '@/components/rrhh/RRHHDashboardCard';
 import { RRHHStats } from '@/components/rrhh/RRHHStats';
 import {
-  Users,
-  Building2,
-  Briefcase,
-  GraduationCap,
-  ClipboardCheck,
-  TrendingUp,
-  UserPlus,
-  Calendar,
-  DollarSign,
-  BarChart3,
-  FileText,
-  Target,
-  Clock
+    BarChart3,
+    Briefcase,
+    Building2,
+    Calendar,
+    ClipboardCheck,
+    DollarSign,
+    GraduationCap,
+    Target,
+    TrendingUp,
+    UserPlus,
+    Users
 } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Page() {
   // Configuración de módulos RRHH ACTUALIZADA
@@ -162,7 +160,14 @@ export default function Page() {
         {modulosRRHH.map((modulo) => (
           <RRHHDashboardCard
             key={modulo.id}
-            modulo={modulo}
+            id={modulo.id}
+            titulo={modulo.titulo}
+            descripcion={modulo.descripcion}
+            icon={modulo.icon}
+            ruta={modulo.ruta}
+            color={modulo.color}
+            habilitado={modulo.habilitado}
+            estadisticas={modulo.estadisticas}
           />
         ))}
       </div>

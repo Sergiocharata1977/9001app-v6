@@ -23,3 +23,9 @@ router.patch('/:id/candidatos/:candidatoId/rechazar', reclutamientoController.re
 
 export default router;
 
+
+
+
+
+
+

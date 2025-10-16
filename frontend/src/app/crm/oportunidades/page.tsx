@@ -1,40 +1,35 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import {
+    EditarOportunidadModal,
+    EliminarOportunidadModal,
+    NuevaOportunidadModal
+} from '@/components/crm/modals';
+import { UnifiedKanbanBoard } from '@/components/ui/UnifiedKanbanBoard';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  Plus, 
-  Target,
-  DollarSign,
-  Calendar,
-  User,
-  Building2,
-  Settings,
-  TrendingUp,
-  Kanban,
-  List,
-  LayoutGrid,
-  Edit,
-  Eye,
-  Trash2,
-  Loader2,
-  Filter,
-  Search,
-  ChevronDown
+import { useOrganization } from '@/contexts/OrganizationContext';
+import { crmClienteService, crmContactoService, crmOportunidadService } from '@/services/crmService';
+import type { KanbanColumn, KanbanItem } from '@/types/unified-kanban';
+import {
+    ClipboardCheck,
+    DollarSign,
+    Edit,
+    Kanban,
+    LayoutGrid,
+    List,
+    Plus,
+    Search,
+    Settings,
+    Target,
+    Trash2,
+    TrendingUp
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useOrganization } from '@/contexts/OrganizationContext';
-import { crmOportunidadService } from '@/services/crmService';
-import { 
-  NuevaOportunidadModal, 
-  EditarOportunidadModal, 
-  EliminarOportunidadModal 
-} from '@/components/crm/modals';
-import CrmCard from '@/components/crm/cards/CrmCard';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 // Datos de ejemplo
@@ -114,19 +109,28 @@ const columnas = [
   { id: 'cierre', titulo: 'Cierre', color: '#10B981' }
 ];
 
+// Convertir columnas a formato Kanban
+const kanbanColumns: KanbanColumn[] = columnas.map(col => ({
+  id: col.id,
+  title: col.titulo,
+  color: col.color
+}));
+
 export default function OportunidadesPage() {
   const router = useRouter();
   const { organizationId } = useOrganization();
   const [oportunidades, setOportunidades] = useState<any[]>([]);
+  const [empresas, setEmpresas] = useState<any[]>([]);
+  const [contactos, setContactos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'kanban' | 'list' | 'cards'>('kanban');
-  
+
   // Estados de filtros
   const [searchTerm, setSearchTerm] = useState('');
   const [filterVendedor, setFilterVendedor] = useState('todos');
   const [filterTipoCliente, setFilterTipoCliente] = useState('todos');
   const [filterEtapa, setFilterEtapa] = useState('todas');
-  
+
   // Estados de modales
   const [showNuevaModal, setShowNuevaModal] = useState(false);
   const [showEditarModal, setShowEditarModal] = useState(false);
@@ -149,15 +153,15 @@ export default function OportunidadesPage() {
 
   // Función para filtrar oportunidades
   const filteredOportunidades = oportunidades.filter(oportunidad => {
-    const matchesSearch = !searchTerm || 
+    const matchesSearch = !searchTerm ||
       oportunidad.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
       oportunidad.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
       oportunidad.descripcion.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesVendedor = filterVendedor === 'todos' || oportunidad.vendedor === filterVendedor;
     const matchesTipoCliente = filterTipoCliente === 'todos' || oportunidad.tipoCliente === filterTipoCliente;
     const matchesEtapa = filterEtapa === 'todas' || oportunidad.etapa === filterEtapa;
-    
+
     return matchesSearch && matchesVendedor && matchesTipoCliente && matchesEtapa;
   });
 
@@ -166,7 +170,7 @@ export default function OportunidadesPage() {
     const total = filteredOportunidades.length;
     const valorTotal = filteredOportunidades.reduce((sum, op) => sum + (op.valor || 0), 0);
     const valorPonderado = filteredOportunidades.reduce((sum, op) => sum + (op.valorPonderado || 0), 0);
-    
+
     return { total, valorTotal, valorPonderado };
   };
 
@@ -191,10 +195,50 @@ export default function OportunidadesPage() {
     }
   }, [organizationId]);
 
-  // Cargar oportunidades
+  // Cargar datos
   useEffect(() => {
     loadOportunidades();
-  }, [loadOportunidades]);
+    loadEmpresas();
+    loadContactos();
+  }, [loadOportunidades, organizationId]);
+
+  // Cargar empresas
+  const loadEmpresas = async () => {
+    try {
+      const response = await crmClienteService.getAll(organizationId);
+      if (response.success && response.data) {
+        setEmpresas(response.data);
+      }
+    } catch (error) {
+      console.error('Error cargando empresas:', error);
+    }
+  };
+
+  // Cargar contactos
+  const loadContactos = async () => {
+    try {
+      const response = await crmContactoService.getAll(organizationId);
+      if (response.success && response.data) {
+        setContactos(response.data);
+      }
+    } catch (error) {
+      console.error('Error cargando contactos:', error);
+    }
+  };
+
+  // Función para obtener nombre de empresa
+  const getEmpresaNombre = (clienteId: string) => {
+    if (!clienteId) return 'Sin empresa asignada';
+    const empresa = empresas.find(e => e.id === clienteId);
+    return empresa ? (empresa.razon_social || empresa.nombre_comercial) : 'Empresa no encontrada';
+  };
+
+  // Función para obtener nombre de contacto
+  const getContactoNombre = (contactoId: string) => {
+    if (!contactoId) return 'Sin contacto asignado';
+    const contacto = contactos.find(c => c.id === contactoId);
+    return contacto ? `${contacto.nombre} ${contacto.apellidos || ''}` : 'Contacto no encontrado';
+  };
 
   const getOportunidadesByColumn = (columnId: string) => {
     return filteredOportunidades.filter(opp => opp.etapa === columnId);
@@ -231,59 +275,79 @@ export default function OportunidadesPage() {
   const vendedores = Array.from(new Set(oportunidades.map(op => op.vendedor)));
 
   // Formatear valor monetario
-  const formatCurrency = (value: number) => {
+  const formatCurrency = (value: number | undefined) => {
+    // Verificar si el valor es undefined o null
+    if (!value && value !== 0) return 'US$ 0';
     // Usar formato consistente para servidor y cliente
     return `US$ ${value.toLocaleString('es-AR')}`;
   };
 
+  // Convertir oportunidades a formato Kanban
+  const convertToKanbanItems = (opps: any[]): KanbanItem[] => {
+    return opps.map(opp => ({
+      id: opp.id,
+      title: opp.titulo,
+      description: opp.descripcion || '',
+      columnId: opp.etapa || 'prospecto',
+      priority: opp.probabilidad >= 75 ? 'critical' :
+        opp.probabilidad >= 50 ? 'high' :
+          opp.probabilidad >= 25 ? 'medium' : 'low',
+      customData: {
+        valor_estimado: opp.valor_estimado || 0,
+        probabilidad: opp.probabilidad || 0,
+        vendedor_id: opp.vendedor_id,
+        cliente_id: opp.cliente_id,
+        contacto_id: opp.contacto_id,
+        fecha_cierre_esperada: opp.fecha_cierre_esperada,
+        evaluacion_necesidades: opp.evaluacion_necesidades
+      }
+    }));
+  };
 
-  const KanbanColumn = ({ columna }: { columna: any }) => {
-    const columnOportunidades = getOportunidadesByColumn(columna.id);
-    const valorColumna = columnOportunidades.reduce((sum, opp) => sum + opp.valor, 0);
+  // Handler para mover items en el Kanban
+  const handleItemMove = async (itemId: string, sourceColumn: string, targetColumn: string, newIndex: number) => {
+    try {
+      // Encontrar la oportunidad
+      const oportunidad = oportunidades.find(opp => opp.id === itemId);
+      if (!oportunidad) {
+        toast.error('Oportunidad no encontrada');
+        return;
+      }
 
-    return (
-      <div className="flex-1 min-w-[300px]">
-        <div className="bg-white rounded-lg border-2 border-gray-200 h-full">
-          <div 
-            className="p-4 rounded-t-lg border-b-2"
-            style={{ 
-              backgroundColor: `${columna.color}20`,
-              borderColor: columna.color 
-            }}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-gray-900">{columna.titulo}</h3>
-              <Badge variant="secondary" className="bg-white">
-                {columnOportunidades.length}
-              </Badge>
-            </div>
-            <div className="text-sm font-medium text-gray-700">
-              ${(valorColumna / 1000).toFixed(0)}K
-            </div>
-          </div>
-          
-          <div className="p-4 min-h-[500px] max-h-[calc(100vh-300px)] overflow-y-auto">
-            {columnOportunidades.map((oportunidad) => (
-              <CrmCard
-                key={oportunidad.id}
-                item={oportunidad}
-                type="oportunidad"
-                onView={handleVerOportunidad}
-                onEdit={handleEditarOportunidad}
-                onDelete={handleEliminarOportunidad}
-                className="mb-3"
-              />
-            ))}
-            
-            {columnOportunidades.length === 0 && (
-              <div className="text-center py-8 text-gray-400 text-sm">
-                Arrastra oportunidades aquí
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
+      // Actualizar el estado local primero para feedback inmediato
+      setOportunidades(prev =>
+        prev.map(opp =>
+          opp.id === itemId ? { ...opp, etapa: targetColumn } : opp
+        )
+      );
+
+      // Actualizar en el backend
+      const response = await crmOportunidadService.update(itemId, {
+        organization_id: organizationId,
+        etapa: targetColumn
+      });
+
+      if (response.success) {
+        toast.success(`Oportunidad movida a ${columnas.find(c => c.id === targetColumn)?.titulo}`);
+      } else {
+        // Revertir cambios si falla
+        setOportunidades(prev =>
+          prev.map(opp =>
+            opp.id === itemId ? { ...opp, etapa: sourceColumn } : opp
+          )
+        );
+        toast.error('Error al actualizar la oportunidad');
+      }
+    } catch (error) {
+      console.error('Error moviendo oportunidad:', error);
+      toast.error('Error al mover la oportunidad');
+      // Revertir cambios
+      setOportunidades(prev =>
+        prev.map(opp =>
+          opp.id === itemId ? { ...opp, etapa: sourceColumn } : opp
+        )
+      );
+    }
   };
 
   return (
@@ -295,14 +359,14 @@ export default function OportunidadesPage() {
           <p className="text-gray-600 mt-2">Gestión de oportunidades de negocio</p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="flex items-center gap-2"
           >
             <Settings className="h-4 w-4" />
             Configurar Etapas
           </Button>
-          <Button 
+          <Button
             className="flex items-center gap-2"
             onClick={handleNuevaOportunidad}
           >
@@ -374,7 +438,7 @@ export default function OportunidadesPage() {
               className="pl-10 w-64"
             />
           </div>
-          
+
           <Select value={filterVendedor} onValueChange={setFilterVendedor}>
             <SelectTrigger className="w-48">
               <SelectValue placeholder="Filtrar por vendedor" />
@@ -415,33 +479,30 @@ export default function OportunidadesPage() {
         <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
           <button
             onClick={() => setViewMode('kanban')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              viewMode === 'kanban'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'kanban'
+              ? 'bg-white text-gray-900 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900'
+              }`}
           >
             <Kanban className="h-4 w-4" />
             Kanban
           </button>
           <button
             onClick={() => setViewMode('cards')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              viewMode === 'cards'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'cards'
+              ? 'bg-white text-gray-900 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900'
+              }`}
           >
             <LayoutGrid className="h-4 w-4" />
             Tarjetas
           </button>
           <button
             onClick={() => setViewMode('list')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              viewMode === 'list'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'list'
+              ? 'bg-white text-gray-900 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900'
+              }`}
           >
             <List className="h-4 w-4" />
             Lista
@@ -449,12 +510,92 @@ export default function OportunidadesPage() {
         </div>
       </div>
 
-      {/* Vista Kanban */}
+      {/* Vista Kanban con Drag & Drop */}
       {viewMode === 'kanban' && (
-        <div className="flex gap-4 overflow-x-auto pb-4">
-          {columnas.map((columna) => (
-            <KanbanColumn key={columna.id} columna={columna} />
-          ))}
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <UnifiedKanbanBoard
+            columns={kanbanColumns}
+            items={convertToKanbanItems(filteredOportunidades)}
+            onItemMove={handleItemMove}
+            onItemClick={(item) => handleVerOportunidad(item.customData)}
+            onItemEdit={(item) => {
+              const opp = oportunidades.find(o => o.id === item.id);
+              if (opp) handleEditarOportunidad(opp);
+            }}
+            onItemDelete={(item) => {
+              const opp = oportunidades.find(o => o.id === item.id);
+              if (opp) handleEliminarOportunidad(opp);
+            }}
+            loading={loading}
+            readOnly={false}
+            showActions={true}
+            customCardRenderer={(item) => {
+              const opp = oportunidades.find(o => o.id === item.id);
+              if (!opp) return null;
+
+              return (
+                <div
+                  className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                  onClick={() => handleVerOportunidad(opp)}
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <h4 className="font-semibold text-sm text-gray-900 line-clamp-2 flex-1">
+                      {opp.titulo}
+                    </h4>
+                    <Badge
+                      className="ml-2 text-xs"
+                      style={{
+                        backgroundColor: `${columnas.find(c => c.id === item.columnId)?.color}20`,
+                        color: columnas.find(c => c.id === item.columnId)?.color
+                      }}
+                    >
+                      {opp.probabilidad}%
+                    </Badge>
+                  </div>
+
+                  <p className="text-xs text-gray-600 mb-2 line-clamp-1 font-medium">
+                    {getEmpresaNombre(opp.cliente_id)}
+                  </p>
+
+                  <p className="text-xs text-gray-500 mb-3 line-clamp-1">
+                    {getContactoNombre(opp.contacto_id)}
+                  </p>
+
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-500">Valor:</span>
+                      <span className="font-semibold text-gray-900">
+                        {formatCurrency(opp.valor_estimado)}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-500">Vendedor:</span>
+                      <span className="text-gray-700">{opp.vendedor_id}</span>
+                    </div>
+
+                    {opp.fecha_cierre_esperada && (
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-gray-500">Cierre:</span>
+                        <span className="text-gray-700">
+                          {new Date(opp.fecha_cierre_esperada).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
+
+                    {opp.evaluacion_necesidades && (
+                      <div className="mt-2 pt-1 border-t border-gray-100">
+                        <Badge variant="outline" className="text-xs">
+                          <ClipboardCheck className="h-3 w-3 mr-1" />
+                          Evaluada
+                        </Badge>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            }}
+          />
         </div>
       )}
 
@@ -462,8 +603,8 @@ export default function OportunidadesPage() {
       {viewMode === 'cards' && (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredOportunidades.map((oportunidad) => (
-            <Card 
-              key={oportunidad.id} 
+            <Card
+              key={oportunidad.id}
               className="cursor-pointer hover:shadow-lg transition-shadow duration-200 border-l-4"
               style={{ borderLeftColor: columnas.find(c => c.id === oportunidad.etapa)?.color || '#6B7280' }}
               onClick={() => handleVerOportunidad(oportunidad)}
@@ -476,10 +617,10 @@ export default function OportunidadesPage() {
                     </h3>
                     <p className="text-xs text-gray-500 mb-2">{oportunidad.cliente}</p>
                   </div>
-                  <Badge 
-                    variant="outline" 
+                  <Badge
+                    variant="outline"
                     className="text-xs"
-                    style={{ 
+                    style={{
                       backgroundColor: `${columnas.find(c => c.id === oportunidad.etapa)?.color}20`,
                       borderColor: columnas.find(c => c.id === oportunidad.etapa)?.color,
                       color: columnas.find(c => c.id === oportunidad.etapa)?.color
@@ -500,7 +641,7 @@ export default function OportunidadesPage() {
                       {formatCurrency(oportunidad.valor)}
                     </span>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-500">Probabilidad:</span>
                     <Badge className={getPrioridadColor(oportunidad.probabilidad)}>
@@ -574,8 +715,8 @@ export default function OportunidadesPage() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredOportunidades.map((oportunidad) => (
-                    <tr 
-                      key={oportunidad.id} 
+                    <tr
+                      key={oportunidad.id}
                       className="hover:bg-gray-50 cursor-pointer"
                       onClick={() => handleVerOportunidad(oportunidad)}
                     >
@@ -593,10 +734,10 @@ export default function OportunidadesPage() {
                         {oportunidad.cliente}
                       </td>
                       <td className="p-4">
-                        <Badge 
-                          variant="outline" 
+                        <Badge
+                          variant="outline"
                           className="text-xs"
-                          style={{ 
+                          style={{
                             backgroundColor: `${columnas.find(c => c.id === oportunidad.etapa)?.color}20`,
                             borderColor: columnas.find(c => c.id === oportunidad.etapa)?.color,
                             color: columnas.find(c => c.id === oportunidad.etapa)?.color

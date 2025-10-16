@@ -119,3 +119,19 @@ export default function EliminarOportunidadModal({
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

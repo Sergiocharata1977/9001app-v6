@@ -1,39 +1,31 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import {
-  FileText,
-  Upload,
-  Download,
-  Eye,
-  CheckCircle,
-  Clock,
-  AlertTriangle,
-  Archive,
-  TrendingUp,
-  Users,
-  BarChart3,
-  FolderOpen,
-  ClipboardCheck,
-  Layout,
-  Settings,
-  Plus,
-  Search,
-  Filter
+    BarChart3,
+    ClipboardCheck,
+    Download,
+    FileText,
+    Filter,
+    FolderOpen,
+    Layout,
+    Plus,
+    Search,
+    Settings
 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Importar componentes específicos
+import { DocumentCategories } from '@/components/documents/DocumentCategories';
 import { DocumentDashboard } from '@/components/documents/DocumentDashboard';
 import { DocumentManagement } from '@/components/documents/DocumentManagement';
-import { DocumentCategories } from '@/components/documents/DocumentCategories';
-import { DocumentVersions } from '@/components/documents/DocumentVersions';
-import { DocumentTemplates } from '@/components/documents/DocumentTemplates';
 import { DocumentSettings } from '@/components/documents/DocumentSettings';
+import { DocumentTemplates } from '@/components/documents/DocumentTemplates';
+import { DocumentVersions } from '@/components/documents/DocumentVersions';
 
 export default function DocumentosPage() {
   const [activeTab, setActiveTab] = useState('dashboard');

@@ -1,40 +1,28 @@
 'use client';
 
-import React, { useState, useMemo, useCallback, memo, useEffect } from 'react';
+import Logo from '@/components/ui/Logo';
+import {
+    AlertTriangle,
+    Award,
+    BookOpen,
+    Briefcase,
+    CheckCircle,
+    ChevronDown,
+    ChevronLeft,
+    ChevronRight,
+    ChevronUp,
+    FileText,
+    Home,
+    MessageSquare,
+    Search,
+    Settings,
+    Users,
+    Workflow,
+    Zap
+} from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  Home,
-  FileText,
-  Settings,
-  Users,
-  BarChart3,
-  Shield,
-  FolderOpen,
-  ChevronLeft,
-  ChevronRight,
-  Target,
-  TrendingUp,
-  BookOpen,
-  Workflow,
-  ChevronDown,
-  ChevronUp,
-  Search,
-  AlertTriangle,
-  CheckCircle,
-  Zap,
-  List,
-  Package,
-  ClipboardCheck,
-  MessageSquare,
-  Briefcase,
-  Building2,
-  Calendar,
-  DollarSign,
-  Award,
-  Link as LinkIcon
-} from 'lucide-react';
-import Logo from '@/components/ui/Logo';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 interface MenuItem {
   name: string;
@@ -45,7 +33,7 @@ interface MenuItem {
 }
 
 const navigation: MenuItem[] = [
-  { name: 'Dashboard', href: '/', icon: Home },
+  { name: 'Dashboard', href: '/dashboard', icon: Home },
   { name: 'Módulo Calidad', href: '/calidad', icon: Award },
   {
     name: 'Mejora',
@@ -62,7 +50,7 @@ const navigation: MenuItem[] = [
   { name: 'Procesos', href: '/procesos', icon: Workflow },
   { name: 'Documentos', href: '/documentos', icon: FileText },
   { name: 'Puntos de la norma', href: '/normas', icon: BookOpen },
-  { name: 'CRM', href: '/crm/dashboard', icon: Briefcase },
+  { name: 'CRM', href: '/crm', icon: Briefcase },
   { name: 'RRHH', href: '/rrhh', icon: Users },
 ];
 

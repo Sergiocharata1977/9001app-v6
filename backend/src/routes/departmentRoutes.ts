@@ -1,19 +1,65 @@
 import express from 'express';
 import { Department } from '../models/Department';
+import { cacheService } from '../services/CacheService';
 
 const router = express.Router();
 
-// GET /api/departments - Obtener todos los departamentos
+// GET /api/departments - Obtener departamentos con paginación
 router.get('/', async (req, res) => {
   try {
-    const departments = await Department.find({ is_active: true })
-      .sort({ name: 1 });
+    // Parámetros de paginación
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const search = req.query.search as string || '';
+    const skip = (page - 1) * limit;
+
+    // Construir query
+    const query: any = { is_active: true };
     
-    return res.json({
+    // Búsqueda por nombre o código
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { code: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    // Generar cache key
+    const cacheKey = `departments:${JSON.stringify(query)}:${page}:${limit}`;
+    
+    // Intentar obtener del cache
+    const cached = cacheService.get<any>(cacheKey);
+    if (cached) {
+      return res.json(cached);
+    }
+
+    // Ejecutar query con paginación (optimizado con lean())
+    const [departments, total] = await Promise.all([
+      Department.find(query)
+        .select('name code description manager_id is_active') // Solo campos necesarios
+        .sort({ name: 1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(), // Retorna plain objects (más rápido)
+      Department.countDocuments(query)
+    ]);
+
+    const response = {
       success: true,
       data: departments,
-      count: departments.length
-    });
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasMore: skip + departments.length < total
+      }
+    };
+
+    // Guardar en cache (5 minutos)
+    cacheService.set(cacheKey, response, 5 * 60 * 1000);
+    
+    return res.json(response);
   } catch (error) {
     console.error('Error obteniendo departamentos:', error);
     return res.status(500).json({
@@ -53,6 +99,9 @@ router.post('/', async (req, res) => {
   try {
     const department = new Department(req.body);
     await department.save();
+    
+    // Invalidar cache de departamentos
+    cacheService.invalidatePattern('departments:');
     
     return res.status(201).json({
       success: true,

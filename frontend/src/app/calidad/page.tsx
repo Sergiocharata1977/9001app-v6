@@ -1,3 +1,5 @@
+'use client';
+
 import QualityModule from '@/components/quality/QualityModule';
 
 export default function CalidadPage() {

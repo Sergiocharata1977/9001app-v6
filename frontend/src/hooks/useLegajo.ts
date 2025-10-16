@@ -118,3 +118,19 @@ export const useLegajo = (legajoId?: string) => {
 
 export default useLegajo;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

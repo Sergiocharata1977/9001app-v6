@@ -1,0 +1,37 @@
+{
+  "name": "9001app-tests",
+  "version": "1.0.0",
+  "description": "Sistema de testing centralizado para 9001app v6",
+  "scripts": {
+    "test": "node scripts/run-all-tests.js",
+    "test:velocidad": "node velocidad/test-velocidad-completo.js",
+    "test:super-admin": "node super-admin/test-super-admin-completo.js",
+    "test:usabilidad": "node usabilidad/test-usabilidad-completo.js",
+    "install-playwright": "npx playwright install"
+  },
+  "dependencies": {
+    "playwright": "^1.56.0"
+  },
+  "keywords": [
+    "testing",
+    "9001app",
+    "velocidad",
+    "usabilidad"
+  ],
+  "author": "Equipo 9001app",
+  "license": "MIT"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

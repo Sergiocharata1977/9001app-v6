@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { AlertTriangle, CheckCircle, ArrowRight } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import { AlertTriangle, ArrowRight, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 
 export default function MejorasPage() {
   return (

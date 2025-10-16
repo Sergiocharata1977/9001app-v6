@@ -1,44 +1,40 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import RequisitoForm from '@/components/crm/forms/RequisitoForm';
+import { HistoryLog, NotesTimeline } from '@/components/crm/shared';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useOrganization } from '@/contexts/OrganizationContext';
+import { crmRequisitosService } from '@/services/crmRequisitosService';
 import {
   ArrowLeft,
-  Edit,
-  Trash2,
-  Share,
-  Calendar,
-  User,
   Building2,
-  Target,
+  Calendar,
+  CheckCircle,
+  ClipboardCheck,
+  Clock,
   DollarSign,
-  TrendingUp,
-  Phone,
+  Download,
+  Edit,
+  Eye,
+  FileText,
   Mail,
   MapPin,
-  FileText,
-  Clock,
-  CheckCircle,
-  AlertCircle,
+  Phone,
   Plus,
-  Download,
-  Eye,
-  ClipboardCheck,
+  Share,
   Star,
-  Filter,
+  Target,
+  TrendingUp,
+  User,
   X
 } from 'lucide-react';
 import Link from 'next/link';
-import { crmOportunidadService, crmClienteService, crmContactoService, crmActividadService } from '@/services/crmService';
-import { crmRequisitosService } from '@/services/crmRequisitosService';
-import RequisitoForm from '@/components/crm/forms/RequisitoForm';
-import { useOrganization } from '@/contexts/OrganizationContext';
-import { RelatedEntityCard, NotesTimeline, HistoryLog } from '@/components/crm/shared';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 // Datos de ejemplo más realistas
@@ -237,7 +233,7 @@ export default function OportunidadSinglePage() {
   const router = useRouter();
   const { organizationId } = useOrganization();
   const [oportunidad, setOportunidad] = useState(datosEjemplo.oportunidad);
-  
+
   // Estados para gestión de requisitos
   const [showRequisitoForm, setShowRequisitoForm] = useState(false);
   const [requisitoEditando, setRequisitoEditando] = useState<any>(null);
@@ -285,7 +281,7 @@ export default function OportunidadSinglePage() {
   const handleSubmitRequisito = async (requisitoData: any) => {
     try {
       setRequisitosLoading(true);
-      
+
       if (requisitoEditando) {
         // Actualizar requisito existente
         await crmRequisitosService.updateRequisito(
@@ -302,12 +298,12 @@ export default function OportunidadSinglePage() {
         );
         toast.success('Requisito creado exitosamente');
       }
-      
+
       // Recargar datos de la oportunidad
       await loadOportunidadData();
       setShowRequisitoForm(false);
       setRequisitoEditando(null);
-      
+
     } catch (error) {
       console.error('Error guardando requisito:', error);
       toast.error('Error al guardar el requisito');
@@ -405,6 +401,13 @@ export default function OportunidadSinglePage() {
           </div>
         </div>
         <div className="flex items-center space-x-2">
+          <Button
+            onClick={() => router.push(`/crm/oportunidades/${oportunidadId}/evaluacion`)}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            <ClipboardCheck className="h-4 w-4 mr-2" />
+            Evaluación ISO 9001
+          </Button>
           <Button variant="outline" size="sm">
             <Edit className="h-4 w-4 mr-2" />
             Editar
@@ -626,8 +629,8 @@ export default function OportunidadSinglePage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <Button 
-                  className="w-full" 
+                <Button
+                  className="w-full"
                   size="sm"
                   onClick={handleAgregarRequisito}
                   disabled={requisitosLoading}
@@ -635,9 +638,13 @@ export default function OportunidadSinglePage() {
                   <Plus className="h-4 w-4 mr-2" />
                   Agregar Requisito
                 </Button>
-                <Button variant="outline" className="w-full" size="sm">
+                <Button
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  size="sm"
+                  onClick={() => router.push(`/crm/oportunidades/${oportunidadId}/evaluacion`)}
+                >
                   <ClipboardCheck className="h-4 w-4 mr-2" />
-                  Revisar Requisitos
+                  Evaluación Completa
                 </Button>
                 <Button variant="outline" className="w-full" size="sm">
                   <Download className="h-4 w-4 mr-2" />
@@ -699,8 +706,8 @@ export default function OportunidadSinglePage() {
                           <td className="p-2">
                             <Badge className={
                               requisito.prioridad === 'alta' ? 'bg-red-100 text-red-800' :
-                              requisito.prioridad === 'media' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-green-100 text-green-800'
+                                requisito.prioridad === 'media' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-green-100 text-green-800'
                             }>
                               {requisito.prioridad.toUpperCase()}
                             </Badge>
@@ -708,10 +715,10 @@ export default function OportunidadSinglePage() {
                           <td className="p-2">
                             <Badge className={
                               requisito.estado === 'aprobado' ? 'bg-green-100 text-green-800' :
-                              requisito.estado === 'en_revision' ? 'bg-yellow-100 text-yellow-800' :
-                              requisito.estado === 'rechazado' ? 'bg-red-100 text-red-800' :
-                              requisito.estado === 'implementado' ? 'bg-blue-100 text-blue-800' :
-                              'bg-gray-100 text-gray-800'
+                                requisito.estado === 'en_revision' ? 'bg-yellow-100 text-yellow-800' :
+                                  requisito.estado === 'rechazado' ? 'bg-red-100 text-red-800' :
+                                    requisito.estado === 'implementado' ? 'bg-blue-100 text-blue-800' :
+                                      'bg-gray-100 text-gray-800'
                             }>
                               {requisito.estado.replace('_', ' ').toUpperCase()}
                             </Badge>
@@ -721,8 +728,8 @@ export default function OportunidadSinglePage() {
                             {requisito.cumplimiento ? (
                               <Badge className={
                                 requisito.cumplimiento === 'cumple' ? 'bg-green-100 text-green-800' :
-                                requisito.cumplimiento === 'no_cumple' ? 'bg-red-100 text-red-800' :
-                                'bg-yellow-100 text-yellow-800'
+                                  requisito.cumplimiento === 'no_cumple' ? 'bg-red-100 text-red-800' :
+                                    'bg-yellow-100 text-yellow-800'
                               }>
                                 {requisito.cumplimiento.replace('_', ' ').toUpperCase()}
                               </Badge>
@@ -732,16 +739,16 @@ export default function OportunidadSinglePage() {
                           </td>
                           <td className="p-2">
                             <div className="flex items-center gap-1">
-                              <Button 
-                                variant="outline" 
+                              <Button
+                                variant="outline"
                                 size="sm"
                                 onClick={() => handleEditarRequisito(requisito)}
                                 disabled={requisitosLoading}
                               >
                                 <Edit className="h-3 w-3" />
                               </Button>
-                              <Button 
-                                variant="outline" 
+                              <Button
+                                variant="outline"
                                 size="sm"
                                 onClick={() => handleEliminarRequisito(requisito.id)}
                                 disabled={requisitosLoading}

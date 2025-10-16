@@ -1,15 +1,20 @@
 "use client"
 
 import * as React from "react"
-import * as ProgressPrimitive from "@radix-ui/react-progress"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Componente de barra de progreso simplificado para MVP
+ * 
+ * Este componente muestra una barra de progreso con un valor determinado.
+ * No depende de Radix UI para simplificar la implementación.
+ */
 const Progress = React.forwardRef<
-  React.ElementRef<typeof ProgressPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
->(({ className, value, ...props }, ref) => (
-  <ProgressPrimitive.Root
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & { value?: number }
+>(({ className, value = 0, ...props }, ref) => (
+  <div
     ref={ref}
     className={cn(
       "relative h-2 w-full overflow-hidden rounded-full bg-gray-200",
@@ -17,12 +22,12 @@ const Progress = React.forwardRef<
     )}
     {...props}
   >
-    <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 bg-blue-600 transition-all"
+    <div
+      className="h-full w-full flex-1 transition-all"
       style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
     />
-  </ProgressPrimitive.Root>
+  </div>
 ))
-Progress.displayName = ProgressPrimitive.Root.displayName
+Progress.displayName = "Progress"
 
 export { Progress }

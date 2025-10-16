@@ -1,0 +1,163 @@
+{
+  "timestamp": "2025-10-12T20:19:48.887Z",
+  "dashboard": {
+    "tarjetas": 9,
+    "clickeables": 9,
+    "navegacion": true,
+    "elementos": {
+      "titulo": true,
+      "subtitulo": true,
+      "estadisticas": false,
+      "filtros": false
+    }
+  },
+  "modulos": {
+    "crm": {
+      "nombre": "CRM",
+      "url": "/super-admin/modulos/crm",
+      "carga": {
+        "exito": true,
+        "tiempo": 5485,
+        "error": null
+      },
+      "elementos": {
+        "titulo": true,
+        "casosUso": true,
+        "requerimientos": true,
+        "tests": true,
+        "documentacion": true
+      },
+      "navegacion": true
+    },
+    "rrhh": {
+      "nombre": "RRHH",
+      "url": "/super-admin/modulos/rrhh",
+      "carga": {
+        "exito": true,
+        "tiempo": 3754,
+        "error": null
+      },
+      "elementos": {
+        "titulo": false,
+        "casosUso": true,
+        "requerimientos": true,
+        "tests": true,
+        "documentacion": true
+      },
+      "navegacion": true
+    },
+    "procesos": {
+      "nombre": "Procesos",
+      "url": "/super-admin/modulos/procesos",
+      "carga": {
+        "exito": true,
+        "tiempo": 5436,
+        "error": null
+      },
+      "elementos": {
+        "titulo": true,
+        "casosUso": true,
+        "requerimientos": true,
+        "tests": true,
+        "documentacion": true
+      },
+      "navegacion": true
+    },
+    "auditorias": {
+      "nombre": "Auditorías",
+      "url": "/super-admin/modulos/auditorias",
+      "carga": {
+        "exito": true,
+        "tiempo": 5641,
+        "error": null
+      },
+      "elementos": {
+        "titulo": true,
+        "casosUso": true,
+        "requerimientos": true,
+        "tests": true,
+        "documentacion": true
+      },
+      "navegacion": true
+    },
+    "normas": {
+      "nombre": "Normas",
+      "url": "/super-admin/modulos/normas",
+      "carga": {
+        "exito": true,
+        "tiempo": 2136,
+        "error": null
+      },
+      "elementos": {
+        "titulo": false,
+        "casosUso": true,
+        "requerimientos": true,
+        "tests": true,
+        "documentacion": true
+      },
+      "navegacion": true
+    },
+    "documentos": {
+      "nombre": "Documentos",
+      "url": "/super-admin/modulos/documentos",
+      "carga": {
+        "exito": true,
+        "tiempo": 2427,
+        "error": null
+      },
+      "elementos": {
+        "titulo": true,
+        "casosUso": true,
+        "requerimientos": true,
+        "tests": true,
+        "documentacion": true
+      },
+      "navegacion": true
+    },
+    "calidad": {
+      "nombre": "Calidad",
+      "url": "/super-admin/modulos/calidad",
+      "carga": {
+        "exito": true,
+        "tiempo": 2413,
+        "error": null
+      },
+      "elementos": {
+        "titulo": true,
+        "casosUso": true,
+        "requerimientos": true,
+        "tests": true,
+        "documentacion": true
+      },
+      "navegacion": true
+    },
+    "diseno-desarrollo": {
+      "nombre": "Diseño y Desarrollo",
+      "url": "/super-admin/modulos/diseno-desarrollo",
+      "carga": {
+        "exito": true,
+        "tiempo": 8535,
+        "error": null
+      },
+      "elementos": {
+        "titulo": true,
+        "casosUso": true,
+        "requerimientos": true,
+        "tests": true,
+        "documentacion": true
+      },
+      "navegacion": true
+    }
+  },
+  "totalTests": 24,
+  "exitosos": 24,
+  "fallidos": 0,
+  "resumen": {
+    "excelente": 0,
+    "bueno": 2,
+    "aceptable": 4,
+    "lento": 1,
+    "critico": 0,
+    "crítico": null
+  }
+}

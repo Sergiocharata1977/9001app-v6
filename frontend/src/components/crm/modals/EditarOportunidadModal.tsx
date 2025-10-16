@@ -351,3 +351,19 @@ export default function EditarOportunidadModal({
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

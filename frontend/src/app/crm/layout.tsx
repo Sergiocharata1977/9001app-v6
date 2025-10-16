@@ -1,29 +1,25 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import {
-  Home,
-  BarChart3,
-  Building2,
-  Users,
-  Target,
-  Calendar,
-  Package,
-  ChevronLeft,
-  ArrowLeft,
-  Menu,
-  X,
-  Star,
-  AlertTriangle,
-  FileText,
-  CheckCircle,
-  MapPin,
-  Briefcase
-} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { OrganizationProvider } from '@/contexts/OrganizationContext';
+// Import icons
+import {
+    AlertTriangle,
+    ArrowLeft,
+    BarChart3,
+    Briefcase,
+    Building2,
+    Calendar,
+    FileText,
+    Menu,
+    Star,
+    Target,
+    Users,
+    X
+} from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import React, { useState } from 'react';
 import { Toaster } from 'sonner';
 
 interface MenuItem {
@@ -39,7 +35,7 @@ const crmNavigation: MenuItem[] = [
   { name: 'Satisfacción Clientes', href: '/crm/satisfaccion', icon: Star },
   { name: 'Acciones', href: '/crm/actividades', icon: Calendar },
   { name: 'Contactos', href: '/crm/contactos', icon: Users },
-  { name: 'Vendedores', href: '/rrhh/personal?tipo=vendedor', icon: Briefcase },
+  { name: 'Vendedores', href: '/crm/vendedores', icon: Briefcase },
   { name: 'Análisis de Riesgo', href: '/crm/analisis-riesgo', icon: AlertTriangle },
   { name: 'Legajos', href: '/crm/legajos', icon: FileText },
 ];

@@ -17,3 +17,9 @@ router.put('/:id/objetivo/:objetivoId', gestionDesempenoController.actualizarObj
 
 export default router;
 
+
+
+
+
+
+

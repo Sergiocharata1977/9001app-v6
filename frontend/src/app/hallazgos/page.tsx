@@ -1,23 +1,22 @@
 'use client';
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
-  Eye,
-  TrendingUp,
-  Target,
-  Users,
-  Calendar,
-  Building2,
-  FileText,
-  User
-} from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
 import { FindingTable } from '@/components/modules/findings/tables/FindingTable';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import {
+    AlertTriangle,
+    Building2,
+    Calendar,
+    CheckCircle,
+    Clock,
+    Eye,
+    FileText,
+    Target,
+    TrendingUp,
+    User,
+    Users
+} from 'lucide-react';
 
 export default function HallazgosPage() {
   const stats = [

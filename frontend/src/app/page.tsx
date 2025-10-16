@@ -1,9 +1,8 @@
 'use client';
 
+import { ArrowRight, Award, CheckCircle, Clock, FileText, LogIn, MessageSquare, Shield, Sparkles, Star, TrendingUp, Users, Zap } from 'lucide-react';
 import Link from 'next/link';
-import { Shield, Users, FileText, Award, Sparkles, LogIn, CheckCircle, TrendingUp, Clock, Zap, ArrowRight, Star, MessageSquare } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useEffect, useState } from 'react';
 // import { DonCandidoAnimation } from '@/components/ui/DonCandidoAnimation'; // Comentado para mejor rendimiento
 
 export default function LandingPage() {
@@ -121,12 +120,12 @@ export default function LandingPage() {
               <Link href="/documentacion" className={`hidden md:block ${scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-white hover:text-emerald-300'} transition-colors font-medium`}>
                 Documentación
               </Link>
-              <Link href="/dashboard">
-                <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-semibold inline-flex items-center gap-2 transition-all transform hover:scale-105 shadow-lg">
-                  <LogIn className="w-4 h-4" />
-                  Acceder
-                </button>
-              </Link>
+            <Link href="/login">
+              <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-semibold inline-flex items-center gap-2 transition-all transform hover:scale-105 shadow-lg">
+                <LogIn className="w-4 h-4" />
+                Acceder
+              </button>
+            </Link>
             </div>
           </div>
         </div>
@@ -160,13 +159,13 @@ export default function LandingPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                <Link href="/normas">
-                  <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-xl font-bold inline-flex items-center justify-center gap-2 shadow-xl transition-all transform hover:scale-105">
-                    <LogIn className="w-5 h-5" />
-                    Comenzar Ahora
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                </Link>
+              <Link href="/login">
+                <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-xl font-bold inline-flex items-center justify-center gap-2 shadow-xl transition-all transform hover:scale-105">
+                  <LogIn className="w-5 h-5" />
+                  Comenzar Ahora
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              </Link>
                 <Link href="/procesos">
                   <button className="border-2 border-emerald-400 text-emerald-300 hover:bg-emerald-500 hover:border-emerald-500 hover:text-white px-8 py-4 rounded-xl font-bold transition-all transform hover:scale-105">
                     Ver Demo
@@ -285,7 +284,7 @@ export default function LandingPage() {
                 <h3 className="text-2xl font-bold text-slate-900 mb-3">{feature.title}</h3>
                 <p className="text-slate-600 leading-relaxed">{feature.description}</p>
                 <div className="mt-6">
-                  <Link href="/dashboard" className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:gap-4 transition-all">
+                  <Link href="/login" className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:gap-4 transition-all">
                     Explorar módulo
                     <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -352,7 +351,7 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Link href="/dashboard">
+            <Link href="/login">
               <button className="bg-white text-emerald-600 font-bold py-5 px-10 rounded-xl hover:bg-slate-100 transition-all inline-flex items-center gap-3 transform hover:scale-105 shadow-2xl">
                 <LogIn className="w-6 h-6" />
                 Comenzar Ahora Gratis
@@ -408,7 +407,7 @@ export default function LandingPage() {
             <div>
               <h4 className="text-lg font-bold mb-4">Enlaces Rápidos</h4>
               <ul className="space-y-3">
-                <li><Link href="/dashboard" className="text-slate-400 hover:text-emerald-400 transition-colors">Dashboard</Link></li>
+                <li><Link href="/login" className="text-slate-400 hover:text-emerald-400 transition-colors">Dashboard</Link></li>
                 <li><Link href="/documentacion" className="text-slate-400 hover:text-emerald-400 transition-colors">Documentación</Link></li>
                 <li><Link href="/calidad" className="text-slate-400 hover:text-emerald-400 transition-colors">Módulo de Calidad</Link></li>
                 <li><Link href="/rrhh" className="text-slate-400 hover:text-emerald-400 transition-colors">RRHH</Link></li>

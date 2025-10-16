@@ -423,3 +423,9 @@ export const eliminarVacante = async (req: Request, res: Response) => {
     }
 };
 
+
+
+
+
+
+

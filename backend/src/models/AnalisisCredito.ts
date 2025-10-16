@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Document, Model, Schema, Types, model } from 'mongoose';
 
 interface ISubAspecto {
   nombre: string;
@@ -259,5 +259,38 @@ AnalisisCreditoSchema.statics.getConfiguracionDefecto = function() {
   };
 };
 
-export const AnalisisCredito = model<IAnalisisCredito>('AnalisisCredito', AnalisisCreditoSchema);
+// Método estático para obtener configuración por defecto
+AnalisisCreditoSchema.statics.getConfiguracionDefecto = function() {
+  return {
+    cualitativos: [
+      { nombre: 'Experiencia del cliente', grado_importancia: 0.25 },
+      { nombre: 'Reputación comercial', grado_importancia: 0.20 },
+      { nombre: 'Relación con la empresa', grado_importancia: 0.20 },
+      { nombre: 'Capacidad gerencial', grado_importancia: 0.15 },
+      { nombre: 'Mercado objetivo', grado_importancia: 0.10 },
+      { nombre: 'Competencia local', grado_importancia: 0.10 }
+    ],
+    legales: [
+      { nombre: 'Antecedentes crediticios', grado_importancia: 0.40 },
+      { nombre: 'Historial de pagos', grado_importancia: 0.25 },
+      { nombre: 'Garantías disponibles', grado_importancia: 0.25 },
+      { nombre: 'Documentación legal', grado_importancia: 0.10 }
+    ],
+    cuantitativos: [
+      { nombre: 'Capacidad de pago', grado_importancia: 0.30 },
+      { nombre: 'Liquidez financiera', grado_importancia: 0.25 },
+      { nombre: 'Rentabilidad del negocio', grado_importancia: 0.20 },
+      { nombre: 'Endeudamiento total', grado_importancia: 0.15 },
+      { nombre: 'Flujo de caja proyectado', grado_importancia: 0.10 }
+    ]
+  };
+};
+
+// Definir interface para métodos estáticos
+interface IAnalisisCreditoModel extends Model<IAnalisisCredito> {
+  getConfiguracionDefecto(): any;
+}
+
+export const AnalisisCredito = model<IAnalisisCredito, IAnalisisCreditoModel>('AnalisisCredito', AnalisisCreditoSchema);
 export { IAnalisisCredito, ISubAspecto };
+

@@ -145,3 +145,19 @@ const FinancialChart: React.FC<FinancialChartProps> = ({
 
 export default FinancialChart;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

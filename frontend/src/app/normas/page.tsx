@@ -1,25 +1,24 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  BookOpen, 
-  CheckCircle, 
-  AlertTriangle, 
-  Clock, 
-  Eye,
-  TrendingUp,
-  Target,
-  FileText,
-  Users,
-  Calendar,
-  Link as LinkIcon,
-  BarChart3
-} from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
 import { IsoClauseTable } from '@/components/modules/iso/tables/IsoClauseTable';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+    AlertTriangle,
+    BarChart3,
+    BookOpen,
+    Calendar,
+    CheckCircle,
+    Clock,
+    Eye,
+    Link as LinkIcon,
+    Target,
+    TrendingUp,
+    Users
+} from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function NormasPage() {
   const [activeTab, setActiveTab] = useState('dashboard');

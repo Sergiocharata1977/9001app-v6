@@ -1,0 +1,518 @@
+================================================================================
+LISTA COMPLETA DE ARCHIVOS ABM - FRONTEND
+9001app v6 - 15 de Octubre 2025
+================================================================================
+
+📁 ESTRUCTURA DE DIRECTORIOS Y ARCHIVOS
+================================================================================
+
+frontend/src/
+│
+├── app/                                    # PÁGINAS NEXT.JS
+│   │
+│   ├── crm/                                # MÓDULO CRM
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── dashboard/page.tsx
+│   │   │
+│   │   ├── empresas/                       # ✅ EMPRESAS (90%)
+│   │   │   ├── page.tsx
+│   │   │   └── [id]/page.tsx
+│   │   │
+│   │   ├── contactos/                      # ✅ CONTACTOS (85%)
+│   │   │   ├── page.tsx
+│   │   │   └── [id]/page.tsx
+│   │   │
+│   │   ├── oportunidades/                  # ✅ OPORTUNIDADES (95%)
+│   │   │   ├── page.tsx
+│   │   │   ├── nueva/page.tsx
+│   │   │   └── [id]/
+│   │   │       ├── page.tsx
+│   │   │       └── evaluacion/page.tsx
+│   │   │
+│   │   ├── actividades/
+│   │   ├── analisis-riesgo/
+│   │   ├── casos-uso/
+│   │   ├── legajos/
+│   │   ├── productos/
+│   │   ├── requerimientos/
+│   │   ├── satisfaccion/
+│   │   └── vendedores/
+│   │
+│   ├── rrhh/                               # MÓDULO RRHH
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   │
+│   │   ├── personal/page.tsx               # ✅ PERSONAL (75%)
+│   │   ├── personal-abm/page.tsx           # ✅ PERSONAL ABM (75%)
+│   │   ├── departamentos/page.tsx          # ✅ DEPARTAMENTOS (75%)
+│   │   ├── puestos/page.tsx                # ❌ PUESTOS (30%)
+│   │   │
+│   │   ├── capacitaciones/                 # ⚠️ CAPACITACIONES (40%)
+│   │   │   ├── page.tsx
+│   │   │   ├── [id]/page.tsx
+│   │   │   └── sesiones/page.tsx
+│   │   │
+│   │   ├── evaluaciones/                   # ⚠️ EVALUACIONES (40%)
+│   │   │   ├── page.tsx
+│   │   │   ├── [id]/page.tsx
+│   │   │   └── reportes/page.tsx
+│   │   │
+│   │   ├── ausencias/
+│   │   ├── clima-laboral/
+│   │   ├── competencias/
+│   │   ├── desempeno/
+│   │   ├── indicadores/
+│   │   └── reclutamiento/
+│   │
+│   ├── procesos/                           # MÓDULO PROCESOS
+│   │   ├── page.tsx                        # ✅ PROCESOS (85%)
+│   │   ├── nuevo/page.tsx
+│   │   ├── dashboard/page.tsx
+│   │   ├── [id]/
+│   │   │   ├── page.tsx
+│   │   │   ├── kanban/page.tsx
+│   │   │   └── registros/
+│   │   │       ├── page.tsx
+│   │   │       └── [recordId]/page.tsx
+│   │   └── indicadores/
+│   │
+│   ├── departamentos/page.tsx              # Vista standalone
+│   ├── personal/page.tsx                   # Vista standalone
+│   └── puestos/page.tsx                    # Vista standalone
+│
+└── components/                             # COMPONENTES REUTILIZABLES
+    │
+    ├── crm/                                # COMPONENTES CRM
+    │   │
+    │   ├── forms/                          # ✅ FORMULARIOS CRM
+    │   │   ├── AnalisisCreditoForm.tsx
+    │   │   ├── ContactoForm.tsx
+    │   │   ├── EmpresaForm.tsx
+    │   │   ├── EvaluacionNecesidadesForm.tsx
+    │   │   ├── OportunidadForm.tsx
+    │   │   └── RequisitoForm.tsx
+    │   │
+    │   ├── modals/                         # ✅ MODALES CRM
+    │   │   ├── index.ts
+    │   │   │
+    │   │   ├── NuevaEmpresaModal.tsx
+    │   │   ├── EditarEmpresaModal.tsx
+    │   │   ├── EliminarEmpresaModal.tsx
+    │   │   │
+    │   │   ├── NuevoContactoModal.tsx
+    │   │   ├── EditarContactoModal.tsx
+    │   │   ├── EliminarContactoModal.tsx
+    │   │   │
+    │   │   ├── NuevaOportunidadModal.tsx
+    │   │   ├── EditarOportunidadModal.tsx
+    │   │   ├── EliminarOportunidadModal.tsx
+    │   │   │
+    │   │   ├── NuevaActividadModal.tsx
+    │   │   ├── EditarActividadModal.tsx
+    │   │   └── EliminarActividadModal.tsx
+    │   │
+    │   ├── cards/
+    │   │   ├── CrmCard.tsx
+    │   │   └── index.ts
+    │   │
+    │   ├── shared/
+    │   │   ├── HistoryLog.tsx
+    │   │   ├── NotesTimeline.tsx
+    │   │   ├── RelatedEntityCard.tsx
+    │   │   └── index.ts
+    │   │
+    │   ├── EmpresasForm.tsx
+    │   └── AnalisisCreditoDashboard.tsx
+    │
+    ├── rrhh/                               # COMPONENTES RRHH
+    │   │
+    │   ├── department/                     # ✅ DEPARTAMENTOS V1
+    │   │   ├── DepartmentCard.tsx
+    │   │   ├── DepartmentForm.tsx
+    │   │   └── DepartmentListing.tsx
+    │   │
+    │   ├── personnel/                      # ✅ PERSONAL V1
+    │   │   ├── PersonnelCard.tsx
+    │   │   ├── PersonnelForm.tsx
+    │   │   └── PersonnelListing.tsx
+    │   │
+    │   ├── departments/                    # (vacío)
+    │   ├── positions/                      # (vacío) ❌ FALTA TODO
+    │   │
+    │   ├── PersonalForm.tsx                # Versión alternativa
+    │   ├── RRHHDashboardCard.tsx
+    │   ├── RRHHHeader.tsx
+    │   ├── RRHHMetrics.tsx
+    │   ├── RRHHSidebar.tsx
+    │   └── RRHHStats.tsx
+    │
+    ├── process/                            # COMPONENTES PROCESOS
+    │   │
+    │   ├── tabs/                           # ✅ TABS PROCESOS
+    │   │   ├── ProcessDefinitionTab.tsx
+    │   │   ├── ProcessIndicadoresTab.tsx
+    │   │   ├── ProcessMedicionesTab.tsx
+    │   │   ├── ProcessObjetivosTab.tsx
+    │   │   ├── ProcessRegistrosTab.tsx
+    │   │   └── ProcessRelationsTab.tsx
+    │   │
+    │   ├── ProcessListing.tsx
+    │   ├── ProcessMasterForm.tsx
+    │   ├── ProcessSingleView.tsx
+    │   ├── ProcessUnifiedView.tsx
+    │   ├── ProcessUnifiedCard.tsx
+    │   ├── ProcessBoardsView.tsx
+    │   ├── ProcessKanbanView.tsx
+    │   ├── ProcessRecordModal.tsx
+    │   ├── ProcessRecordSingle.tsx
+    │   ├── ProcesoRegistroKanbanTab.tsx
+    │   ├── ConfiguracionEtapas.tsx
+    │   ├── EditorCamposEtapa.tsx
+    │   ├── ProcesoDocumentoTab.tsx
+    │   ├── ProcesoRelacionesTab.tsx
+    │   └── ProcesoUnifiedPage.tsx
+    │
+    ├── modules/                            # VERSIONES V2
+    │   │
+    │   ├── hr/                             # ✅ RRHH V2
+    │   │   │
+    │   │   ├── cards/
+    │   │   │   ├── DepartmentCard.tsx
+    │   │   │   └── PersonnelCard.tsx
+    │   │   │
+    │   │   ├── forms/
+    │   │   │   ├── DepartmentFormV2.tsx
+    │   │   │   └── PersonnelFormV2.tsx
+    │   │   │
+    │   │   ├── listings/
+    │   │   │   ├── DepartmentListing.tsx
+    │   │   │   └── PersonnelListing.tsx
+    │   │   │
+    │   │   └── tables/
+    │   │       ├── DepartmentTable.tsx
+    │   │       └── PersonnelTable.tsx
+    │   │
+    │   └── processes/                      # ✅ PROCESOS V2
+    │       │
+    │       ├── cards/
+    │       │   └── ProcessRecordCard.tsx
+    │       │
+    │       ├── forms/
+    │       │   ├── ProcessDefinitionFormV2.tsx
+    │       │   ├── ProcessRecordFormV2.tsx
+    │       │   ├── QualityIndicatorFormV2.tsx
+    │       │   └── QualityObjectiveFormV2.tsx
+    │       │
+    │       └── tables/
+    │           ├── ProcessRecordTable.tsx
+    │           ├── QualityIndicatorTable.tsx
+    │           └── QualityObjectiveTable.tsx
+    │
+    ├── ui/                                 # COMPONENTES UI BASE
+    │   ├── UnifiedKanban.tsx
+    │   ├── UnifiedKanbanBoard.tsx
+    │   ├── KanbanCard.tsx
+    │   ├── KanbanColumn.tsx
+    │   ├── button.tsx
+    │   ├── input.tsx
+    │   ├── select.tsx
+    │   ├── dialog.tsx
+    │   ├── card.tsx
+    │   ├── table.tsx
+    │   └── ... (más componentes shadcn/ui)
+    │
+    └── ABM/
+        └── ABMBase.tsx
+
+================================================================================
+RESUMEN POR COMPONENTE
+================================================================================
+
+CRM - EMPRESAS (90% COMPLETO)
+───────────────────────────────
+✅ components/crm/forms/EmpresaForm.tsx
+✅ components/crm/modals/NuevaEmpresaModal.tsx
+✅ components/crm/modals/EditarEmpresaModal.tsx
+✅ components/crm/modals/EliminarEmpresaModal.tsx
+✅ app/crm/empresas/page.tsx
+✅ app/crm/empresas/[id]/page.tsx
+
+CRM - CONTACTOS (85% COMPLETO)
+───────────────────────────────
+✅ components/crm/forms/ContactoForm.tsx
+✅ components/crm/modals/NuevoContactoModal.tsx
+✅ components/crm/modals/EditarContactoModal.tsx
+✅ components/crm/modals/EliminarContactoModal.tsx
+✅ app/crm/contactos/page.tsx
+✅ app/crm/contactos/[id]/page.tsx
+
+CRM - OPORTUNIDADES (95% COMPLETO)
+────────────────────────────────────
+✅ components/crm/forms/OportunidadForm.tsx
+✅ components/crm/modals/NuevaOportunidadModal.tsx
+✅ components/crm/modals/EditarOportunidadModal.tsx
+✅ components/crm/modals/EliminarOportunidadModal.tsx
+✅ app/crm/oportunidades/page.tsx (Kanban)
+✅ app/crm/oportunidades/nueva/page.tsx
+✅ app/crm/oportunidades/[id]/page.tsx
+
+CRM - ACTIVIDADES (70% COMPLETO)
+──────────────────────────────────
+✅ components/crm/modals/NuevaActividadModal.tsx
+✅ components/crm/modals/EditarActividadModal.tsx
+✅ components/crm/modals/EliminarActividadModal.tsx
+
+CRM - ANÁLISIS DE RIESGO (90% COMPLETO)
+────────────────────────────────────────
+✅ components/crm/forms/AnalisisCreditoForm.tsx
+✅ components/crm/AnalisisCreditoDashboard.tsx
+
+RRHH - PERSONAL (75% COMPLETO - 2 VERSIONES)
+───────────────────────────────────────────────
+VERSIÓN 1:
+✅ components/rrhh/personnel/PersonnelForm.tsx
+✅ components/rrhh/personnel/PersonnelCard.tsx
+✅ components/rrhh/personnel/PersonnelListing.tsx
+✅ components/rrhh/PersonalForm.tsx (alternativa)
+
+VERSIÓN 2:
+✅ components/modules/hr/forms/PersonnelFormV2.tsx
+✅ components/modules/hr/cards/PersonnelCard.tsx
+✅ components/modules/hr/listings/PersonnelListing.tsx
+✅ components/modules/hr/tables/PersonnelTable.tsx
+
+PÁGINAS:
+✅ app/rrhh/personal/page.tsx
+✅ app/rrhh/personal-abm/page.tsx
+
+⚠️ FALTA:
+❌ Modales CRUD (Nuevo/Editar/Eliminar)
+
+RRHH - DEPARTAMENTOS (75% COMPLETO - 2 VERSIONES)
+────────────────────────────────────────────────────
+VERSIÓN 1:
+✅ components/rrhh/department/DepartmentForm.tsx
+✅ components/rrhh/department/DepartmentCard.tsx
+✅ components/rrhh/department/DepartmentListing.tsx
+
+VERSIÓN 2:
+✅ components/modules/hr/forms/DepartmentFormV2.tsx
+✅ components/modules/hr/cards/DepartmentCard.tsx
+✅ components/modules/hr/listings/DepartmentListing.tsx
+✅ components/modules/hr/tables/DepartmentTable.tsx
+
+PÁGINAS:
+✅ app/rrhh/departamentos/page.tsx
+
+⚠️ FALTA:
+❌ Modales CRUD (Nuevo/Editar/Eliminar)
+
+RRHH - PUESTOS (30% COMPLETO) 🔴 CRÍTICO
+──────────────────────────────────────────
+EXISTE:
+✅ app/rrhh/puestos/page.tsx (solo página básica)
+✅ app/puestos/page.tsx (vista standalone)
+
+❌ FALTA TODO:
+❌ components/rrhh/positions/PositionForm.tsx
+❌ components/rrhh/positions/PositionCard.tsx
+❌ components/rrhh/positions/PositionListing.tsx
+❌ components/rrhh/positions/PositionModal.tsx
+
+RRHH - CAPACITACIONES (40% COMPLETO) ⚠️
+─────────────────────────────────────────
+EXISTE:
+✅ app/rrhh/capacitaciones/page.tsx
+✅ app/rrhh/capacitaciones/[id]/page.tsx
+✅ app/rrhh/capacitaciones/sesiones/page.tsx
+
+❌ FALTA TODO:
+❌ components/rrhh/training/TrainingForm.tsx
+❌ components/rrhh/training/TrainingCard.tsx
+❌ components/rrhh/training/TrainingListing.tsx
+❌ components/rrhh/training/TrainingModal.tsx
+❌ components/rrhh/training/TrainingSessionForm.tsx
+
+RRHH - EVALUACIONES (40% COMPLETO) ⚠️
+───────────────────────────────────────
+EXISTE:
+✅ app/rrhh/evaluaciones/page.tsx
+✅ app/rrhh/evaluaciones/[id]/page.tsx
+✅ app/rrhh/evaluaciones/reportes/page.tsx
+
+❌ FALTA TODO:
+❌ components/rrhh/evaluations/EvaluationForm.tsx
+❌ components/rrhh/evaluations/EvaluationCard.tsx
+❌ components/rrhh/evaluations/EvaluationListing.tsx
+❌ components/rrhh/evaluations/EvaluationModal.tsx
+❌ components/rrhh/evaluations/EvaluationRatingForm.tsx
+
+PROCESOS (85% COMPLETO)
+────────────────────────
+✅ components/process/ProcessListing.tsx
+✅ components/process/ProcessMasterForm.tsx
+✅ components/process/ProcessSingleView.tsx
+✅ components/process/ProcessUnifiedView.tsx
+✅ components/process/ProcessKanbanView.tsx
+✅ components/process/ProcessRecordModal.tsx
+
+TABS:
+✅ components/process/tabs/ProcessDefinitionTab.tsx
+✅ components/process/tabs/ProcessIndicadoresTab.tsx
+✅ components/process/tabs/ProcessMedicionesTab.tsx
+✅ components/process/tabs/ProcessObjetivosTab.tsx
+✅ components/process/tabs/ProcessRegistrosTab.tsx
+✅ components/process/tabs/ProcessRelationsTab.tsx
+
+VERSIÓN 2:
+✅ components/modules/processes/forms/ProcessDefinitionFormV2.tsx
+✅ components/modules/processes/forms/ProcessRecordFormV2.tsx
+✅ components/modules/processes/forms/QualityIndicatorFormV2.tsx
+✅ components/modules/processes/forms/QualityObjectiveFormV2.tsx
+
+PÁGINAS:
+✅ app/procesos/page.tsx
+✅ app/procesos/nuevo/page.tsx
+✅ app/procesos/[id]/page.tsx
+✅ app/procesos/[id]/kanban/page.tsx
+✅ app/procesos/[id]/registros/page.tsx
+
+================================================================================
+COMPONENTES KANBAN
+================================================================================
+✅ components/ui/UnifiedKanban.tsx
+✅ components/ui/UnifiedKanbanBoard.tsx
+✅ components/ui/KanbanCard.tsx
+✅ components/ui/KanbanColumn.tsx
+✅ components/process/ProcessKanbanView.tsx
+✅ components/process/ProcesoRegistroKanbanTab.tsx
+
+================================================================================
+SERVICIOS API NECESARIOS
+================================================================================
+
+CRM:
+────
+GET    /api/crm/empresas
+POST   /api/crm/empresas
+PUT    /api/crm/empresas/:id
+DELETE /api/crm/empresas/:id
+
+GET    /api/crm/contactos
+POST   /api/crm/contactos
+PUT    /api/crm/contactos/:id
+DELETE /api/crm/contactos/:id
+
+GET    /api/crm/oportunidades
+POST   /api/crm/oportunidades
+PUT    /api/crm/oportunidades/:id
+DELETE /api/crm/oportunidades/:id
+
+GET    /api/crm/actividades
+POST   /api/crm/actividades
+PUT    /api/crm/actividades/:id
+DELETE /api/crm/actividades/:id
+
+RRHH:
+─────
+GET    /api/rrhh/personal
+POST   /api/rrhh/personal
+PUT    /api/rrhh/personal/:id
+DELETE /api/rrhh/personal/:id
+
+GET    /api/rrhh/departamentos
+POST   /api/rrhh/departamentos
+PUT    /api/rrhh/departamentos/:id
+DELETE /api/rrhh/departamentos/:id
+
+GET    /api/rrhh/puestos          ⚠️ VERIFICAR QUE EXISTE
+POST   /api/rrhh/puestos          ⚠️ VERIFICAR QUE EXISTE
+PUT    /api/rrhh/puestos/:id      ⚠️ VERIFICAR QUE EXISTE
+DELETE /api/rrhh/puestos/:id      ⚠️ VERIFICAR QUE EXISTE
+
+GET    /api/rrhh/capacitaciones   ⚠️ VERIFICAR QUE EXISTE
+POST   /api/rrhh/capacitaciones   ⚠️ VERIFICAR QUE EXISTE
+PUT    /api/rrhh/capacitaciones/:id
+DELETE /api/rrhh/capacitaciones/:id
+
+GET    /api/rrhh/evaluaciones     ⚠️ VERIFICAR QUE EXISTE
+POST   /api/rrhh/evaluaciones     ⚠️ VERIFICAR QUE EXISTE
+PUT    /api/rrhh/evaluaciones/:id
+DELETE /api/rrhh/evaluaciones/:id
+
+PROCESOS:
+─────────
+GET    /api/procesos
+POST   /api/procesos
+PUT    /api/procesos/:id
+DELETE /api/procesos/:id
+
+GET    /api/procesos/:id/registros
+POST   /api/procesos/:id/registros
+PUT    /api/procesos/:id/registros/:recordId
+DELETE /api/procesos/:id/registros/:recordId
+
+================================================================================
+ARCHIVOS DE REFERENCIA (PARA COPIAR ESTRUCTURA)
+================================================================================
+
+MEJOR EJEMPLO DE FORMULARIO:
+  → components/crm/forms/EmpresaForm.tsx
+  → components/modules/hr/forms/PersonnelFormV2.tsx
+
+MEJOR EJEMPLO DE MODAL:
+  → components/crm/modals/NuevaEmpresaModal.tsx
+  → components/crm/modals/EditarEmpresaModal.tsx
+  → components/crm/modals/EliminarEmpresaModal.tsx
+
+MEJOR EJEMPLO DE CARD:
+  → components/rrhh/personnel/PersonnelCard.tsx
+  → components/modules/hr/cards/PersonnelCard.tsx
+
+MEJOR EJEMPLO DE LISTING:
+  → components/rrhh/personnel/PersonnelListing.tsx
+  → components/modules/hr/listings/PersonnelListing.tsx
+
+MEJOR EJEMPLO DE TABLA:
+  → components/modules/hr/tables/PersonnelTable.tsx
+
+MEJOR EJEMPLO DE PÁGINA:
+  → app/crm/empresas/page.tsx
+  → app/rrhh/personal/page.tsx
+
+MEJOR EJEMPLO DE KANBAN:
+  → app/procesos/[id]/kanban/page.tsx
+  → components/process/ProcessKanbanView.tsx
+
+================================================================================
+PRIORIDADES PARA COMPLETAR MVP
+================================================================================
+
+🔴 PRIORIDAD CRÍTICA (DÍA 2):
+────────────────────────────────
+1. Crear componentes de PUESTOS:
+   ❌ components/rrhh/positions/PositionForm.tsx
+   ❌ components/rrhh/positions/PositionCard.tsx
+   ❌ components/rrhh/positions/PositionListing.tsx
+   ❌ Modales CRUD
+
+🟡 PRIORIDAD ALTA (DÍA 3):
+──────────────────────────
+2. Agregar modales CRUD a Personal
+3. Agregar modales CRUD a Departamentos
+
+🟢 PRIORIDAD MEDIA (OPCIONAL - DÍA 4-5):
+────────────────────────────────────────
+4. Completar sistema de Capacitaciones
+5. Completar sistema de Evaluaciones
+
+================================================================================
+FIN DE LA LISTA
+================================================================================
+Total de archivos identificados: ~120+
+Estado del MVP: 75% → Objetivo: 100%
+Tiempo estimado para completar: 2-3 días
+
+
+

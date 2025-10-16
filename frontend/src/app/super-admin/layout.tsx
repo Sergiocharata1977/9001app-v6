@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import { SuperAdminHeader } from '@/components/super-admin/SuperAdminHeader';
+import { SuperAdminSidebar } from '@/components/super-admin/SuperAdminSidebar';
 import { Menu } from 'lucide-react';
-import SuperAdminSidebar from '@/components/super-admin/SuperAdminSidebar';
-import SuperAdminHeader from '@/components/super-admin/SuperAdminHeader';
+import React, { useState } from 'react';
 
 export default function SuperAdminLayout({
   children,

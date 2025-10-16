@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import ProcessListing from '@/components/process/ProcessListing';
 import { useDonCandidoActions } from '@/contexts/DonCandidoContext';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function ProcesosPage() {
   const router = useRouter();

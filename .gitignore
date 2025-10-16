@@ -135,6 +135,22 @@ README-DON-CANDIDO*.md
 RESUMEN-EJECUTIVO-DON-CANDIDO.md
 ROADMAP-KANBAN-README.md
 ETAPA_1_CRM_COMPLETADA.md
+CHEAT-SHEET-*.md
+OPTIMIZACION-*.md
+REFERENCIA-*.md
+PROYECTO-*.md
+RRHH-*.md
+
+# Documentos de guías y manuales
+Guia*.pdf
+*Implementacion*.pdf
+*Implementacion*.md
+
+# Directorio de documentación interna
+.kiro/
+
+# IGNORAR TODOS LOS ARCHIVOS .MD (excepto los importantes)
+*.md
 
 # EXCEPCIONES - Mantener estos archivos importantes
 !README.md

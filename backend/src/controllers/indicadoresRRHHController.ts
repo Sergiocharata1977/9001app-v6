@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import ControlAusencias from '../models/ControlAusencias';
 import GestionDesempeno from '../models/GestionDesempeno';
 import IndicadoresRRHH from '../models/IndicadoresRRHH';
-import Personnel from '../models/Personnel';
+import { Personnel } from '../models/Personnel';
 import ReclutamientoSeleccion from '../models/ReclutamientoSeleccion';
 
 // Crear indicador personalizado
@@ -46,7 +46,7 @@ export const crearIndicador = async (req: Request, res: Response) => {
 export const obtenerIndicadores = async (req: Request, res: Response) => {
     try {
         const { organization_id, categoria } = req.query;
-        
+
         const filtros: any = { organization_id };
         if (categoria) filtros.categoria = categoria;
 
@@ -73,7 +73,7 @@ const calcularIndiceAusentismo = async (organization_id: string): Promise<number
         const finAno = new Date(year, 11, 31);
 
         // Obtener total de empleados
-        const totalEmpleados = await Personnel.countDocuments({ 
+        const totalEmpleados = await Personnel.countDocuments({
             organization_id,
             status: 'active'
         });
@@ -88,13 +88,13 @@ const calcularIndiceAusentismo = async (organization_id: string): Promise<number
         });
 
         const totalDiasAusencia = ausencias.reduce((acc, a) => acc + a.dias_solicitados, 0);
-        
+
         // Días laborables en el año (aproximado: 260 días)
         const diasLaborables = 260;
         const totalDiasDisponibles = totalEmpleados * diasLaborables;
 
         const indiceAusentismo = (totalDiasAusencia / totalDiasDisponibles) * 100;
-        
+
         return Math.round(indiceAusentismo * 10) / 10;
     } catch (error) {
         console.error('Error al calcular ausentismo:', error);
@@ -286,11 +286,13 @@ export const recalcularIndicadores = async (req: Request, res: Response) => {
 
             let tendencia: 'positiva' | 'negativa' | 'estable' = 'estable';
             if (indicadorAnterior) {
-                const diferencia = indicador.valor_actual - indicadorAnterior.valor_actual;
-                
+                // Acceder a valor_actual como propiedad del objeto indicadorAnterior
+                const valorAnterior = (indicadorAnterior as any).valor_actual || 0;
+                const diferencia = indicador.valor_actual - valorAnterior;
+
                 // Para algunos indicadores, menor es mejor (ausentismo, rotación)
                 const menorEsMejor = ['Índice de Ausentismo', 'Rotación de Personal', 'Tiempo Promedio de Reclutamiento'].includes(indicador.nombre);
-                
+
                 if (Math.abs(diferencia) > 0.5) {
                     if (menorEsMejor) {
                         tendencia = diferencia < 0 ? 'positiva' : 'negativa';
@@ -413,4 +415,10 @@ export const eliminarIndicador = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Error al eliminar indicador' });
     }
 };
+
+
+
+
+
+
 

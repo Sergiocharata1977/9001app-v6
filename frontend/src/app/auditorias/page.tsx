@@ -1,33 +1,29 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { 
-  Search, 
-  Filter, 
-  Plus, 
-  Grid3X3, 
-  List, 
-  SearchCheck,
-  Calendar,
-  User,
-  FileText,
-  MoreHorizontal,
-  Eye,
-  CheckCircle,
-  Clock,
-  AlertCircle,
-  XCircle,
-  Kanban,
-  Target,
-  Settings,
-  Users,
-  Building2
+import {
+    AlertCircle,
+    Building2,
+    Calendar,
+    CheckCircle,
+    Clock,
+    Eye,
+    Grid3X3,
+    Kanban,
+    List,
+    MoreHorizontal,
+    Plus,
+    Search,
+    SearchCheck,
+    Target,
+    User,
+    XCircle
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 // Interface para auditorías
 interface Auditoria {
