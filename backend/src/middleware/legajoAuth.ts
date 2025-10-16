@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import Legajo from '../models/Legajo';
+// import Legajo from '../models/Legajo'; // TODO: Implementar modelo Legajo
 
 /**
  * MIDDLEWARE DE AUTORIZACIÓN PARA LEGAJOS

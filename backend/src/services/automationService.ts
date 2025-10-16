@@ -97,7 +97,7 @@ export class AutomationService {
             await this.createReminder(encuestaAnual.id, cliente.id, cliente.razon_social, 'primero');
           }
         } catch (error) {
-          job.errores.push(`Error procesando cliente ${cliente.razon_social}: ${error.message}`);
+          job.errores.push(`Error procesando cliente ${cliente.razon_social}: ${(error as Error).message}`);
         }
       }
 

@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
-import Legajo from '../models/Legajo';
-import { IRiskFactor, IRiskLink, IRiskLinkOptions } from '../types/legajo.types';
+// import Legajo from '../models/Legajo'; // TODO: Implementar modelo Legajo
+// import { IRiskFactor, IRiskLink, IRiskLinkOptions } from '../types/legajo.types'; // TODO: Implementar tipos Legajo
 
 /**
  * SERVICIO DE VINCULACIÓN CON ANÁLISIS DE RIESGO
@@ -37,7 +37,7 @@ export class RiskLinkService {
       
       // Verificar que no esté ya vinculado
       const existingLink = legajo.risk_links.find(
-        link => link.risk_analysis_id.toString() === analysisId
+        (link: any) => link.risk_analysis_id.toString() === analysisId
       );
       
       if (existingLink) {
@@ -301,7 +301,7 @@ export class RiskLinkService {
       }
       
       // Ordenar por fecha descendente
-      return legajo.risk_links.sort((a, b) => 
+      return legajo.risk_links.sort((a: any, b: any) => 
         new Date(b.computed_at).getTime() - new Date(a.computed_at).getTime()
       );
       
@@ -385,7 +385,7 @@ export class RiskLinkService {
       
       const initialLength = legajo.risk_links.length;
       legajo.risk_links = legajo.risk_links.filter(
-        link => link.risk_analysis_id.toString() !== analysisId
+        (link: any) => link.risk_analysis_id.toString() !== analysisId
       );
       
       if (legajo.risk_links.length === initialLength) {

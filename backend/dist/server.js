@@ -45,7 +45,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const database_1 = require("./config/database");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.use((0, helmet_1.default)());
 const limiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000,
@@ -60,31 +60,31 @@ app.use((0, cors_1.default)({
     credentials: true,
     optionsSuccessStatus: 200,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 app.use((0, morgan_1.default)(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(express_1.default.json({
     limit: '10mb',
-    type: ['application/json', 'text/plain']
+    type: ['application/json', 'text/plain'],
 }));
 app.use(express_1.default.urlencoded({
     extended: true,
     limit: '10mb',
-    parameterLimit: 50000
+    parameterLimit: 50000,
 }));
 app.get('/', (req, res) => {
     res.json({
         message: '9001App v6 Backend API',
         version: '1.0.0',
         status: 'running',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
     });
 });
 app.get('/health', (req, res) => {
     res.json({
         status: 'healthy',
         timestamp: new Date().toISOString(),
-        uptime: process.uptime()
+        uptime: process.uptime(),
     });
 });
 app.get('/api/health/database', async (req, res) => {
@@ -94,14 +94,14 @@ app.get('/api/health/database', async (req, res) => {
             res.json({
                 status: 'connected',
                 database: 'MongoDB',
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
             });
         }
         else {
             res.status(503).json({
                 status: 'disconnected',
                 database: 'MongoDB',
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
             });
         }
     }
@@ -110,7 +110,7 @@ app.get('/api/health/database', async (req, res) => {
             status: 'error',
             database: 'MongoDB',
             error: error instanceof Error ? error.message : 'Unknown error',
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
         });
     }
 });
@@ -166,12 +166,14 @@ const crmClienteRoutes_1 = __importDefault(require("./routes/crmClienteRoutes"))
 const crmContactoRoutes_1 = __importDefault(require("./routes/crmContactoRoutes"));
 const crmOportunidadRoutes_1 = __importDefault(require("./routes/crmOportunidadRoutes"));
 const crmProductoRoutes_1 = __importDefault(require("./routes/crmProductoRoutes"));
-const legajo_1 = __importDefault(require("./routes/legajo"));
 const climaLaboralRoutes_1 = __importDefault(require("./routes/climaLaboralRoutes"));
 const controlAusenciasRoutes_1 = __importDefault(require("./routes/controlAusenciasRoutes"));
 const gestionDesempenoRoutes_1 = __importDefault(require("./routes/gestionDesempenoRoutes"));
 const indicadoresRRHHRoutes_1 = __importDefault(require("./routes/indicadoresRRHHRoutes"));
 const reclutamientoRoutes_1 = __importDefault(require("./routes/reclutamientoRoutes"));
+const mongoDBMetricsRoutes_1 = __importDefault(require("./routes/mongoDBMetricsRoutes"));
+const performanceMetricsRoutes_1 = __importDefault(require("./routes/performanceMetricsRoutes"));
+const donCandido_routes_1 = __importDefault(require("./routes/donCandido.routes"));
 app.use('/api/processes', processRoutes_1.default);
 app.use('/api/process-definitions', processDefinitionRoutes_1.default);
 app.use('/api/process-records', processRecordRoutes_1.default);
@@ -201,12 +203,14 @@ app.use('/api/crm/oportunidades', crmOportunidadRoutes_1.default);
 app.use('/api/crm/actividades', crmActividadRoutes_1.default);
 app.use('/api/crm/productos', crmProductoRoutes_1.default);
 app.use('/api/crm/analisis-credito', analisisCredito_1.default);
-app.use('/api/legajos', legajo_1.default);
 app.use('/api/rrhh/clima-laboral', climaLaboralRoutes_1.default);
 app.use('/api/rrhh/desempeno', gestionDesempenoRoutes_1.default);
 app.use('/api/rrhh/ausencias', controlAusenciasRoutes_1.default);
 app.use('/api/rrhh/reclutamiento', reclutamientoRoutes_1.default);
 app.use('/api/rrhh/indicadores', indicadoresRRHHRoutes_1.default);
+app.use('/api/metrics/performance', performanceMetricsRoutes_1.default);
+app.use('/api/admin/mongodb-metrics', mongoDBMetricsRoutes_1.default);
+app.use('/api/don-candido', donCandido_routes_1.default);
 app.post('/api/admin/seed-all', async (req, res) => {
     try {
         console.log('🌱 Ejecutando seeder maestro...');
@@ -215,14 +219,14 @@ app.post('/api/admin/seed-all', async (req, res) => {
         res.json({
             success: true,
             message: 'Seeder maestro ejecutado exitosamente',
-            data: result
+            data: result,
         });
     }
     catch (error) {
         console.error('❌ Error ejecutando seeder maestro:', error);
         res.status(500).json({
             error: 'Error ejecutando seeder maestro',
-            message: error instanceof Error ? error.message : 'Error desconocido'
+            message: error instanceof Error ? error.message : 'Error desconocido',
         });
     }
 });
@@ -234,14 +238,14 @@ app.post('/api/admin/seed-processes', async (req, res) => {
         res.json({
             success: true,
             message: 'Seeder de procesos ejecutado exitosamente',
-            data: result
+            data: result,
         });
     }
     catch (error) {
         console.error('❌ Error ejecutando seeder:', error);
         res.status(500).json({
             error: 'Error ejecutando seeder',
-            message: error instanceof Error ? error.message : 'Error desconocido'
+            message: error instanceof Error ? error.message : 'Error desconocido',
         });
     }
 });
@@ -253,14 +257,14 @@ app.delete('/api/admin/clear-all', async (req, res) => {
         res.json({
             success: true,
             message: 'Todos los datos han sido limpiados',
-            data: result
+            data: result,
         });
     }
     catch (error) {
         console.error('❌ Error limpiando datos:', error);
         res.status(500).json({
             error: 'Error limpiando datos',
-            message: error instanceof Error ? error.message : 'Error desconocido'
+            message: error instanceof Error ? error.message : 'Error desconocido',
         });
     }
 });
@@ -274,7 +278,7 @@ app.post('/api/admin/cleanup-collections', async (req, res) => {
                 console.error('❌ Error ejecutando limpieza:', error);
                 res.status(500).json({
                     error: 'Error ejecutando limpieza',
-                    message: error.message
+                    message: error.message,
                 });
                 return;
             }
@@ -282,7 +286,7 @@ app.post('/api/admin/cleanup-collections', async (req, res) => {
             res.json({
                 success: true,
                 message: 'Limpieza ejecutada exitosamente',
-                output: stdout
+                output: stdout,
             });
         });
     }
@@ -290,7 +294,7 @@ app.post('/api/admin/cleanup-collections', async (req, res) => {
         console.error('❌ Error ejecutando limpieza:', error);
         res.status(500).json({
             error: 'Error ejecutando limpieza',
-            message: error instanceof Error ? error.message : 'Error desconocido'
+            message: error instanceof Error ? error.message : 'Error desconocido',
         });
     }
 });
@@ -298,16 +302,14 @@ app.use('*', (req, res) => {
     res.status(404).json({
         error: 'Ruta no encontrada',
         path: req.originalUrl,
-        method: req.method
+        method: req.method,
     });
 });
 app.use((err, _req, res, _next) => {
     console.error('Error:', err);
     res.status(err.status || 500).json({
-        error: process.env.NODE_ENV === 'production'
-            ? 'Error interno del servidor'
-            : err.message,
-        ...(process.env.NODE_ENV !== 'production' && { stack: err.stack })
+        error: process.env.NODE_ENV === 'production' ? 'Error interno del servidor' : err.message,
+        ...(process.env.NODE_ENV !== 'production' && { stack: err.stack }),
     });
 });
 async function startServer() {

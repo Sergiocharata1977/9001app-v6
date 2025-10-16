@@ -23,7 +23,7 @@ const ProcessDefinitionValidationSchema = BaseValidationSchema.extend({
   
   version: z.string()
     .default("1.0")
-    .regex(/^\d+\.\d+$/, "La versión debe tener formato X.Y"),
+    .pattern(/^\d+\.\d+$/, "La versión debe tener formato X.Y"),
   
   objetivo: z.string()
     .max(500, "El objetivo no puede exceder 500 caracteres")
@@ -201,10 +201,7 @@ class ProcessDefinitionControllerV2 extends BaseController {
       }
 
       // Crear copia
-      const processData = originalProcess.toObject();
-      delete processData._id;
-      delete processData.created_at;
-      delete processData.updated_at;
+      const { _id, created_at, updated_at, ...processData } = originalProcess.toObject();
 
       processData.id = nuevo_id;
       processData.name = nuevo_nombre;

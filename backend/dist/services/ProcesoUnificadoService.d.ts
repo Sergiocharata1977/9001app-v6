@@ -9,9 +9,9 @@ declare class ProcesoUnificadoService {
         };
         registros: any[];
         estadisticas: any;
-        etapas_configuradas: any;
+        etapas_configuradas: never[];
     }>;
-    actualizarConfiguracionEtapas(processId: string, organizationId: string, etapas: any[], userId: string): Promise<any>;
+    actualizarConfiguracionEtapas(processId: string, organizationId: string, etapas: any[], userId: string): Promise<never[]>;
     togglePermiteRegistros(processId: string, organizationId: string, permite: boolean, userId: string): Promise<any>;
     getEstadisticasRegistros(processId: string, organizationId: string): Promise<any>;
     private validarConfiguracionEtapas;

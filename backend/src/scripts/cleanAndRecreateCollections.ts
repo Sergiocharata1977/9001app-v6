@@ -16,7 +16,7 @@ import { QualityIndicator } from '../models/QualityIndicator';
 import { Measurement } from '../models/Measurement';
 import { NormPoint } from '../models/NormPoint';
 import { Proceso } from '../models/PROCESO';
-import { ProcessRecord } from '../models/REGISTRO_PROCESO';
+import { ProcessRecord } from '../models/ProcessRecord';
 
 // Importar modelos basados en Turso
 import { Documentos } from '../models/documentos';
@@ -27,7 +27,7 @@ import { Departamentos } from '../models/departamentos';
 import { Competencias } from '../models/competencias';
 import { Encuestas } from '../models/encuestas';
 import { Minutas } from '../models/minutas';
-import { LimitesUso } from '../models/limites_uso';
+import { Limites_uso } from '../models/limites_uso';
 
 // Lista de todas las colecciones a limpiar
 const collectionsToClean = [
@@ -83,14 +83,14 @@ const collectionsToClean = [
 async function cleanCollections() {
   try {
     console.log('🔌 Conectando a MongoDB...');
-    await mongoose.connect(config.mongoUri);
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/9001app');
     console.log('✅ Conectado a MongoDB');
 
     console.log('🧹 Limpiando colecciones...');
     
     for (const collectionName of collectionsToClean) {
       try {
-        const collection = mongoose.connection.db.collection(collectionName);
+        const collection = mongoose.connection.db?.collection(collectionName);
         const count = await collection.countDocuments();
         
         if (count > 0) {
@@ -100,7 +100,7 @@ async function cleanCollections() {
           console.log(`ℹ️  Colección '${collectionName}' ya estaba vacía`);
         }
       } catch (error) {
-        console.log(`⚠️  Error al limpiar '${collectionName}':`, error.message);
+        console.log(`⚠️  Error al limpiar '${collectionName}':`, (error as Error).message);
       }
     }
 

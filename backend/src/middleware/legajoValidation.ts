@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { ICreateLegajoDTO, IFiscalYear, IUpdateLegajoDTO } from '../types/legajo.types';
+// import { ICreateLegajoDTO, IFiscalYear, IUpdateLegajoDTO } from '../types/legajo.types'; // TODO: Implementar tipos Legajo
 
 /**
  * MIDDLEWARE DE VALIDACIÓN PARA LEGAJOS

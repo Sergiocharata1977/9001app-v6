@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { qualityIndicatorController } from '../controllers/QualityIndicatorController';
+import { qualityIndicatorController } from '../controllers/qualityIndicatorController';
 import { multiTenantSecurity, managerOrAdmin } from '../middleware/multiTenantMiddleware';
 
 const router = Router();

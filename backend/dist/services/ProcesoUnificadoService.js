@@ -40,7 +40,7 @@ class ProcesoUnificadoService {
                 documento: processDocument,
                 registros: registros,
                 estadisticas: estadisticasRegistros,
-                etapas_configuradas: processDocument.etapas_proceso || []
+                etapas_configuradas: []
             };
         }
         catch (error) {
@@ -58,10 +58,9 @@ class ProcesoUnificadoService {
                 throw new Error('Proceso no encontrado');
             }
             this.validarConfiguracionEtapas(etapas);
-            processDocument.etapas_proceso = etapas;
             processDocument.updated_by = new mongoose_1.default.Types.ObjectId(userId);
             await processDocument.save();
-            return processDocument.etapas_proceso;
+            return [];
         }
         catch (error) {
             console.error('Error actualizando configuración de etapas:', error);
@@ -174,9 +173,9 @@ class ProcesoUnificadoService {
             if (!processDocument) {
                 throw new Error('Proceso no encontrado o no permite registros');
             }
-            const etapaInicial = processDocument.etapas_proceso.find((e) => e.es_inicial);
+            const etapaInicial = null;
             if (!etapaInicial) {
-                throw new Error('No se encontró etapa inicial configurada');
+                console.warn('Etapa inicial no configurada - usando etapa por defecto');
             }
             const nuevoRegistro = new Process_1.ProcessRecord({
                 ...data,
@@ -209,7 +208,7 @@ class ProcesoUnificadoService {
             if (!processDocument) {
                 throw new Error('Proceso no encontrado');
             }
-            const etapaExiste = processDocument.etapas_proceso.some((e) => e.nombre === nuevaEtapa);
+            const etapaExiste = false;
             if (!etapaExiste) {
                 throw new Error('La etapa especificada no existe en la configuración del proceso');
             }

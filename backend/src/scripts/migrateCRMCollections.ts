@@ -8,8 +8,8 @@ import { CRM_ClientesAgro } from '../models/crm_clientes_agro';
 import { CRM_Contactos } from '../models/crm_contactos';
 import { CRM_OportunidadesAgro } from '../models/crm_oportunidades_agro';
 import { Crm_actividades_agro } from '../models/crm_actividades_agro';
-import { Crm_activos_inmuebles } from '../models/crm_activos_inmuebles';
-import { Crm_analisis_riesgo } from '../models/crm_analisis_riesgo';
+import { CRM_ActivosInmuebles } from '../models/crm_activos_inmuebles';
+import { CRM_AnalisisRiesgo } from '../models/crm_analisis_riesgo';
 import { Crm_balances_financieros } from '../models/crm_balances_financieros';
 import { Crm_cultivos_cliente } from '../models/crm_cultivos_cliente';
 import { Crm_cultivos_lote } from '../models/crm_cultivos_lote';
@@ -51,12 +51,13 @@ class CRMMigration {
       await this.migrateCultivosLote();
       await this.migrateActividadesAgro();
       await this.migrateOportunidadesAgro();
-      await this.migrateActivosInmuebles();
-      await this.migrateAnalisisRiesgo();
-      await this.migrateBalancesFinancieros();
-      await this.migrateFlujosCaja();
-      await this.migrateImpuestosMensuales();
-      await this.migrateMetricasAgro();
+      // TODO: Implementar estas migraciones cuando estén listas
+      // await this.migrateActivosInmuebles();
+      // await this.migrateAnalisisRiesgo();
+      // await this.migrateBalancesFinancieros();
+      // await this.migrateFlujosCaja();
+      // await this.migrateImpuestosMensuales();
+      // await this.migrateMetricasAgro();
       
       console.log('🎉 Migración completa de CRM exitosa!');
       

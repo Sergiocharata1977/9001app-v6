@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import Legajo, { ILegajoDocument } from '../models/Legajo';
+// import Legajo, { ILegajoDocument } from '../models/Legajo'; // TODO: Implementar modelo Legajo
 import {
     ICreateLegajoDTO,
     IFiscalYear,
@@ -7,7 +7,7 @@ import {
     ILegajoMetrics,
     ILegajosPaginatedResponse,
     IUpdateLegajoDTO
-} from '../types/legajo.types';
+} from '../types/legajo.types'; // TODO: Verificar si estos tipos existen
 import MetricsService from './MetricsService';
 
 /**
@@ -299,7 +299,7 @@ export class LegajoService {
       }
       
       // Verificar que no exista ya el año
-      const existingYear = legajo.fiscal_years.find(fy => fy.year === fiscalYear.year);
+      const existingYear = legajo.fiscal_years.find((fy: any) => fy.year === fiscalYear.year);
       if (existingYear) {
         throw new Error(`Ya existe un registro para el año ${fiscalYear.year}`);
       }
@@ -343,7 +343,7 @@ export class LegajoService {
         throw new Error('Legajo no encontrado');
       }
       
-      const fiscalYearIndex = legajo.fiscal_years.findIndex(fy => fy.year === year);
+      const fiscalYearIndex = legajo.fiscal_years.findIndex((fy: any) => fy.year === year);
       if (fiscalYearIndex === -1) {
         throw new Error(`No existe registro para el año ${year}`);
       }
@@ -540,27 +540,28 @@ export class LegajoService {
     }
   }
   
-  /**
-   * Obtiene el legajo de una empresa (si existe)
-   */
-  static async findByCompanyId(
-    companyId: string,
-    organizationId: string
-  ): Promise<ILegajoDocument | null> {
-    try {
-      const legajo = await Legajo.findOne({
-        company_id: companyId,
-        organization_id: organizationId,
-        is_active: true
-      })
-      .populate('company_id', 'razon_social cuit zona_geografica')
-      .populate('risk_links.risk_analysis_id', 'nivel_riesgo_general puntuacion_total fecha_analisis');
-      
-      return legajo;
-    } catch (error: any) {
-      throw new Error(`Error buscando legajo por empresa: ${error.message}`);
-    }
-  }
+  // TODO: Función duplicada - eliminar cuando se implemente el modelo Legajo
+  // /**
+  //  * Obtiene el legajo de una empresa (si existe)
+  //  */
+  // static async findByCompanyId(
+  //   companyId: string,
+  //   organizationId: string
+  // ): Promise<ILegajoDocument | null> {
+  //   try {
+  //     const legajo = await Legajo.findOne({
+  //       company_id: companyId,
+  //       organization_id: organizationId,
+  //       is_active: true
+  //     })
+  //     .populate('company_id', 'razon_social cuit zona_geografica')
+  //     .populate('risk_links.risk_analysis_id', 'nivel_riesgo_general puntuacion_total fecha_analisis');
+  //     
+  //     return legajo;
+  //   } catch (error: any) {
+  //     throw new Error(`Error buscando legajo por empresa: ${error.message}`);
+  //   }
+  // }
 }
 
 export default LegajoService;

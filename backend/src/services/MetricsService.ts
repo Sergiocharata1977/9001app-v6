@@ -5,7 +5,7 @@ import {
     IIncomeStatement,
     IMetricsCalculationOptions,
     IMetricsCalculationResult
-} from '../types/legajo.types';
+} from '../types/legajo.types'; // TODO: Verificar si estos tipos existen
 
 /**
  * SERVICIO DE CÁLCULO DE MÉTRICAS FINANCIERAS
@@ -551,7 +551,7 @@ export class MetricsService {
       ]
     };
     
-    const tabla = interpretaciones[ratioName];
+    const tabla = interpretaciones[ratioName as keyof typeof interpretaciones];
     if (!tabla) return 'regular';
     
     // Buscar nivel correspondiente

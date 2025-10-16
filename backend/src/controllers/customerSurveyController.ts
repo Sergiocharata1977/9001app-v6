@@ -213,7 +213,7 @@ export const submitAnnualSurvey = async (req: Request, res: Response) => {
 async function autoGenerateFindingsFromSurvey(survey: IEncuestaCliente, organization_id: string) {
   try {
     const traceabilityService = new TraceabilityService(organization_id);
-    const findingNumber = await traceabilityService.generateFindingNumber('customer', survey.customerId);
+    const findingNumber = await traceabilityService.generateFindingNumber('customer', survey.clienteId);
 
     let title = 'Hallazgo de encuesta de cliente';
     let description = '';

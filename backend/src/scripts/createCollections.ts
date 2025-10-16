@@ -11,8 +11,8 @@ import { Suscripciones } from '../models/Suscripciones';
 import { UserFeaturePermissions } from '../models/user_feature_permissions';
 
 // Importar modelos RRHH
-import { RRHH_Capacitaciones } from '../models/rrhh_capacitaciones';
-import { RRHH_Competencias } from '../models/rrhh_competencias';
+import { RRHH_Capacitaciones } from '../models/RRHH_Capacitaciones';
+import { RRHH_Competencias } from '../models/RRHH_Competencias';
 import { RRHH_EvaluacionesIndividuales } from '../models/rrhh_evaluaciones_individuales';
 import { RRHH_EvaluacionProgramacion } from '../models/rrhh_evaluacion_programacion';
 import { RRHH_TemasCapacitacion } from '../models/rrhh_temas_capacitacion';
