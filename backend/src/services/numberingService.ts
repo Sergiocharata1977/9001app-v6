@@ -83,14 +83,14 @@ export class NumberingService {
     // Buscar el último hallazgo para este origen
     const lastFinding = await Hallazgos.findOne({
       organization_id: organizationId,
-      source: source,
-      sourceId: sourceId,
-      findingNumber: { $regex: `^${sourcePrefix}-${sourceNumber}-HALL` }
-    }).sort({ findingNumber: -1 });
+      origen: source,
+      origenId: sourceId,
+      numeroHallazgo: { $regex: `^${sourcePrefix}-${sourceNumber}-HALL` }
+    }).sort({ numeroHallazgo: -1 });
     
     let sequence = 1;
     if (lastFinding) {
-      const parts = lastFinding.findingNumber.split('-');
+      const parts = lastFinding.numeroHallazgo.split('-');
       const lastSequence = parts[parts.length - 1];
       sequence = parseInt(lastSequence) + 1;
     }
@@ -121,18 +121,18 @@ export class NumberingService {
     // Buscar la última acción para este hallazgo
     const lastAction = await Acciones.findOne({
       organization_id: organizationId,
-      hallazgo_id: findingId,
-      codigo: { $regex: `^${finding.findingNumber}-ACC` }
-    }).sort({ codigo: -1 });
+      hallazgoId: findingId,
+      numeroAccion: { $regex: `^${finding.numeroHallazgo}-ACC` }
+    }).sort({ numeroAccion: -1 });
     
     let sequence = 1;
     if (lastAction) {
-      const parts = lastAction.codigo.split('-');
+      const parts = lastAction.numeroAccion.split('-');
       const lastSequence = parts[parts.length - 1];
       sequence = parseInt(lastSequence) + 1;
     }
     
-    return `${finding.findingNumber}-ACC-${sequence.toString().padStart(3, '0')}`;
+    return `${finding.numeroHallazgo}-ACC-${sequence.toString().padStart(3, '0')}`;
   }
 
   /**
@@ -160,14 +160,14 @@ export class NumberingService {
       case 'finding':
         exists = !!(await Hallazgos.findOne({ 
           organization_id: organizationId, 
-          findingNumber: number 
+          numeroHallazgo: number 
         }));
         break;
         
       case 'action':
         exists = !!(await Acciones.findOne({ 
           organization_id: organizationId, 
-          codigo: number 
+          numeroAccion: number 
         }));
         break;
     }
