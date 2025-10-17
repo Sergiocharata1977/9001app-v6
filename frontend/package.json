@@ -8,13 +8,17 @@
     "build:linux": "node scripts/prebuild-linux.js && next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "check-case": "node scripts/check-case-sensitivity.js",
+    "precommit": "npm run typecheck && npm run check-case",
     "clean": "rm -rf .next node_modules/.cache",
     "rebuild": "npm run clean && npm install --legacy-peer-deps && npm run build",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
-    "test:report": "playwright show-report"
+    "test:report": "playwright show-report",
+    "prepare": "cd .. && husky install frontend/.husky"
   },
   "dependencies": {
     "@atlaskit/pragmatic-drag-and-drop": "^1.7.7",
@@ -53,6 +57,8 @@
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
+    "glob": "^10.3.10",
+    "husky": "^9.0.11",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
