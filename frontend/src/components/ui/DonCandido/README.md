@@ -8,7 +8,7 @@ Sistema de animaciones interactivas para Don Candido, el asistente virtual del s
 Componente base para mostrar animaciones de Don Candido.
 
 ```tsx
-import { DonCandidoAnimation } from '@/components/ui/DonCandidoAnimation';
+import { DonCandidoAnimation } from '@/components/ui/don-candido-animation';
 
 <DonCandidoAnimation
   animationType="saludo"
@@ -40,7 +40,7 @@ import { DonCandidoChat } from '@/components/chat/DonCandidoChat';
 Botón para activar animaciones de Don Candido.
 
 ```tsx
-import { DonCandidoButton } from '@/components/ui/DonCandidoButton';
+import { DonCandidoButton } from '@/components/ui/don-candido-button';
 
 <DonCandidoButton
   action="welcome"
@@ -123,7 +123,7 @@ export default function MiPagina() {
 
 ### En un componente
 ```tsx
-import { DonCandidoButton } from '@/components/ui/DonCandidoButton';
+import { DonCandidoButton } from '@/components/ui/don-candido-button';
 
 export default function MiComponente() {
   return (
@@ -138,7 +138,7 @@ export default function MiComponente() {
 
 ### Botón flotante
 ```tsx
-import { DonCandidoFloatingButton } from '@/components/ui/DonCandidoButton';
+import { DonCandidoFloatingButton } from '@/components/ui/don-candido-button';
 
 export default function Layout() {
   return (
