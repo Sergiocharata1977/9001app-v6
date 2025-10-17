@@ -5,7 +5,7 @@ import {
     EliminarOportunidadModal,
     NuevaOportunidadModal
 } from '@/components/crm/modals';
-import { UnifiedKanbanBoard } from '@/components/ui/unified-kanban-board';
+import { UnifiedKanbanBoard } from '@/components/ui/UnifiedKanbanBoard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';

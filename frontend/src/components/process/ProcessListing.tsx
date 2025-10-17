@@ -8,9 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { processUnifiedService, ProcessUnified } from '@/services/processUnifiedService';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { ErrorMessage } from '@/components/ui/error-message';
-import { NotFoundMessage } from '@/components/ui/not-found-message';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { ErrorMessage } from '@/components/ui/ErrorMessage';
+import { NotFoundMessage } from '@/components/ui/NotFoundMessage';
 import { ProcessModal } from '@/components/ProcessModal';
 import { Plus, Search, RefreshCw } from 'lucide-react';
 

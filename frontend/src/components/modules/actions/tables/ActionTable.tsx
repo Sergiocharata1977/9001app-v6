@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../../ui/card';
 import { Badge } from '../../../ui/badge';
 import { Button } from '../../../ui/button';
 import { Input } from '../../../ui/input';
-import UnifiedKanban from '../../../ui/UnifiedKanban';
+import UnifiedKanban from '../../../ui/unified-kanban';
 import type { KanbanColumn, KanbanItem } from '../../../types/unified-kanban';
 import { 
   Calendar, 

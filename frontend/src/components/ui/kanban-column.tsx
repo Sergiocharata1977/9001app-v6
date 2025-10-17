@@ -6,8 +6,8 @@ import { cn } from '@/lib/utils';
 import { Plus, MoreHorizontal } from 'lucide-react';
 import { Button } from './button';
 import { Badge } from './badge';
-import { Dropdown } from './Dropdown';
-import { KanbanCard } from './KanbanCard';
+import { Dropdown } from './dropdown';
+import { KanbanCard } from './kanban-card';
 import { useKanbanDrop } from '@/hooks/useKanbanDrop';
 import type { KanbanColumnProps } from '@/types/unified-kanban';
 

@@ -1,3 +1,4 @@
+// Este archivo será renombrado a modal.tsx
 import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
 import { Button } from './button';

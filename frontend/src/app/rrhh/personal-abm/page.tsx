@@ -1,6 +1,6 @@
 'use client';
 
-import PersonalForm from '@/components/RRHH/PersonalForm';
+import PersonalForm from '@/components/rrhh/PersonalForm';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
