@@ -65,7 +65,7 @@ const mockTasks: KanbanItem[] = [
     title: 'Revisar procedimiento actual',
     description: 'Revisar el procedimiento de recepción actual y identificar brechas',
     columnId: 'pendiente',
-    priority: 'Alta',
+    priority: 'high',
     assignee: 'Juan Pérez',
     dueDate: '2024-02-01',
     tags: ['Revisión', 'Procedimiento']
@@ -75,7 +75,7 @@ const mockTasks: KanbanItem[] = [
     title: 'Identificar requisitos ISO 9001',
     description: 'Identificar todos los requisitos de ISO 9001:2015 aplicables',
     columnId: 'en-progreso',
-    priority: 'Media',
+    priority: 'medium',
     assignee: 'María García',
     dueDate: '2024-02-05',
     tags: ['ISO 9001', 'Requisitos']
@@ -85,7 +85,7 @@ const mockTasks: KanbanItem[] = [
     title: 'Redactar nuevo procedimiento',
     description: 'Redactar el nuevo procedimiento según los requisitos identificados',
     columnId: 'pendiente',
-    priority: 'Alta',
+    priority: 'high',
     assignee: 'Carlos López',
     dueDate: '2024-02-10',
     tags: ['Redacción', 'Procedimiento']
@@ -95,7 +95,7 @@ const mockTasks: KanbanItem[] = [
     title: 'Revisar y aprobar',
     description: 'Revisar el procedimiento y obtener la aprobación del responsable',
     columnId: 'revision',
-    priority: 'Media',
+    priority: 'medium',
     assignee: 'Ana Martínez',
     dueDate: '2024-02-12',
     tags: ['Revisión', 'Aprobación']
@@ -105,7 +105,7 @@ const mockTasks: KanbanItem[] = [
     title: 'Implementar procedimiento',
     description: 'Implementar el nuevo procedimiento en el área de trabajo',
     columnId: 'pendiente',
-    priority: 'Alta',
+    priority: 'high',
     assignee: 'Juan Pérez',
     dueDate: '2024-02-15',
     tags: ['Implementación', 'Procedimiento']
