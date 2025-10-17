@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { KanbanColumn } from './kanban-column';
-import { LoadingSpinner } from './loading-spinner';
-import { ErrorMessage } from './error-message';
+import { KanbanColumn } from './KanbanColumn';
+import { LoadingSpinner } from './LoadingSpinner';
+import { ErrorMessage } from './ErrorMessage';
 import { EmptyState } from './empty-state';
 import type {
   UnifiedKanbanProps,
