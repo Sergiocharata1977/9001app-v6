@@ -222,7 +222,7 @@ export default function AccionAuditorKanbanPage() {
           </div>
           <div className="flex items-center gap-1">
             <Calendar className="h-3 w-3" />
-            <span>{new Date(task.dueDate).toLocaleDateString()}</span>
+            <span>{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Sin fecha'}</span>
           </div>
         </div>
       </Card>
