@@ -130,7 +130,7 @@ export default function AccionAuditorKanbanPage() {
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
 
   // Función para mover tareas entre columnas
-  const handleItemMove = (itemId: string, sourceColumnId: string, targetColumnId: string, index: number) => {
+  const handleItemMove = (itemId: string, sourceColumnId: string, targetColumnId: string, index?: number) => {
     setTasks(prevTasks => 
       prevTasks.map(task => 
         task.id === itemId 
