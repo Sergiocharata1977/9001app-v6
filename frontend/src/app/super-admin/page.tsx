@@ -8,7 +8,7 @@ import { SuperAdminSidebar } from '@/components/super-admin/SuperAdminSidebar';
 import { SuperAdminStats } from '@/components/super-admin/SuperAdminStats';
 import { SystemLogs } from '@/components/super-admin/SystemLogs';
 import { Card, CardContent } from '@/components/ui/card';
-import { LogoutButton } from '@/components/ui/LogoutButton';
+import { LogoutButton } from '@/components/ui/logout-button';
 import { MODULE_CONFIG, getEnabledModules } from '@/config/modules';
 import { getCurrentUser } from '@/lib/auth-simple';
 import { useEffect, useState } from 'react';

@@ -3,7 +3,7 @@
 import { ArrowRight, Award, CheckCircle, Clock, FileText, LogIn, MessageSquare, Shield, Sparkles, Star, TrendingUp, Users, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-// import { DonCandidoAnimation } from '@/components/ui/DonCandidoAnimation'; // Comentado para mejor rendimiento
+// import { DonCandidoAnimation } from '@/components/ui/don-candido-animation'; // Comentado para mejor rendimiento
 
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
