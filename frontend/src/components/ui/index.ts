@@ -33,25 +33,23 @@ export {
 } from './dropdown-menu'
 
 // Componentes personalizados existentes
-export { Modal } from './Modal';
-export { LoadingSpinner } from './LoadingSpinner';
-export { ErrorMessage } from './ErrorMessage';
+export { Modal } from './modal';
+export { LoadingSpinner } from './loading-spinner';
+export { ErrorMessage } from './error-message';
 export { EmptyState, EmptyProcesses, EmptyRecords } from './empty-state';
-export { NotFoundMessage } from './NotFoundMessage';
-export { DataTable } from './DataTable';
-export { Dropdown } from './Dropdown';
-export { ViewToggle } from './ViewToggle';
-export { Logo } from './Logo';
-export { LogoutButton } from './LogoutButton';
+export { NotFoundMessage } from './not-found-message';
+export { DataTable } from './data-table';
+export { Dropdown } from './dropdown';
+export { ViewToggle } from './view-toggle';
 
 // Componentes Kanban
-export { KanbanCard } from './KanbanCard';
-export { KanbanColumn } from './KanbanColumn';
-export { ProcessBoardCard } from './ProcessBoardCard';
-export { TrelloCard } from './TrelloCard';
-export { UnifiedKanbanBoard } from './UnifiedKanbanBoard';
-export { default as UnifiedKanban } from './UnifiedKanban';
+export { KanbanCard } from './kanban-card';
+export { KanbanColumn } from './kanban-column';
+export { ProcessBoardCard } from './process-board-card';
+export { TrelloCard } from './trello-card';
+export { UnifiedKanbanBoard } from './unified-kanban-board';
+export { default as UnifiedKanban } from './unified-kanban';
 
 // Componentes Don Candido
-export { DonCandidoAnimation, useDonCandido } from './DonCandidoAnimation';
-export { DonCandidoButton, DonCandidoFloatingButton } from './DonCandidoButton';
+export { DonCandidoAnimation, useDonCandido } from './don-candido-animation';
+export { DonCandidoButton, DonCandidoFloatingButton } from './don-candido-button';
