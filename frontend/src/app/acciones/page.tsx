@@ -8,8 +8,34 @@ import {
     Target
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Action } from '../../../shared-types/entities/Action';
 import { ActionFormV2 } from '../../components/modules/actions/forms/ActionFormV2';
+
+// Tipo para Acciones (Correctivas/Preventivas)
+interface Action {
+  id: string;
+  actionNumber: string;
+  findingId: string;
+  title: string;
+  description: string;
+  type: 'correctiva' | 'preventiva' | 'mejora';
+  status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  assignedTo: string;
+  assignedToId: string;
+  dueDate: string;
+  createdAt: string;
+  updatedAt: string;
+  progress: number;
+  estimatedHours?: number;
+  actualHours?: number;
+  estimatedCost?: number;
+  actualCost?: number;
+  implementationSteps?: Array<{ step: string; completed: boolean }>;
+  verificationMethods?: string[];
+  rootCauseAnalysis?: string;
+  preventiveActions?: string[];
+  organizationId: string;
+}
 import ActionTable from '../../components/modules/actions/tables/ActionTable';
 import { Modal } from '../../components/ui/modal';
 import { Badge } from '../../components/ui/badge';
