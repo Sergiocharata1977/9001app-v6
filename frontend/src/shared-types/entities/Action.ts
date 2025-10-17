@@ -23,8 +23,10 @@ export type ActionCategory =
 export type ActionPriority = 'low' | 'medium' | 'high' | 'critical';
 
 export interface ImplementationStep {
-  title: string;
+  step?: string;  // Título del paso (alternativo)
+  title?: string; // Título del paso
   description?: string;
+  completed?: boolean; // Estado de completado
   responsibleId?: string;
   deadline?: string; // ISO string
   status?: 'pending' | 'in_progress' | 'completed';
