@@ -7,6 +7,16 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   
+  // Configuración de webpack para case sensitivity
+  webpack: (config, { isServer }) => {
+    // Solo en desarrollo, para detectar problemas de case sensitivity
+    if (process.env.NODE_ENV === 'development') {
+      const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+      config.plugins.push(new CaseSensitivePathsPlugin());
+    }
+    return config;
+  },
+  
   // Optimizaciones de producción
   compress: true,
   swcMinify: true,

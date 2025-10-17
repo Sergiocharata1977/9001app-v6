@@ -208,7 +208,7 @@ export default function AccionAuditorKanbanPage() {
         <p className="text-xs text-gray-600 mb-3 line-clamp-2">{task.description}</p>
         
         <div className="flex flex-wrap gap-1 mb-3">
-          {task.tags.map((tag, index) => (
+          {task.tags?.map((tag, index) => (
             <Badge key={index} variant="outline" className="text-xs">
               {tag}
             </Badge>
