@@ -143,15 +143,48 @@ fi
 echo ""
 
 # =============================================
-# 9. Ejecutar validación pre-build
+# 9. Análisis TypeScript completo
 # =============================================
 echo "============================================="
-echo "9️⃣  EJECUTANDO VALIDACIÓN PRE-BUILD..."
+echo "9️⃣  ANÁLISIS TYPESCRIPT (STRICT MODE)..."
 echo "============================================="
-if [ -f "scripts/prebuild-linux.js" ]; then
-    node scripts/prebuild-linux.js || echo -e "${YELLOW}⚠️  Advertencias encontradas, continuando...${NC}"
+
+# Crear directorio de reportes
+mkdir -p ../reports
+
+# Ejecutar TypeScript compiler en modo check
+echo "🔍 Verificando tipos estrictos..."
+npx tsc --noEmit --pretty > ../reports/ts-errors-full.txt 2>&1 || true
+
+# Contar errores
+TS_ERRORS=$(grep -c "error TS" ../reports/ts-errors-full.txt 2>/dev/null || echo "0")
+
+if [ "$TS_ERRORS" -gt 0 ]; then
+    echo -e "${YELLOW}⚠️  Se encontraron $TS_ERRORS errores de TypeScript${NC}"
+    
+    # Extraer solo errores de undefined/null
+    grep -E "undefined|possibly|cannot|may be" ../reports/ts-errors-full.txt > ../reports/ts-undefined-errors.txt 2>/dev/null || true
+    
+    UNDEFINED_ERRORS=$(wc -l < ../reports/ts-undefined-errors.txt 2>/dev/null || echo "0")
+    
+    if [ "$UNDEFINED_ERRORS" -gt 0 ]; then
+        echo -e "${YELLOW}   • $UNDEFINED_ERRORS relacionados con undefined/null${NC}"
+        echo ""
+        echo "🔍 Primeros 10 errores críticos:"
+        head -10 ../reports/ts-undefined-errors.txt
+        echo ""
+    fi
+    
+    echo -e "${BLUE}📄 Reporte completo en: reports/ts-errors-full.txt${NC}"
 else
-    echo -e "${YELLOW}⚠️  Script de validación no encontrado, omitiendo...${NC}"
+    echo -e "${GREEN}✅ TypeScript: Sin errores de tipos${NC}"
+fi
+
+# Ejecutar validación pre-build adicional
+if [ -f "scripts/prebuild-linux.js" ]; then
+    echo ""
+    echo "🔍 Ejecutando validaciones adicionales..."
+    node scripts/prebuild-linux.js || echo -e "${YELLOW}⚠️  Advertencias encontradas, continuando...${NC}"
 fi
 echo ""
 
@@ -165,11 +198,31 @@ echo ""
 
 # Ejecutar build con logs detallados
 if npm run build 2>&1 | tee ../build_log.txt; then
-    echo ""
-    echo "============================================="
-    echo -e "${GREEN}✅ ¡BUILD EXITOSO!${NC}"
-    echo "============================================="
-    BUILD_SUCCESS=true
+    # Verificar que realmente fue exitoso (no confiar solo en exit code)
+    if grep -q "Failed to compile" ../build_log.txt; then
+        echo ""
+        echo "============================================="
+        echo -e "${RED}❌ BUILD FALLÓ (TypeScript errors)${NC}"
+        echo "============================================="
+        
+        # Extraer el error específico
+        grep -A 10 "Type error:" ../build_log.txt | head -15
+        
+        echo ""
+        echo -e "${YELLOW}💡 Sugerencias:${NC}"
+        echo "   1. Revisa: reports/ts-errors-full.txt"
+        echo "   2. Corrige los errores de tipos"
+        echo "   3. Haz push a GitHub"
+        echo "   4. Vuelve a ejecutar este script"
+        echo ""
+        BUILD_SUCCESS=false
+    else
+        echo ""
+        echo "============================================="
+        echo -e "${GREEN}✅ ¡BUILD EXITOSO!${NC}"
+        echo "============================================="
+        BUILD_SUCCESS=true
+    fi
 else
     echo ""
     echo "============================================="
@@ -207,9 +260,11 @@ if [ "$BUILD_SUCCESS" = true ]; then
     echo "   pm2 logs --lines 50"
     echo ""
     echo "📁 Archivos de diagnóstico generados:"
-    echo "   - build_log.txt"
-    echo "   - case_conflicts.txt"
-    echo "   - amfe_check.txt"
+    echo "   - build_log.txt (log completo del build)"
+    echo "   - case_conflicts.txt (imports con case problems)"
+    echo "   - amfe_check.txt (status de AMFETable)"
+    echo "   - reports/ts-errors-full.txt (todos los errores TS)"
+    echo "   - reports/ts-undefined-errors.txt (solo undefined/null)"
     echo ""
 else
     echo ""
@@ -221,6 +276,8 @@ else
     echo "   - build_log.txt (log completo del build)"
     echo "   - case_conflicts.txt (imports problemáticos)"
     echo "   - amfe_check.txt (exports de AMFETable)"
+    echo "   - reports/ts-errors-full.txt (errores TypeScript)"
+    echo "   - reports/ts-undefined-errors.txt (problemas undefined)"
     echo ""
     echo "🔧 Acciones sugeridas:"
     echo "   1. Revisa los errores en build_log.txt"
