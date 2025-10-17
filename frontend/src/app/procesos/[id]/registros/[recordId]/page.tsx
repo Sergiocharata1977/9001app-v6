@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import ProcessRecordSingle from '@/components/process/ProcessRecordSingle';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Calendar, User, Clock, Paperclip, MessageCircle } from 'lucide-react';
 
 // Datos de prueba para el registro individual

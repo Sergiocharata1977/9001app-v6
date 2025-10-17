@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button } from '@/components/ui/Button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Plus, FileText, Calendar, User, Eye, Edit, Download } from 'lucide-react';
 
 export default function ProcesosDocumentosPage() {

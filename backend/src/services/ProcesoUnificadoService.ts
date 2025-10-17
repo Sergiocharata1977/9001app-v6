@@ -224,7 +224,7 @@ class ProcesoUnificadoService {
         ...data,
         process_definition_id: processId,
         organization_id: organizationId,
-        current_state: etapaInicial?.nombre || 'inicial', // TODO: Implementar etapas cuando esté definido
+        current_state: etapaInicial && etapaInicial.nombre ? etapaInicial.nombre : 'inicial', // TODO: Implementar etapas cuando esté definido
         created_by: userId,
         responsible_user_id: data.responsible_user_id || userId
       });

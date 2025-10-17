@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { DonCandidoAnimation } from '@/components/ui/DonCandidoAnimation';
+import { DonCandidoAnimation } from '@/components/ui/don-candido-animation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 

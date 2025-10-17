@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { UnifiedKanbanBoard } from '@/components/ui/UnifiedKanbanBoard';
-import { Card, CardContent } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
+import { UnifiedKanbanBoard } from '@/components/ui/unified-kanban-board';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Settings, Users, Calendar } from 'lucide-react';
 import type { KanbanColumn, KanbanItem } from '@/types/unified-kanban';
 

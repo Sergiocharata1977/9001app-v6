@@ -324,4 +324,4 @@ class QualityIndicatorController extends BaseController_1.BaseController {
     }
 }
 exports.qualityIndicatorController = new QualityIndicatorController();
-//# sourceMappingURL=QualityIndicatorController.js.map
+//# sourceMappingURL=qualityIndicatorController.js.map

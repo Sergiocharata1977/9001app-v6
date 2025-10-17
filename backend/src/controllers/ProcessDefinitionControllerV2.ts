@@ -23,7 +23,7 @@ const ProcessDefinitionValidationSchema = BaseValidationSchema.extend({
   
   version: z.string()
     .default("1.0")
-    .pattern(/^\d+\.\d+$/, "La versión debe tener formato X.Y"),
+    .regex(/^\d+\.\d+$/, "La versión debe tener formato X.Y"),
   
   objetivo: z.string()
     .max(500, "El objetivo no puede exceder 500 caracteres")

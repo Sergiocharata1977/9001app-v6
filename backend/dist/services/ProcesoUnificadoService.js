@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.procesoUnificadoService = void 0;
 const ProcessDocument_1 = require("../models/ProcessDocument");
-const Process_1 = require("../models/Process");
+const ProcessRecord_1 = require("../models/ProcessRecord");
 const mongoose_1 = __importDefault(require("mongoose"));
 class ProcesoUnificadoService {
     async getProcesoUnificado(processId, organizationId) {
@@ -24,8 +24,8 @@ class ProcesoUnificadoService {
                 throw new Error('Proceso no encontrado');
             }
             let registros = [];
-            if (processDocument.permite_registros) {
-                registros = await Process_1.ProcessRecord.find({
+            if (true) {
+                registros = await ProcessRecord_1.ProcessRecord.find({
                     process_definition_id: processId,
                     organization_id: organizationId,
                     is_active: true,
@@ -76,10 +76,9 @@ class ProcesoUnificadoService {
             if (!processDocument) {
                 throw new Error('Proceso no encontrado');
             }
-            processDocument.permite_registros = permite;
             processDocument.updated_by = new mongoose_1.default.Types.ObjectId(userId);
             await processDocument.save();
-            return processDocument.permite_registros;
+            return true;
         }
         catch (error) {
             console.error('Error cambiando configuración de registros:', error);
@@ -88,7 +87,7 @@ class ProcesoUnificadoService {
     }
     async getEstadisticasRegistros(processId, organizationId) {
         try {
-            const stats = await Process_1.ProcessRecord.aggregate([
+            const stats = await ProcessRecord_1.ProcessRecord.aggregate([
                 {
                     $match: {
                         process_definition_id: processId,
@@ -177,16 +176,16 @@ class ProcesoUnificadoService {
             if (!etapaInicial) {
                 console.warn('Etapa inicial no configurada - usando etapa por defecto');
             }
-            const nuevoRegistro = new Process_1.ProcessRecord({
+            const nuevoRegistro = new ProcessRecord_1.ProcessRecord({
                 ...data,
                 process_definition_id: processId,
                 organization_id: organizationId,
-                current_state: etapaInicial.nombre,
+                current_state: etapaInicial && etapaInicial.nombre ? etapaInicial.nombre : 'inicial',
                 created_by: userId,
                 responsible_user_id: data.responsible_user_id || userId
             });
             const registroGuardado = await nuevoRegistro.save();
-            return await Process_1.ProcessRecord.findById(registroGuardado._id)
+            return await ProcessRecord_1.ProcessRecord.findById(registroGuardado._id)
                 .populate('responsible_user_id', 'name email')
                 .populate('assigned_users', 'name email');
         }
@@ -197,7 +196,7 @@ class ProcesoUnificadoService {
     }
     async moverRegistroEntreEtapas(registroId, nuevaEtapa, organizationId, userId) {
         try {
-            const registro = await Process_1.ProcessRecord.findOne({
+            const registro = await ProcessRecord_1.ProcessRecord.findOne({
                 _id: registroId,
                 organization_id: organizationId
             });
@@ -225,7 +224,7 @@ class ProcesoUnificadoService {
                 registro.progress_percentage = 100;
             }
             await registro.save();
-            return await Process_1.ProcessRecord.findById(registro._id)
+            return await ProcessRecord_1.ProcessRecord.findById(registro._id)
                 .populate('responsible_user_id', 'name email')
                 .populate('assigned_users', 'name email');
         }

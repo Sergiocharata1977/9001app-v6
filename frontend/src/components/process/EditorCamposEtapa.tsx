@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/Badge';
+import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Plus, Trash2, Edit, Check, X } from 'lucide-react';
@@ -92,7 +92,10 @@ export default function EditorCamposEtapa({
 
             <Select
               value={nuevoCampo.tipo}
-              onValueChange={(value) => setNuevoCampo({ ...nuevoCampo, tipo: value as Campo['tipo'] })}
+              onChange={(e) => {
+                const value = e.target.value;
+                setNuevoCampo({ ...nuevoCampo, tipo: value as Campo['tipo'] });
+              }}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Tipo de campo" />

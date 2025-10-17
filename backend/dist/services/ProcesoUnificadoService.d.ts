@@ -12,11 +12,19 @@ declare class ProcesoUnificadoService {
         etapas_configuradas: never[];
     }>;
     actualizarConfiguracionEtapas(processId: string, organizationId: string, etapas: any[], userId: string): Promise<never[]>;
-    togglePermiteRegistros(processId: string, organizationId: string, permite: boolean, userId: string): Promise<any>;
+    togglePermiteRegistros(processId: string, organizationId: string, permite: boolean, userId: string): Promise<boolean>;
     getEstadisticasRegistros(processId: string, organizationId: string): Promise<any>;
     private validarConfiguracionEtapas;
-    crearRegistroEjecucion(processId: string, organizationId: string, data: any, userId: string): Promise<any>;
-    moverRegistroEntreEtapas(registroId: string, nuevaEtapa: string, organizationId: string, userId: string): Promise<any>;
+    crearRegistroEjecucion(processId: string, organizationId: string, data: any, userId: string): Promise<(mongoose.Document<unknown, {}, import("../models/ProcessRecord").IProcessRecord, {}, {}> & import("../models/ProcessRecord").IProcessRecord & Required<{
+        _id: mongoose.Types.ObjectId;
+    }> & {
+        __v: number;
+    }) | null>;
+    moverRegistroEntreEtapas(registroId: string, nuevaEtapa: string, organizationId: string, userId: string): Promise<(mongoose.Document<unknown, {}, import("../models/ProcessRecord").IProcessRecord, {}, {}> & import("../models/ProcessRecord").IProcessRecord & Required<{
+        _id: mongoose.Types.ObjectId;
+    }> & {
+        __v: number;
+    }) | null>;
 }
 export declare const procesoUnificadoService: ProcesoUnificadoService;
 export default procesoUnificadoService;

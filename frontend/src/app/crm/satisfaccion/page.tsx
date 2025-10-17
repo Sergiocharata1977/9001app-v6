@@ -311,185 +311,181 @@ export default function SatisfaccionPage() {
           Nueva Encuesta
         </Button>
       </div>
-    </div>
 
-      {/* Estadísticas */ }
-  <div className="grid gap-4 md:grid-cols-4">
-    <Card>
-      <CardContent className="p-6">
-        <div className="flex items-center gap-4">
-          <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
-            <MessageSquare className="h-6 w-6 text-blue-600" />
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">Total Encuestas</p>
-            <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-
-    <Card>
-      <CardContent className="p-6">
-        <div className="flex items-center gap-4">
-          <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
-            <CheckCircle className="h-6 w-6 text-green-600" />
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">Respondidas</p>
-            <p className="text-2xl font-bold text-gray-900">{stats.respondidas}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-
-    <Card>
-      <CardContent className="p-6">
-        <div className="flex items-center gap-4">
-          <div className="h-12 w-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-            <Clock className="h-6 w-6 text-yellow-600" />
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">Pendientes/Enviadas</p>
-            <p className="text-2xl font-bold text-gray-900">{stats.pendientes + stats.enviadas}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-
-    <Card>
-      <CardContent className="p-6">
-        <div className="flex items-center gap-4">
-          <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
-            <Star className="h-6 w-6 text-purple-600" />
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">Puntuación Promedio</p>
-            <p className="text-2xl font-bold text-gray-900">
-              {stats.puntuacionPromedio.toFixed(1)}/5
-            </p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  </div>
-
-  {/* Filtros */ }
-  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-    <div className="relative w-full md:w-64">
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-      <Input
-        placeholder="Buscar encuestas..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="pl-10"
-      />
-    </div>
-    <div className="flex items-center gap-2">
-      <Button
-        variant={filterEstado === 'todas' ? 'default' : 'outline'}
-        size="sm"
-        onClick={() => setFilterEstado('todas')}
-      >
-        Todas
-      </Button>
-      <Button
-        variant={filterEstado === 'respondida' ? 'default' : 'outline'}
-        size="sm"
-        onClick={() => setFilterEstado('respondida')}
-        className="bg-green-100 text-green-800 hover:bg-green-200 border-green-200"
-      >
-        Respondidas
-      </Button>
-      <Button
-        variant={filterEstado === 'enviada' ? 'default' : 'outline'}
-        size="sm"
-        onClick={() => setFilterEstado('enviada')}
-        className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-200"
-      >
-        Enviadas
-      </Button>
-      <Button
-        variant={filterEstado === 'pendiente' ? 'default' : 'outline'}
-        size="sm"
-        onClick={() => setFilterEstado('pendiente')}
-        className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-yellow-200"
-      >
-        Pendientes
-      </Button>
-    </div>
-  </div>
-
-  {/* Lista de Encuestas */ }
-  <div className="space-y-4">
-    {filteredEncuestas.length > 0 ? (
-      filteredEncuestas.map((encuesta) => (
-        <Card key={encuesta.id} className="hover:shadow-md transition-shadow">
+      {/* Estadísticas */}
+      <div className="grid gap-4 md:grid-cols-4">
+        <Card>
           <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-lg">{encuesta.titulo}</h3>
-                  <Badge className={getEstadoColor(encuesta.estado)}>
-                    {getEstadoLabel(encuesta.estado)}
-                  </Badge>
-                </div>
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                <MessageSquare className="h-6 w-6 text-blue-600" />
               </div>
-              <p className="text-sm text-gray-600">
-                Cliente: <span className="font-medium">{encuesta.cliente_nombre}</span>
-              </p>
-              <p className="text-sm text-gray-600">
-                Oportunidad: <span className="font-medium">{encuesta.oportunidad_titulo}</span>
-              </p>
-              <div className="flex items-center gap-4 text-sm text-gray-500">
-                <span>Creada: {encuesta.fecha_creacion}</span>
-                {encuesta.fecha_envio && <span>Enviada: {encuesta.fecha_envio}</span>}
-                {encuesta.fecha_respuesta && <span>Respondida: {encuesta.fecha_respuesta}</span>}
+              <div>
+                <p className="text-sm text-gray-600">Total Encuestas</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
               </div>
-              {encuesta.puntuacion_general && (
-                <div className="flex items-center gap-1">
-                  <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                  <span className="font-medium">{encuesta.puntuacion_general.toFixed(1)}/5</span>
-                </div>
-              )}
             </div>
-            <div className="flex items-center gap-2 self-end md:self-auto">
-              {encuesta.estado === 'pendiente' && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleEnviarEncuesta(encuesta.id)}
-                >
-                  <Send className="h-4 w-4 mr-2" />
-                  Enviar
-                </Button>
-              )}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleVerEncuesta(encuesta.id)}
-              >
-                <Eye className="h-4 w-4 mr-2" />
-                Ver Detalle
-              </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <CheckCircle className="h-6 w-6 text-green-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Respondidas</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.respondidas}</p>
+              </div>
             </div>
-          </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                <Clock className="h-6 w-6 text-yellow-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Pendientes/Enviadas</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.pendientes + stats.enviadas}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                <Star className="h-6 w-6 text-purple-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Puntuación Promedio</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.puntuacionPromedio.toFixed(1)}/5
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filtros */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="relative w-full md:w-64">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            placeholder="Buscar encuestas..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
         </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant={filterEstado === 'todas' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterEstado('todas')}
+          >
+            Todas
+          </Button>
+          <Button
+            variant={filterEstado === 'respondida' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterEstado('respondida')}
+            className="bg-green-100 text-green-800 hover:bg-green-200 border-green-200"
+          >
+            Respondidas
+          </Button>
+          <Button
+            variant={filterEstado === 'enviada' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterEstado('enviada')}
+            className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-200"
+          >
+            Enviadas
+          </Button>
+          <Button
+            variant={filterEstado === 'pendiente' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterEstado('pendiente')}
+            className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-yellow-200"
+          >
+            Pendientes
+          </Button>
+        </div>
+      </div>
+
+      {/* Lista de Encuestas */}
+      <div className="space-y-4">
+        {filteredEncuestas.length > 0 ? (
+          filteredEncuestas.map((encuesta) => (
+            <Card key={encuesta.id} className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-lg">{encuesta.titulo}</h3>
+                      <Badge className={getEstadoColor(encuesta.estado)}>
+                        {getEstadoLabel(encuesta.estado)}
+                      </Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Cliente: <span className="font-medium">{encuesta.cliente_nombre}</span>
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Oportunidad: <span className="font-medium">{encuesta.oportunidad_titulo}</span>
+                  </p>
+                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <span>Creada: {encuesta.fecha_creacion}</span>
+                    {encuesta.fecha_envio && <span>Enviada: {encuesta.fecha_envio}</span>}
+                    {encuesta.fecha_respuesta && <span>Respondida: {encuesta.fecha_respuesta}</span>}
+                  </div>
+                  {encuesta.puntuacion_general && (
+                    <div className="flex items-center gap-1">
+                      <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                      <span className="font-medium">{encuesta.puntuacion_general.toFixed(1)}/5</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 self-end md:self-auto">
+                  {encuesta.estado === 'pendiente' && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEnviarEncuesta(encuesta.id)}
+                    >
+                      <Send className="h-4 w-4 mr-2" />
+                      Enviar
+                    </Button>
+                  )}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleVerEncuesta(encuesta.id)}
+                  >
+                    <Eye className="h-4 w-4 mr-2" />
+                    Ver Detalle
+                  </Button>
+                </div>
               </CardContent>
-            </Card >
+            </Card>
           ))
         ) : (
-    <div className="text-center py-12 bg-gray-50 rounded-lg">
-      <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-      <h3 className="text-lg font-medium text-gray-900 mb-2">No se encontraron encuestas</h3>
-      <p className="text-gray-600 mb-4">No hay encuestas que coincidan con los filtros aplicados.</p>
-      <Button onClick={() => { setSearchTerm(''); setFilterEstado('todas'); }}>
-        Limpiar Filtros
-      </Button>
+          <div className="text-center py-12 bg-gray-50 rounded-lg">
+            <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No se encontraron encuestas</h3>
+            <p className="text-gray-600 mb-4">No hay encuestas que coincidan con los filtros aplicados.</p>
+            <Button onClick={() => { setSearchTerm(''); setFilterEstado('todas'); }}>
+              Limpiar Filtros
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
-  )
-}
-      </div >
-    </div >
   );
 }

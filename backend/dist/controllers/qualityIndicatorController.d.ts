@@ -12,4 +12,4 @@ declare class QualityIndicatorController extends BaseController {
 }
 export declare const qualityIndicatorController: QualityIndicatorController;
 export {};
-//# sourceMappingURL=QualityIndicatorController.d.ts.map
+//# sourceMappingURL=qualityIndicatorController.d.ts.map

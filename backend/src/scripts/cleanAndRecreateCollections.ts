@@ -91,13 +91,17 @@ async function cleanCollections() {
     for (const collectionName of collectionsToClean) {
       try {
         const collection = mongoose.connection.db?.collection(collectionName);
-        const count = await collection.countDocuments();
-        
-        if (count > 0) {
-          await collection.drop();
-          console.log(`🗑️  Colección '${collectionName}' eliminada (${count} documentos)`);
+        if (collection) {
+          const count = await collection.countDocuments();
+          
+          if (count > 0) {
+            await collection.drop();
+            console.log(`🗑️  Colección '${collectionName}' eliminada (${count} documentos)`);
+          } else {
+            console.log(`ℹ️  Colección '${collectionName}' ya estaba vacía`);
+          }
         } else {
-          console.log(`ℹ️  Colección '${collectionName}' ya estaba vacía`);
+          console.log(`⚠️  Colección '${collectionName}' no encontrada`);
         }
       } catch (error) {
         console.log(`⚠️  Error al limpiar '${collectionName}':`, (error as Error).message);

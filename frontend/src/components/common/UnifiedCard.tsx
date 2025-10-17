@@ -1,8 +1,8 @@
 'use client';
 
-import { Badge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
-import { Card, CardContent, CardFooter } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Eye, FileText, Pencil, Trash2 } from 'lucide-react';
 import React from 'react';
 

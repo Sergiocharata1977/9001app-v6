@@ -3,7 +3,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/Badge';
+import { Badge } from '@/components/ui/badge';
 import { Plus, Search, Download, LayoutGrid, List, FileText, Calendar, LucideIcon } from 'lucide-react';
 
 interface UnifiedHeaderProps {

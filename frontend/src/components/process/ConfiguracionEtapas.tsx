@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { Modal } from '@/components/ui/modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/Badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Settings, Plus, Trash2, GripVertical, Check, X } from 'lucide-react';
 
 interface Etapa {
@@ -146,7 +146,7 @@ export default function ConfiguracionEtapas({
 
                   <div className="flex items-center gap-2">
                     <Button
-                      variant={etapa.es_inicial ? "primary" : "outline"}
+                      variant={etapa.es_inicial ? "default" : "outline"}
                       size="sm"
                       onClick={() => handleToggleInicial(etapa.id)}
                     >
@@ -155,7 +155,7 @@ export default function ConfiguracionEtapas({
                     </Button>
 
                     <Button
-                      variant={etapa.es_final ? "primary" : "outline"}
+                      variant={etapa.es_final ? "default" : "outline"}
                       size="sm"
                       onClick={() => handleToggleFinal(etapa.id)}
                     >

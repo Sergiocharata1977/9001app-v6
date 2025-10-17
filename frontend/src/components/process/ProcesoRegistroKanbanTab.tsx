@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Settings, BarChart3, Plus, Calendar, User, AlertCircle } from 'lucide-react';
 import { procesoUnificadoService } from '@/services/procesoUnificadoService';
 import { useToast } from '@/components/ui/use-toast';
