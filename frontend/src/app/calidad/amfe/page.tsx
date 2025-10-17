@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { AMFETable } from '@/components/quality/amfe/AMFETable';
+import AMFETable from '@/components/quality/amfe/AMFETable';
 
 export default function AMFEPage() {
   return (

@@ -145,8 +145,12 @@ export default function AccionAuditorKanbanPage() {
     return tasks.filter(task => task.columnId === columnId);
   };
 
-  const getPrioridadColor = (prioridad: string) => {
+  const getPrioridadColor = (prioridad?: string) => {
     switch (prioridad) {
+      case 'critical': return 'bg-red-100 text-red-800';
+      case 'high': return 'bg-orange-100 text-orange-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'low': return 'bg-green-100 text-green-800';
       case 'Crítica': return 'bg-red-100 text-red-800';
       case 'Alta': return 'bg-orange-100 text-orange-800';
       case 'Media': return 'bg-yellow-100 text-yellow-800';
@@ -155,8 +159,12 @@ export default function AccionAuditorKanbanPage() {
     }
   };
 
-  const getPrioridadIcon = (prioridad: string) => {
+  const getPrioridadIcon = (prioridad?: string) => {
     switch (prioridad) {
+      case 'critical': return <XCircle className="h-4 w-4" />;
+      case 'high': return <AlertCircle className="h-4 w-4" />;
+      case 'medium': return <Clock className="h-4 w-4" />;
+      case 'low': return <CheckCircle className="h-4 w-4" />;
       case 'Crítica': return <XCircle className="h-4 w-4" />;
       case 'Alta': return <AlertCircle className="h-4 w-4" />;
       case 'Media': return <Clock className="h-4 w-4" />;
