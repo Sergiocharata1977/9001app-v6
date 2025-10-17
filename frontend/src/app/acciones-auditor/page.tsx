@@ -20,7 +20,8 @@ import {
   Eye,
   CheckCircle,
   Clock,
-  AlertCircle
+  AlertCircle,
+  XCircle
 } from 'lucide-react';
 
 // Interface para acciones de auditor
