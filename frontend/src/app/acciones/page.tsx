@@ -11,10 +11,10 @@ import { useMemo, useState } from 'react';
 import { Action } from '@/shared-types/entities/Action';
 import { ActionFormV2 } from '../../components/modules/actions/forms/ActionFormV2';
 import ActionTable from '../../components/modules/actions/tables/ActionTable';
-import { Modal } from '../../components/ui/modal';
-import { Badge } from '../../components/ui/badge';
-import { Button } from '../../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
+import { Modal } from '@/components/ui/modal';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 // Datos de ejemplo - En producción vendrían de la API
 const mockActions: Action[] = [

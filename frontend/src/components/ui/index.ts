@@ -41,6 +41,8 @@ export { NotFoundMessage } from './not-found-message';
 export { DataTable } from './data-table';
 export { Dropdown } from './dropdown';
 export { ViewToggle } from './view-toggle';
+export { Logo } from './logo';
+export { LogoutButton } from './logout-button';
 
 // Componentes Kanban
 export { KanbanCard } from './kanban-card';
