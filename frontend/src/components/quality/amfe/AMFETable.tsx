@@ -248,5 +248,3 @@ export default function AMFETable() {
     </div>
   );
 }
-
-export default AMFETable;
