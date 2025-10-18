@@ -16,7 +16,7 @@ export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // Rutas públicas que no requieren autenticación
-    const publicRoutes = ['/login'];
+    const publicRoutes = ['/', '/login'];
     const isPublicRoute = publicRoutes.some(route => pathname === route);
 
     // Si es una ruta pública y el usuario está autenticado, redirigir según el tipo de usuario
@@ -48,7 +48,6 @@ export function middleware(request: NextRequest) {
 export const config = {
     matcher: [
         // Rutas que requieren autenticación
-        '/',
         '/dashboard',
         '/dashboard/:path*',
         '/super-admin/:path*',
